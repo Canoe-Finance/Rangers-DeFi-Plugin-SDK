@@ -3,13 +3,16 @@
 ## MetaDex swap plugin solution
 
 ### [x] iframe
+
 Refer to https://transak.com
 
 ### [x] Component
+
 Refer to https://depay.fi/documentation/payments, its open source code: https://github.com/DePayFi/widgets
 
 
 ### [√] Web Component
+
 Refer to https://co-w.io/, its open source code: https://github.com/dejurin/crypto-converter-widget
 
 ### Advantages and disadvantages:
@@ -17,3 +20,23 @@ Refer to https://co-w.io/, its open source code: https://github.com/dejurin/cryp
 - The iframe technology is relatively old, but the compatibility is the strongest.
 - The component scheme requires the project party to access or install the code, and may need to provide open source packages of React, Vue or Angular, which has certain requirements for development.
 - The component solution is the latest technology, only compatible with the latest browsers.
+
+## Start
+
+```bash
+yarn
+yarn dev
+yarn build
+```
+
+## Development
+
+```bash
+yarn dev
+```
+
+## Build
+
+```bash
+yarn build
+```
