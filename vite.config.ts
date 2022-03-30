@@ -1,5 +1,6 @@
-import { defineConfig } from 'vite'
+import path from 'path'
 import litcss from 'rollup-plugin-postcss-lit'
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,7 +10,7 @@ export default defineConfig({
       formats: ['es']
     },
     rollupOptions: {
-      external: /^lit-element/
+      // external: /^lit-element/
     }
   },
   plugins: [
@@ -17,5 +18,10 @@ export default defineConfig({
       ...litcss(),
       enforce: 'post'
     }
-  ]
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  }
 })

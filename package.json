@@ -12,12 +12,15 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint:ts": "eslint --fix --ext .ts src",
     "lint:css": "stylelint --fix \"./src/**/*.{css,scss}\"",
     "format": "prettier --write './src/**/*.{ts,scss}' --list-different --ignore-path .gitignore ."
   },
   "dependencies": {
+    "chart.js": "2.8.0",
+    "ethereum-input-data-decoder": "^0.4.0",
+    "ethers": "^5.6.1",
     "lit": "^2.1.1"
   },
   "devDependencies": {
@@ -25,6 +28,7 @@
     "@babel/preset-env": "^7.16.11",
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
+    "@types/chart.js": "^2.9.35",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "babel-eslint": "^10.1.0",
