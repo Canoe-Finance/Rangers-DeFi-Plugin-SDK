@@ -1,0 +1,22 @@
+header {
+  height: 33px;
+}
+
+.header-logo {
+  background-color: $header-bg-color;
+
+  img {
+    margin-right: 6px;
+    margin-left: 18px;
+  }
+}
+
+.network-container {
+  min-width: 80px;
+  background-color: $network-bg-color;
+}
+
+.wallet-container {
+  width: 120px;
+  background-color: $wallet-bg-color;
+}
