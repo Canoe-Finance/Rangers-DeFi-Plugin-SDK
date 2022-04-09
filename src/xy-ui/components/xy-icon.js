@@ -1,5 +1,7 @@
 //https://www.iconfont.cn/collections/detail?spm=a313x.7781069.1998910419.d9df05512&cid=9402
 
+import sprite from '../iconfont/icon.svg'
+
 export default class XyIcon extends HTMLElement {
   static get observedAttributes() {
     return ['name', 'size', 'color', 'path']
@@ -29,7 +31,7 @@ export default class XyIcon extends HTMLElement {
         }
         @keyframes rotate{
             to{
-                transform: rotate(360deg); 
+                transform: rotate(360deg);
             }
         }
         </style>
@@ -87,7 +89,7 @@ export default class XyIcon extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (name == 'name' && this.use) {
-      this.use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `../iconfont/icon.svg#icon-${newValue}`)
+      this.use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${sprite}#icon-${newValue}`)
     }
     if (name == 'path' && this.d) {
       this.d.setAttribute('d', newValue)

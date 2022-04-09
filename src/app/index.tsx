@@ -10,14 +10,15 @@ import '../xy-ui/index'
 export class MetaApp {
   @State() show: boolean = false
 
-  private handleClick = () => {
-    this.show = true
+  private handleClick = (status: boolean) => {
+    this.show = status
   }
 
   render() {
     return (
-      <div class={this.show ? 'app-main' : 'app-mini'}>
-        {this.show ? <meta-main></meta-main> : <meta-mini onClick={this.handleClick}></meta-mini>}
+      <div class={`app-main app-mini ${this.show ? 'show' : 'hide'}`}>
+        <meta-mini class={this.show ? 'hidden' : ''} onClick={() => this.handleClick(true)}></meta-mini>
+        <meta-main class={this.show ? '' : 'hidden'}></meta-main>
       </div>
     )
   }

@@ -1,4 +1,4 @@
-import { Component, h } from '@stencil/core'
+import { Component, h, Fragment } from '@stencil/core'
 
 import { data } from '../../data'
 
@@ -9,10 +9,10 @@ import { data } from '../../data'
 export class MetaMain {
   render() {
     return (
-      <div class="app-main">
+      <Fragment>
         <meta-header class="bg-color"></meta-header>
         <meta-chart data={data}></meta-chart>
-      </div>
+      </Fragment>
     )
   }
 }

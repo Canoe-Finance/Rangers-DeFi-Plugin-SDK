@@ -1,0 +1,399 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
+    "inputs": [],
+    "name": "_ETH_ADDRESS_",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "projectId",
+        "type": "string"
+      },
+      {
+        "internalType": "address[]",
+        "name": "addrList",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fromTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "mixAdapters",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "mixPairs",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "assetTo",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "directions",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "moreInfos",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "dodoMixSwapOne",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "projectId",
+        "type": "string"
+      },
+      {
+        "internalType": "address[]",
+        "name": "addrList",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fromTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "mixAdapters",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "mixPairs",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "assetTo",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "directions",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isIncentive",
+        "type": "bool"
+      }
+    ],
+    "name": "dodoMixSwapTwo",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "projectId",
+        "type": "string"
+      },
+      {
+        "internalType": "address[]",
+        "name": "addrList",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fromTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "dodoPairs",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "directions",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isIncentive",
+        "type": "bool"
+      }
+    ],
+    "name": "dodoSwapV1",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "projectId",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "toAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "toToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address[]",
+        "name": "dodoPairs",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "directions",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isIncentive",
+        "type": "bool"
+      }
+    ],
+    "name": "dodoSwapV2ETHToToken",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "projectId",
+        "type": "string"
+      },
+      {
+        "internalType": "address[]",
+        "name": "addrList",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fromTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "dodoPairs",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "directions",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isIncentive",
+        "type": "bool"
+      }
+    ],
+    "name": "dodoSwapV2TokenToETH",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "projectId",
+        "type": "string"
+      },
+      {
+        "internalType": "address[]",
+        "name": "addrList",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fromTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "dodoPairs",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "directions",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isIncentive",
+        "type": "bool"
+      }
+    ],
+    "name": "dodoSwapV2TokenToToken",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "projectId",
+        "type": "string"
+      },
+      {
+        "internalType": "address[]",
+        "name": "addrList",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address",
+        "name": "approveTarget",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fromTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "callDataConcat",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bool",
+        "name": "isIncentive",
+        "type": "bool"
+      }
+    ],
+    "name": "externalSwap",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "metaDexSwapAddr",
+    "outputs": [
+      {
+        "internalType": "contract MetaDexSwap",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_metaDexSwapAddr",
+        "type": "address"
+      }
+    ],
+    "name": "setMetaDexSwapAddr",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
+]

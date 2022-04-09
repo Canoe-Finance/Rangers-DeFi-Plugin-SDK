@@ -31,6 +31,12 @@
     "@stencil/reserved-member-names": "error",
     "@stencil/single-export": "error",
     "@stencil/strict-mutable": "error",
-    "@stencil/strict-boolean-conditions": "off"
+    "@stencil/strict-boolean-conditions": "off",
+    "react/jsx-no-bind": [
+      "warn",
+      {
+        "allowArrowFunctions": true
+      }
+    ]
   }
 }
