@@ -1,0 +1,11 @@
+:host {
+  --themeColor: #24242e;
+}
+
+:host * {
+  color: #fff;
+}
+
+.bg-color {
+  background-color: $background-color;
+}
