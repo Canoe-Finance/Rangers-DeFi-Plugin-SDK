@@ -1,4 +1,5 @@
 import { Component, h } from '@stencil/core'
+// import { getChainList } from '@/utils/func.js'
 
 @Component({
   tag: 'meta-header',
@@ -6,6 +7,24 @@ import { Component, h } from '@stencil/core'
   shadow: true,
 })
 export class MetaHeader {
+  // const networkList = getChainList()
+
+  // conosle.log('networkList', networkList)
+
+  // @Prop() data: IChartData[]
+
+  // @Prop({ type: Number })
+  // public currentChainId = 0
+
+  // @Prop({ type: Object })
+  // public currentChainInfo: object | null = null
+
+  // @Prop({ type: String })
+  // public userAddress = ''
+
+  // @Prop({ type: String })
+  // public shortUserAddress = ''
+
   render() {
     return (
       <header class="flex items-center">
@@ -14,7 +33,7 @@ export class MetaHeader {
           <div>MetaDEX</div>
         </div>
         <div class="network-container h-full flex items-center">
-          <xy-icon name="earth"></xy-icon>
+          <xy-icon class="icon" name="earth"></xy-icon>
           <xy-select type="flat" placeholder="NET">
             <xy-option value="bsc">BSC</xy-option>
             <xy-option value="eth">ETH</xy-option>
