@@ -13,6 +13,7 @@ log.txt
 *.sublime-project
 *.sublime-workspace
 *-lock.yaml
+*-lock.json
 
 .stencil/
 .idea/
@@ -24,3 +25,5 @@ $RECYCLE.BIN/
 
 .DS_Store
 Thumbs.db
+pnpm-lock.yaml
+components.d.ts

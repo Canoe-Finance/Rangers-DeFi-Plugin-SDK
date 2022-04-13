@@ -20,7 +20,7 @@
     "@stencil/element-type": "error",
     "@stencil/host-data-deprecated": "error",
     "@stencil/methods-must-be-public": "error",
-    "@stencil/no-unused-watch": "error",
+    "@stencil/no-unused-watch": "off",
     "@stencil/own-methods-must-be-private": "off",
     "@stencil/own-props-must-be-private": "error",
     "@stencil/prefer-vdom-listener": "error",

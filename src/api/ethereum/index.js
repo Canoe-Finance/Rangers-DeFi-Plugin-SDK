@@ -1,18 +1,17 @@
-/*
- * @Descripttion: ethereum
- * @Author: pujianguo
- * @Date: 2022-01-22 12:48:18
- */
-import { hexToNumber, toHex } from '@/api/ethers/utils'
-import chains from '@/lib/chainInfo.js'
-import { copy } from '@/utils/func.js'
+import { hexToNumber, toHex } from '../ethers/utils'
+import chains from '../../lib/chains.js'
+import { copy } from '../../utils/func.js'
 
 /**
  * check ethereum
  * @return {Boolean}
  */
 export const checkEthereum = () => {
-  return !!window.ethereum
+  if (window.ethereum && window.ethereum.isMetaMask) {
+    return true
+  }
+  console.log('place install MetaMask')
+  return false
 }
 
 /**

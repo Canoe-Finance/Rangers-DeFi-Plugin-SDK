@@ -1,5 +1,5 @@
-import { Component, Prop, h } from '@stencil/core'
-import klinecharts from 'klinecharts'
+import { Component, Prop, h, Watch } from '@stencil/core'
+import { Chart, init } from 'klinecharts'
 
 import { IChartData } from '../../../interface'
 
@@ -12,11 +12,19 @@ export class MetaChart {
   @Prop() data: IChartData[]
 
   chartDom!: HTMLDivElement
-  chart!: klinecharts.Chart
+  chart!: Chart
+
+  @Watch('data')
+  watchData(value: IChartData[]) {
+    this.chart.applyNewData(value)
+  }
 
   componentDidLoad() {
-    this.chart = klinecharts.init(this.chartDom)
-    this.chart.applyNewData(this.data)
+    this.chart = init(this.chartDom, {
+      grid: {
+        show: false,
+      },
+    })
   }
 
   render() {

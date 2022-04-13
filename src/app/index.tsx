@@ -1,4 +1,4 @@
-import { Component, State, h } from '@stencil/core'
+import { Component, State, Prop, h } from '@stencil/core'
 
 import '../xy-ui/index'
 
@@ -8,7 +8,10 @@ import '../xy-ui/index'
   shadow: true,
 })
 export class MetaApp {
-  @State() show: boolean = false
+  @Prop() token: string
+
+  // TODO:
+  @State() show: boolean = true
 
   private handleClick = (status: boolean) => {
     this.show = status
@@ -17,8 +20,12 @@ export class MetaApp {
   render() {
     return (
       <div class={`app-main app-mini ${this.show ? 'show' : 'hide'}`}>
-        <meta-mini class={this.show ? 'hidden' : ''} onClick={() => this.handleClick(true)}></meta-mini>
-        <meta-main class={this.show ? '' : 'hidden'}></meta-main>
+        <meta-mini
+          class={this.show ? 'hidden' : ''}
+          onOpenSwap={() => this.handleClick(true)}
+          token={this.token}
+        ></meta-mini>
+        <meta-main class={this.show ? '' : 'invisible'}></meta-main>
       </div>
     )
   }

@@ -1,5 +1,8 @@
 header {
+  position: relative;
+  z-index: 1000;
   height: 33px;
+  font-size: 12px;
 }
 
 .header-logo {
@@ -12,11 +15,76 @@ header {
 }
 
 .network-container {
-  min-width: 80px;
+  cursor: pointer;
   background-color: $network-bg-color;
+
+  .network-title {
+    position: relative;
+    max-width: 100px;
+    padding: 0 15px;
+  }
 }
 
 .wallet-container {
-  width: 120px;
+  cursor: pointer;
   background-color: $wallet-bg-color;
+
+  .wallet-title {
+    position: relative;
+    padding: 0 15px;
+    margin-right: 10px;
+  }
+}
+
+.icon {
+  margin-right: 3px;
+}
+
+.popover-content {
+  width: 100%;
+
+  .popover-list {
+    position: relative;
+    width: 100%;
+    background-color: #1d212e;
+
+    &::before {
+      position: absolute;
+      top: -11px;
+      left: 0;
+      width: 100%;
+      height: 11px;
+      content: '';
+    }
+
+    .popover-item {
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      padding: 0 8px;
+      line-height: 36px;
+      text-align: center;
+
+      &__active {
+        background-color: #404864;
+      }
+
+      &:hover {
+        background-color: #404864;
+      }
+    }
+  }
+}
+
+.has-right-arrow::after {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  display: block;
+  width: 0;
+  height: 0;
+  content: '';
+  border-top: 5px solid #fff;
+  border-right: 3px solid transparent;
+  border-left: 3px solid transparent;
 }

@@ -1,5 +1,6 @@
 import { Config } from '@stencil/core'
 import { sass } from '@stencil/sass'
+import nodePolyfills from 'rollup-plugin-node-polyfills'
 import tailwind, { tailwindHMR } from 'stencil-tailwind-plugin'
 import tailwindcss from 'tailwindcss'
 import { defaultExtractor } from 'tailwindcss/lib/lib/defaultExtractor'
@@ -35,4 +36,7 @@ export const config: Config = {
     }),
     tailwindHMR(),
   ],
+  rollupPlugins: {
+    after: [nodePolyfills()],
+  },
 }
