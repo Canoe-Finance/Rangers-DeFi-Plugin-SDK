@@ -89,7 +89,7 @@ export default class XyInput extends HTMLElement {
             min-width: 0;
             -webkit-appearance: none;
             -moz-appearance: textfield;
-            background: none;
+            background: #fff;
             overflow-x: hidden;
             transition: color .3s;
             animation: removeBg 0s forwards;

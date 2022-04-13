@@ -1,5 +1,16 @@
 import { Component, h } from '@stencil/core'
-// import { getChainList } from '@/utils/func.js'
+import { getChainList } from '../../../utils/func'
+import { chainItemType } from '../../../interface'
+import storage from '../../../utils/storage'
+import { hexToNumber } from '../../../api/ethers/utils'
+import { state } from '../../../store'
+import {
+  changeEthereumChainForPc,
+  checkEthereum,
+  getUserAddress,
+  getWindowNetwork,
+  requestAccounts,
+} from '../../../api/ethereum/index'
 
 @Component({
   tag: 'meta-header',
@@ -7,43 +18,149 @@ import { Component, h } from '@stencil/core'
   shadow: true,
 })
 export class MetaHeader {
-  // const networkList = getChainList()
+  networkPopover!: HTMLElement
+  walletPopover!: HTMLElement
+  networkList: chainItemType[] = getChainList()
 
-  // conosle.log('networkList', networkList)
+  initNetworkInfo = async () => {
+    const windowNetworkId = await getWindowNetwork()
+    this.setNetworkInfo(windowNetworkId)
+  }
+  setNetworkInfo = (chainId: number): void => {
+    const item = this.networkList.find(x => x.chainId === chainId)
+    if (item) {
+      state.chain = item
+    } else {
+      state.chain = { chainId: 0, chainName: '' }
+    }
+  }
 
-  // @Prop() data: IChartData[]
+  handleNetworkChange = chainId => {
+    this.networkPopover.removeAttribute('open')
+    if (!checkEthereum()) {
+      return
+    }
+    if (chainId !== state.chain.chainId) {
+      changeEthereumChainForPc(chainId)
+        .then(() => {
+          this.setNetworkInfo(chainId)
+        })
+        .catch(err => {
+          const msg = err.message || 'Connect error.'
+          console.log('error:', msg)
+        })
+    }
+  }
 
-  // @Prop({ type: Number })
-  // public currentChainId = 0
+  initUserAddress = async () => {
+    if (storage.getIsLogin()) {
+      const userAddress = await getUserAddress()
+      if (userAddress) {
+        this.setUserAddress(userAddress)
+      } else {
+        storage.rmIsLogin()
+      }
+    } else {
+      this.setUserAddress('')
+    }
+  }
+  setUserAddress = (address: string) => {
+    if (address) {
+      storage.setIsLogin(true)
+    }
+    state.userAddress = address
+  }
+  handleWalletConnect = async () => {
+    if (state.userAddress) {
+      this.handleLogout()
+      return
+    }
+    if (!checkEthereum()) {
+      return
+    }
+    try {
+      const account = await requestAccounts()
+      this.setUserAddress(account)
+    } catch (err) {
+      const message = err.message || 'Connect error.'
+      console.log('message', message)
+    }
+  }
 
-  // @Prop({ type: Object })
-  // public currentChainInfo: object | null = null
+  handleLogout = () => {
+    storage.rmIsLogin()
+    this.setUserAddress('')
+    this.walletPopover.removeAttribute('open')
+  }
 
-  // @Prop({ type: String })
-  // public userAddress = ''
+  componentDidLoad() {
+    this.initNetworkInfo()
+    this.initUserAddress()
 
-  // @Prop({ type: String })
-  // public shortUserAddress = ''
+    if (checkEthereum()) {
+      window['ethereum'].on('chainChanged', (id: number) => {
+        const chainId = hexToNumber(id)
+        this.setNetworkInfo(chainId)
+      })
+      window['ethereum'].on('accountsChanged', (account: string[]) => {
+        this.setUserAddress(account[0])
+      })
+    }
+  }
 
   render() {
     return (
       <header class="flex items-center">
         <div class="header-logo h-full flex flex-1 items-center">
           <img src="../../assets/images/logo.svg" alt="logo" />
-          <div>MetaDEX</div>
+          <div class="font-bold">MetaDEX</div>
         </div>
         <div class="network-container h-full flex items-center">
-          <xy-icon class="icon" name="earth"></xy-icon>
-          <xy-select type="flat" placeholder="NET">
-            <xy-option value="bsc">BSC</xy-option>
-            <xy-option value="eth">ETH</xy-option>
-            <xy-option value="solana">SOLANA</xy-option>
-            <xy-option value="polygon">POLYGON</xy-option>
-          </xy-select>
+          <xy-popover class="popover">
+            <div class="network-title h-full flex items-center has-right-arrow">
+              <xy-icon class="icon" name="earth"></xy-icon>
+              <div class="font-bold truncate">{state.chain.chainName ? state.chain.chainName : 'NET'}</div>
+            </div>
+            <xy-popcon class="popover-content" ref={el => (this.networkPopover = el as HTMLElement)}>
+              <div class="popover-list">
+                {this.networkList.map(item => (
+                  <div
+                    class={`popover-item truncate font-bold ${
+                      item.chainId === state.chain.chainId ? 'popover-item__active' : ''
+                    }`}
+                    key={item.chainId}
+                    onClick={() => {
+                      this.handleNetworkChange(item.chainId)
+                    }}
+                  >
+                    {item.chainName}
+                  </div>
+                ))}
+              </div>
+            </xy-popcon>
+          </xy-popover>
         </div>
         <div class="wallet-container h-full flex items-center">
-          <xy-icon name="wallet"></xy-icon>
-          <span>WALLET</span>
+          {!state.userAddress ? (
+            <div class="wallet-title h-full flex items-center" onClick={this.handleWalletConnect}>
+              <xy-icon class="icon" name="wallet"></xy-icon>
+              <div class="font-bold">WALLET</div>
+            </div>
+          ) : (
+            <xy-popover class="popover">
+              <div class="wallet-title h-full flex items-center has-right-arrow">
+                <xy-icon class="icon" name="wallet"></xy-icon>
+                <div class="font-bold">{state.shortUserAddress}</div>
+              </div>
+              <xy-popcon class="popover-content" ref={el => (this.walletPopover = el as HTMLElement)}>
+                <div class="popover-list">
+                  <div class="popover-item font-bold" onClick={this.handleLogout}>
+                    LOGOUT
+                  </div>
+                </div>
+              </xy-popcon>
+            </xy-popover>
+          )}
         </div>
       </header>
     )

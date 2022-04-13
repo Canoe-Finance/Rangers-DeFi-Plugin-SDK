@@ -34,13 +34,14 @@ class XyDialog extends HTMLElement {
             display:flex;
             position:relative;
             min-width: 360px;
+            height: 100%;
             margin:auto;
             box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
             box-sizing: border-box;
             max-width: calc(100vw - 20px);
             max-height: calc(100vh - 20px);
-            border-radius: 3px;
-            background-color: #fff;
+            // border-radius: 3px;
+            background-color: #24242E;
             opacity:0;
             transform:scale(0.5);
             transition:.3s cubic-bezier(.645, .045, .355, 1);
@@ -68,7 +69,7 @@ class XyDialog extends HTMLElement {
         }
         .dialog-body {
             flex: 1;
-            overflow: auto;
+            // overflow: auto;
             min-height: 50px;
             padding: 10px 0;
         }
@@ -82,6 +83,7 @@ class XyDialog extends HTMLElement {
             right:10px;
             top:10px;
             border:0;
+            display: none;
         }
         .dialog-footer xy-button {
             margin-left:10px;
@@ -140,7 +142,7 @@ class XyDialog extends HTMLElement {
   }
 
   get title() {
-    return this.getAttribute('title') || 'dialog'
+    return this.getAttribute('title') || ''
   }
 
   get type() {
@@ -148,7 +150,7 @@ class XyDialog extends HTMLElement {
   }
 
   get oktext() {
-    return this.getAttribute('oktext') || 'ok'
+    return this.getAttribute('oktext') || ''
   }
 
   get portal() {

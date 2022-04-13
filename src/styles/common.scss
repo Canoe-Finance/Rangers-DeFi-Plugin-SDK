@@ -1,5 +1,7 @@
 :host {
   --themeColor: #24242e;
+  --fontColor: #fff;
+  --textColor: #a2a8ba;
 }
 
 :host * {
@@ -8,4 +10,12 @@
 
 .bg-color {
   background-color: $background-color;
+}
+
+.green-color {
+  color: $green-color;
+}
+
+.red-color {
+  color: $red-color;
 }

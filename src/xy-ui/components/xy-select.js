@@ -20,14 +20,14 @@ export default class XySelect extends HTMLElement {
         :host([block]){
             display:block;
         }
-        
+
         :host(:not([disabled]):not([type="primary"]):focus-within) #select,
         :host(:not([disabled]):not([type="primary"]):hover) #select{
             border-color:var(--themeColor,#42b983);
             color:var(--themeColor,#42b983);
         }
 
-        :host([search]:focus-within:not([disabled])) #select, 
+        :host([search]:focus-within:not([disabled])) #select,
         :host([search]:not([disabled]):hover) #select{
             color: var(--themeColor,#42b983);
         }
@@ -35,8 +35,8 @@ export default class XySelect extends HTMLElement {
         :host([disabled]){
             pointer-events:none;
         }
-        
-        :host(:focus-within) xy-popover,:host(:active) xy-popover{ 
+
+        :host(:focus-within) xy-popover,:host(:active) xy-popover{
             z-index: 2;
         }
         xy-tips{
@@ -45,7 +45,7 @@ export default class XySelect extends HTMLElement {
             height: 100%;
             border-radius: inherit;
         }
-        
+
         #select:not([type="primary"]){
             display:flex;
             width:100%;
@@ -70,7 +70,7 @@ export default class XySelect extends HTMLElement {
             flex:1;
             text-align:left;
         }
-        
+
         xy-input::after{
             content:'';
             position:absolute;

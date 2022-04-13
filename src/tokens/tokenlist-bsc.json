@@ -42,7 +42,7 @@
   {
     "address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
     "chainId": 56,
-    "name": "Ethereum Token",
+    "name": "Ethereum",
     "symbol": "ETH",
     "decimals": 18,
     "logoURI": "https://raw.githubusercontent.com/complusnetwork/default-token-list/master/src/bsc/0x2170Ed0880ac9A755fd29B2688956BD959F933F8/logo.png"

@@ -1,0 +1,48 @@
+.coin-info {
+  padding: 20px 16px;
+  border-bottom: 1px solid $text-bg-color;
+}
+
+.coin {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.info {
+  padding: 3px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: $text-color;
+  background-color: $text-bg-color;
+  border-radius: 2px;
+
+  &.active {
+    color: #fff;
+    background-color: $text-bg-active-color;
+  }
+
+  & + & {
+    margin-left: 6px;
+  }
+}
+
+.coin-address {
+  box-sizing: border-box;
+  height: 22px;
+  padding: 3px 6px !important;
+
+  span {
+    font-size: 12px;
+    font-weight: 700;
+    color: $text-color;
+  }
+
+  img {
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+  }
+}

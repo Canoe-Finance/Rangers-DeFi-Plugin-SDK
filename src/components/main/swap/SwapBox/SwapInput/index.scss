@@ -1,0 +1,60 @@
+:host {
+  .input-container {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 320px;
+    padding: 10px;
+    background: $text-bg-color;
+    border-radius: 4px;
+
+    .token-info {
+      display: flex;
+      align-items: center;
+
+      .token-logo {
+        width: 14px;
+        height: 14px;
+      }
+
+      .token-symbol {
+        margin-left: 4px;
+        font-size: 14px;
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+
+        &::after {
+          position: absolute;
+          display: inline-block;
+          width: 0;
+          height: 0;
+          margin-top: 6px;
+          margin-left: 4px;
+          content: '';
+          border-top: 5px solid #fff;
+          border-right: 5px solid transparent;
+          border-left: 5px solid transparent;
+        }
+      }
+    }
+
+    input.customs {
+      width: 80px;
+      height: 100%;
+      color: #fff;
+      background-color: $text-bg-color;
+      border: none;
+
+      &::placeholder {
+        float: right;
+        color: #fff;
+      }
+    }
+
+    input:focus {
+      outline: none;
+    }
+  }
+}

@@ -1,9 +1,3 @@
-/*
- * @Descripttion: ethers utils
- * @Author: pujianguo
- * @Date: 2022-01-22 12:48:18
- */
-
 import { BigNumber, utils } from 'ethers'
 
 /**

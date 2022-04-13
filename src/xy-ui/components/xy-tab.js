@@ -46,10 +46,10 @@ class XyTabContent extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue && newValue !== undefined) {
-      if (name === 'label') {
+      if (name === 'label' && this.parentNode) {
         this.parentNode.updatalabel && this.parentNode.updatalabel(this.key, newValue)
       }
-      if (name === 'disabled') {
+      if (name === 'disabled' && this.parentNode) {
         this.parentNode.updatadisabled && this.parentNode.updatadisabled(this.key, newValue)
       }
     }
@@ -84,19 +84,24 @@ export default class XyTab extends HTMLElement {
             position:relative;
             overflow:hidden;
             scroll-behavior: smooth;
+            border-bottom: 1px solid #323645;
         }
         .tab-nav{
             display:flex;
+            padding: 0 20px;
         }
         .nav-item{
-            font-size:inherit;
+            font-size:12px;
+            font-weight:700;
             border-radius:0;
             box-shadow:none;
             flex-shrink: 0;
+            color: var(--textColor,#42b983);
             border-color:transparent;
+            cursor: pointer;
         }
         :host(:not([type="line"])) .nav-item.active{
-            color:var(--themeColor,#42b983);
+            color:var(--fontColor,#42b983);
         }
         .tab-line{
             position:absolute;
@@ -104,7 +109,7 @@ export default class XyTab extends HTMLElement {
             margin-top:-2px;
             height:2px;
             border-radius:2px;
-            background:var(--themeColor,#42b983);
+            background:var(--fontColor,#42b983);
             transition:.2s;
         }
         .tab-content{
@@ -223,7 +228,7 @@ export default class XyTab extends HTMLElement {
         label: item.textContent,
       }
     })
-    if (this.activekey) {
+    if (this.activekey && this.tabPos[this.activekey]) {
       this.tabline.style = `width:${this.tabPos[this.activekey].width}px;transform:translateX(${
         this.tabPos[this.activekey].left
       }px)`
