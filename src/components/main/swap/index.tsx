@@ -1,72 +1,63 @@
 import { Component, h, State } from '@stencil/core'
+import { state, onChange } from 'store'
+
 @Component({
   tag: 'token-swap',
   styleUrl: 'index.scss',
   shadow: true,
 })
 export class SwapMain {
-  tabList = [{ title: 'swap' }, { title: 'credit card' }, { title: 'Transfer' }]
+  tabList = [
+    {
+      title: 'swap',
+      menuList: [
+        { name: 'swapRefresh', icon: 'refresh' },
+        { name: 'swapReload', icon: 'reload' },
+        { name: 'swapCustomize', icon: 'customize' },
+      ],
+    },
+    {
+      title: 'credit card',
+      menuList: [],
+    },
+    {
+      title: 'Transfer',
+      menuList: [],
+    },
+  ]
   tabRef!: HTMLElement
 
-  @State() showContent: boolean = true
+  @State() showContent: boolean = false
   @State() currentTab: number = 0
   @State() tabLeft: string = '0'
   @State() tabWidth: string = '0'
 
-  handleTabChange = (e, i) => {
-    const { offsetLeft, offsetWidth } = e.target
-    this.tabLeft = offsetLeft + 'px'
-    this.tabWidth = offsetWidth + 'px'
-    this.currentTab = i
-  }
-
-  componentDidLoad() {
-    // select first tab
-    this.handleTabChange({ target: this.tabRef.childNodes[0] }, 0)
-  }
-
   handleRefresh = () => {}
   handleReload = () => {}
   handleCustomize = () => {}
+
+  clickTabMenu = ({ detail }) => {
+    console.log('click tab menu:', detail)
+  }
+
+  componentWillLoad() {
+    onChange('appShow', val => {
+      setTimeout(() => {
+        this.showContent = val
+      }, 300)
+    })
+  }
+
   render() {
     return (
-      <div class={`token-swap ${!this.showContent ? 'token-swap__close' : ''}`}>
+      <div class={`token-swap flex ${state.appShow && this.showContent ? '' : 'token-swap__close'}`}>
         <div
           class="open-btn"
           onClick={() => {
             this.showContent = !this.showContent
           }}
         ></div>
-        <div class="token-swap-title">
-          <div
-            class="title-tab"
-            style={{ '--tab-width': this.tabWidth, '--tab-left': this.tabLeft }}
-            ref={el => (this.tabRef = el as HTMLElement)}
-          >
-            {this.tabList.map((tab, i) => (
-              <xy-button
-                class={`tab-item ${this.currentTab === i ? 'tab-item__active' : ''}`}
-                onClick={e => {
-                  this.handleTabChange(e, i)
-                }}
-              >
-                {tab.title}
-              </xy-button>
-            ))}
-          </div>
-          <div class="title-menu">
-            <xy-button class="menu-item" onClick={this.handleRefresh}>
-              <xy-icon class="icon" name="refresh"></xy-icon>
-            </xy-button>
-            <xy-button class="menu-item" onClick={this.handleReload}>
-              <xy-icon class="icon" name="reload"></xy-icon>
-            </xy-button>
-            <xy-button class="menu-item" onClick={this.handleCustomize}>
-              <xy-icon class="icon" name="customize"></xy-icon>
-            </xy-button>
-          </div>
-        </div>
-        <div class="token-swap-content" style={{ transform: `translateX(${-100 * this.currentTab}%)` }}>
+        <my-tab class="my-tab grow" disabled={!this.showContent} tabList={this.tabList} onClickMenu={this.clickTabMenu}>
           <div class="content-item">
             <swap-box class="container"></swap-box>
             <div class="footer">
@@ -85,7 +76,7 @@ export class SwapMain {
               Powered by <span>MetaDEX</span>
             </div>
           </div>
-        </div>
+        </my-tab>
       </div>
     )
   }

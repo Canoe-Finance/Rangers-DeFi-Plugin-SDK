@@ -1,5 +1,7 @@
 # MetaDex-SDK
 
+![MetaDex](./docs/image/metadex.gif)
+
 ## MetaDex swap plugin solution
 
 ### [x] iframe

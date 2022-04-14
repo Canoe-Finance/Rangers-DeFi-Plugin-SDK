@@ -24,6 +24,10 @@ export class MetaChart {
       grid: {
         show: false,
       },
+      yAxis: {
+        show: false,
+        width: 0,
+      },
     })
   }
 

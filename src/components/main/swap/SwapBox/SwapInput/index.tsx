@@ -14,6 +14,7 @@ export class SwapInput {
     logoURI: '',
     decimals: 0,
   }
+  @Prop() value: number = 0
   @Event() openSearch: EventEmitter
 
   private _openSearch = () => {
@@ -27,7 +28,7 @@ export class SwapInput {
           <img src={this.token.logoURI} class="token-logo" />
           <span class="token-symbol">{this.token.symbol}</span>
         </div>
-        <input class="customs" placeholder="0" inputmode="numeric" type="text" />
+        <input class="customs focus:outline-none" placeholder="0" inputmode="numeric" type="text" value={this.value} />
       </div>
     )
   }

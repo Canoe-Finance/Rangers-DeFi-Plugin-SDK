@@ -17,8 +17,8 @@ export class DealStatusBox {
   @State() buttonText: string = 'CONFIRM'
 
   @Prop() visible: boolean = false
-  @Prop() from: ITransformTokenInfo = { name: '', icon: '', price: 0 }
-  @Prop() to: ITransformTokenInfo = { name: '', icon: '', price: 0 }
+  @Prop() send: ITransformTokenInfo = { symbol: '', logoURI: '' }
+  @Prop() receive: ITransformTokenInfo = { symbol: '', logoURI: '' }
 
   handleButtonClick = () => {
     if (this.type === 'primary') {
@@ -101,17 +101,17 @@ export class DealStatusBox {
         </div>
         <div class="content">
           <div class="token-line token-from">
-            <img class="token-icon" src={this.from.icon} />
-            <div class="token-name">{this.from.name}</div>
-            <div class="token-price">{this.from.price}</div>
+            <img class="token-icon" src={this.send.logoURI} />
+            <div class="token-name">{this.send.symbol}</div>
+            <div class="token-price"></div>
           </div>
           <div class="transform-icon">
             <img class="icon" src={this.statusIcon} alt="logo" />
           </div>
           <div class="token-line token-from">
-            <img class="token-icon" src={this.from.icon} />
-            <div class="token-name">{this.from.name}</div>
-            <div class="token-price">{this.from.price}</div>
+            <img class="token-icon" src={this.receive.logoURI} />
+            <div class="token-name">{this.receive.symbol}</div>
+            <div class="token-price"></div>
           </div>
         </div>
         <bottom-button type={this.type} loading={this.type === 'info'} onClick={this.handleButtonClick}>
