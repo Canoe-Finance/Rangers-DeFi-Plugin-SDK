@@ -1,0 +1,114 @@
+.my-tab {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.title {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 30px;
+  padding-right: 20px;
+  padding-left: 20px;
+  border-bottom: 1px solid $text-bg-color;
+
+  .title-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    &::before {
+      position: absolute;
+      bottom: -1px;
+      left: var(--tab-left);
+      width: var(--tab-width);
+      height: 2px;
+      content: '';
+      background: $text-color;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .tab-item {
+      height: 100%;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: $text-color;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: 0;
+      border-radius: 0;
+
+      &__active {
+        color: #fff;
+      }
+    }
+  }
+
+  .title-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 100%;
+      cursor: pointer;
+      border: 0;
+      border-radius: 0;
+
+      .icon {
+        width: 12px;
+        height: 12px;
+        font-size: 12px;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  overflow: hidden;
+  opacity: 1;
+  transition: transform 0.3s;
+}
+
+.content-wrap {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: 0.2s;
+}
+
+.my-tab-disabled {
+  .title {
+    cursor: not-allowed !important;
+
+    .tab-item {
+      color: $text-color !important;
+      pointer-events: none;
+
+      &:hover {
+        color: $text-color !important;
+      }
+    }
+
+    .menu-item {
+      pointer-events: none;
+
+      .icon {
+        color: $text-color !important;
+      }
+    }
+  }
+}

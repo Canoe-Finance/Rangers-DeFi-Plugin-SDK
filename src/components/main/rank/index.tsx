@@ -2,6 +2,7 @@ import { Component, h, Prop } from '@stencil/core'
 import { State } from '@stencil/core/internal'
 import copy from 'copy-to-clipboard'
 import { IState } from 'interface'
+import { state } from 'store'
 import { formatAddress } from '../../../utils/format'
 
 @Component({
@@ -10,7 +11,7 @@ import { formatAddress } from '../../../utils/format'
   shadow: true,
 })
 export class MetaRank {
-  @Prop() state: IState
+  @Prop() state: IState = state
   @State() copied = false
 
   handleCopy = () => {

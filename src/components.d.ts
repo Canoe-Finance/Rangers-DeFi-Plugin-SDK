@@ -5,14 +5,12 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { Chart } from "chart.js";
+import { IChartData as IChartData1, IState } from "interface";
 import { IChartData, IToken, ITransformTokenInfo } from "./interface";
-import { IState } from "interface";
 export namespace Components {
     interface BaseChart {
-        "data": Chart.ChartData;
-        "options": Chart.ChartOptions;
-        "type": Chart.ChartType;
+        "mini": any[];
+        "state": IState;
     }
     interface BottomButton {
         "disabled": boolean;
@@ -22,8 +20,8 @@ export namespace Components {
     interface CreditBox {
     }
     interface DealStatusBox {
-        "from": ITransformTokenInfo;
-        "to": ITransformTokenInfo;
+        "receive": ITransformTokenInfo;
+        "send": ITransformTokenInfo;
         "visible": boolean;
     }
     interface MetaChart {
@@ -32,10 +30,12 @@ export namespace Components {
     interface MetaHeader {
     }
     interface MetaMain {
+        "data": IChartData[];
+        "state": IState;
     }
     interface MetaMini {
-        "priceVolate": number;
-        "token": string;
+        "mini": any[];
+        "state": IState;
     }
     interface MetaPrice {
         "state": IState;
@@ -45,6 +45,10 @@ export namespace Components {
     }
     interface MetaSwap {
         "token": string;
+    }
+    interface MyTab {
+        "disabled": boolean;
+        "tabList": any[];
     }
     interface SearchTokens {
         /**
@@ -113,12 +117,16 @@ export namespace Components {
         "value": string;
     }
     interface SwapBox {
-        "defaultSellToken": IToken;
-        "selectedSellToken": IToken;
+        "chainId": number;
+        "fromAmount": number;
+        "rpc": string;
+        "slippage": number;
+        "swapTokenType": string;
         "tokens": any[];
     }
     interface SwapInput {
         "token": IToken;
+        "value": number;
     }
     interface TokenSwap {
     }
@@ -192,6 +200,12 @@ declare global {
         prototype: HTMLMetaSwapElement;
         new (): HTMLMetaSwapElement;
     };
+    interface HTMLMyTabElement extends Components.MyTab, HTMLStencilElement {
+    }
+    var HTMLMyTabElement: {
+        prototype: HTMLMyTabElement;
+        new (): HTMLMyTabElement;
+    };
     interface HTMLSearchTokensElement extends Components.SearchTokens, HTMLStencilElement {
     }
     var HTMLSearchTokensElement: {
@@ -234,6 +248,7 @@ declare global {
         "meta-price": HTMLMetaPriceElement;
         "meta-rank": HTMLMetaRankElement;
         "meta-swap": HTMLMetaSwapElement;
+        "my-tab": HTMLMyTabElement;
         "search-tokens": HTMLSearchTokensElement;
         "swap-box": HTMLSwapBoxElement;
         "swap-input": HTMLSwapInputElement;
@@ -243,9 +258,8 @@ declare global {
 }
 declare namespace LocalJSX {
     interface BaseChart {
-        "data"?: Chart.ChartData;
-        "options"?: Chart.ChartOptions;
-        "type"?: Chart.ChartType;
+        "mini"?: any[];
+        "state"?: IState;
     }
     interface BottomButton {
         "disabled"?: boolean;
@@ -255,9 +269,9 @@ declare namespace LocalJSX {
     interface CreditBox {
     }
     interface DealStatusBox {
-        "from"?: ITransformTokenInfo;
         "onClose"?: (event: CustomEvent<any>) => void;
-        "to"?: ITransformTokenInfo;
+        "receive"?: ITransformTokenInfo;
+        "send"?: ITransformTokenInfo;
         "visible"?: boolean;
     }
     interface MetaChart {
@@ -266,11 +280,13 @@ declare namespace LocalJSX {
     interface MetaHeader {
     }
     interface MetaMain {
+        "data"?: IChartData[];
+        "state"?: IState;
     }
     interface MetaMini {
+        "mini"?: any[];
         "onOpenSwap"?: (event: CustomEvent<any>) => void;
-        "priceVolate"?: number;
-        "token"?: string;
+        "state"?: IState;
     }
     interface MetaPrice {
         "state"?: IState;
@@ -280,6 +296,11 @@ declare namespace LocalJSX {
     }
     interface MetaSwap {
         "token"?: string;
+    }
+    interface MyTab {
+        "disabled"?: boolean;
+        "onClickMenu"?: (event: CustomEvent<any>) => void;
+        "tabList"?: any[];
     }
     interface SearchTokens {
         /**
@@ -344,13 +365,17 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface SwapBox {
-        "defaultSellToken"?: IToken;
-        "selectedSellToken"?: IToken;
+        "chainId"?: number;
+        "fromAmount"?: number;
+        "rpc"?: string;
+        "slippage"?: number;
+        "swapTokenType"?: string;
         "tokens"?: any[];
     }
     interface SwapInput {
         "onOpenSearch"?: (event: CustomEvent<any>) => void;
         "token"?: IToken;
+        "value"?: number;
     }
     interface TokenSwap {
     }
@@ -368,6 +393,7 @@ declare namespace LocalJSX {
         "meta-price": MetaPrice;
         "meta-rank": MetaRank;
         "meta-swap": MetaSwap;
+        "my-tab": MyTab;
         "search-tokens": SearchTokens;
         "swap-box": SwapBox;
         "swap-input": SwapInput;
@@ -390,6 +416,7 @@ declare module "@stencil/core" {
             "meta-price": LocalJSX.MetaPrice & JSXBase.HTMLAttributes<HTMLMetaPriceElement>;
             "meta-rank": LocalJSX.MetaRank & JSXBase.HTMLAttributes<HTMLMetaRankElement>;
             "meta-swap": LocalJSX.MetaSwap & JSXBase.HTMLAttributes<HTMLMetaSwapElement>;
+            "my-tab": LocalJSX.MyTab & JSXBase.HTMLAttributes<HTMLMyTabElement>;
             "search-tokens": LocalJSX.SearchTokens & JSXBase.HTMLAttributes<HTMLSearchTokensElement>;
             "swap-box": LocalJSX.SwapBox & JSXBase.HTMLAttributes<HTMLSwapBoxElement>;
             "swap-input": LocalJSX.SwapInput & JSXBase.HTMLAttributes<HTMLSwapInputElement>;

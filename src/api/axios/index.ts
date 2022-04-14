@@ -33,10 +33,40 @@ export const getHolders = async (name: string) => {
 }
 
 /**
+ * get mini-chart
+ */
+export const getMiniChartData = async (name: string) => {
+  const apiUrl = url['mini-chart'].replace('name', name.toLowerCase())
+  const { data } = await axios.get(apiUrl)
+  return data
+}
+
+/**
  * get chart
  */
 export const getChartData = async (name: string) => {
   const apiUrl = url.chart.replace('name', name.toLowerCase())
   const { data } = await axios.get(apiUrl)
+  return data
+}
+
+/**
+ * get dodoapi data
+ */
+
+export const getDodoData = async (
+  fromTokenAddress: string,
+  fromTokenDecimals: number,
+  toTokenAddress: string,
+  toTokenDecimals: number,
+  fromAmount: any,
+  slippage: number,
+  userAddr: string,
+  chainId: number,
+  rpc: string,
+) => {
+  const { data } = await axios.get(
+    `${url.router}fromTokenAddress=${fromTokenAddress}&fromTokenDecimals=${fromTokenDecimals}&toTokenAddress=${toTokenAddress}&toTokenDecimals=${toTokenDecimals}&fromAmount=${fromAmount}&slippage=${slippage}&userAddr=${userAddr}&chainId=${chainId}&rpc=${rpc}`,
+  )
   return data
 }

@@ -33,9 +33,8 @@ export interface IToken {
 }
 
 export interface ITransformTokenInfo {
-  icon: string
-  name: string
-  price: number
+  logoURI: string
+  symbol: string
 }
 export interface IInfo {
   name: string
@@ -53,6 +52,7 @@ export interface IInfo {
 }
 
 export interface IState {
+  appShow: boolean
   chain: chainItemType
   userAddress: string
   shortUserAddress: string

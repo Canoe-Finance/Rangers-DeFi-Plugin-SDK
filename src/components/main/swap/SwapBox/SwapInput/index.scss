@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: space-between;
     width: 320px;
+    height: 36px;
     padding: 10px;
     background: $text-bg-color;
     border-radius: 4px;
@@ -42,18 +43,24 @@
 
     input.customs {
       width: 80px;
-      height: 100%;
+      line-height: 100%;
       color: #fff;
       background-color: $text-bg-color;
       border: none;
+      outline: none;
 
       &::placeholder {
         float: right;
         color: #fff;
       }
+
+      &:focus {
+        outline: 0 !important;
+        appearance: none;
+      }
     }
 
-    input:focus {
+    input {
       outline: none;
     }
   }

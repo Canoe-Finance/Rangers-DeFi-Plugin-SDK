@@ -1,10 +1,7 @@
 import { Component, h, Fragment, Prop, State, Element } from '@stencil/core'
-
-import { ITransformTokenInfo, IToken } from '../../../../interface'
-
-import './SwapInput/index'
-import './Search/index'
-import bscTokenList from '../../../../tokens/tokenlist-bsc.json'
+import { state } from '../../../../store'
+import { getDodoData } from 'api/axios'
+// import bscTokenList from '../../../../tokens/tokenlist-bsc.json'
 @Component({
   tag: 'swap-box',
   styleUrl: 'index.scss',
@@ -12,41 +9,47 @@ import bscTokenList from '../../../../tokens/tokenlist-bsc.json'
 })
 export class SwapBox {
   @Element() el: HTMLElement
-  @Prop() defaultSellToken: IToken = {
-    name: 'Ethereum',
-    address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-    logoURI:
-      'https://raw.githubusercontent.com/complusnetwork/default-token-list/master/src/bsc/0x2170Ed0880ac9A755fd29B2688956BD959F933F8/logo.png',
-    symbol: 'ETH',
-    decimals: 18,
-  }
-  @Prop() selectedSellToken: IToken = {
-    name: '',
-    address: '',
-    symbol: '',
-    logoURI: '',
-    decimals: 0,
-  }
+
   @Prop() tokens = []
+  @Prop() slippage: number = 5
+  @Prop() chainId: number = 1
+  @Prop() rpc: string = 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
+  @Prop() fromAmount = 10000000000000000000
+  resAmount = 0
+  @Prop() swapTokenType: string = 'send'
   @State() showSearch: boolean = false
-  _openSearch = () => {
+  _openSearch = (type: string) => {
+    this.swapTokenType = type
     this.showSearch = !this.showSearch
   }
-  _selectToken = item => {
+  _selectToken = async ({ detail }) => {
     const webcomplete = this.el
     const input = webcomplete.shadowRoot.querySelector('search-tokens')
-    this.selectedSellToken = item.detail
-    console.log('selected', this.selectedSellToken)
+    if (this.swapTokenType === 'send') {
+      state.send = detail
+    } else {
+      state.receive = detail
+    }
+    const data = await getDodoData(
+      state.send.address,
+      state.send.decimals,
+      state.receive.address,
+      state.receive.decimals,
+      this.fromAmount,
+      this.slippage,
+      state.userAddress,
+      this.chainId,
+      this.rpc,
+    )
+    console.log(data)
+    this.resAmount = data.data.resAmount
     this.showSearch = false
     input.clear()
-  }
-  componentWillLoad() {
-    this.selectedSellToken = this.defaultSellToken
-    this.tokens = bscTokenList
   }
   componentDidLoad() {
     const webcomplete = this.el
     const input = webcomplete.shadowRoot.querySelector('search-tokens')
+    // TODO:
     input.suggestionGenerator = function (text) {
       return fetch('https://wispy-bird-88a7.uniswap.workers.dev/?url=http://tokens.1inch.eth.link')
         .then(response => response.json())
@@ -72,16 +75,6 @@ export class SwapBox {
   }
 
   @State() transformInfoVisible: boolean = false
-  @State() transformFromInfo: ITransformTokenInfo = {
-    icon: 'https://wallet-asset.matic.network/img/tokens/eth.svg',
-    name: 'ETH',
-    price: 0.1569,
-  }
-  @State() transformToInfo: ITransformTokenInfo = {
-    icon: 'https://wallet-asset.matic.network/img/tokens/usdt.svg',
-    name: 'BNB',
-    price: 1.09191,
-  }
   openTransformInfoBox = () => {
     this.transformInfoVisible = true
   }
@@ -91,7 +84,20 @@ export class SwapBox {
       <Fragment>
         <div class="swap-box flex flex-col items-center">
           <div class="grow">
-            <swap-input token={this.selectedSellToken} onOpenSearch={this._openSearch}></swap-input>
+            <swap-input
+              token={state.send}
+              value={this.fromAmount}
+              onOpenSearch={() => this._openSearch('send')}
+            ></swap-input>
+            <div class="flex items-center justify-end h-[26px] text-[12px]">
+              <span>Balance</span>
+              <button class="flex items-center w-[25px] h-[13px] bg-[#323645] text-[#A2A8BA] ml-[4px]">MAX</button>
+            </div>
+            <swap-input
+              token={state.receive}
+              value={this.resAmount}
+              onOpenSearch={() => this._openSearch('receive')}
+            ></swap-input>
           </div>
           <bottom-button class="bottom-button" onClick={this.openTransformInfoBox}>
             <xy-icon class="icon" slot="prefix" name="swap-m"></xy-icon>
@@ -105,8 +111,8 @@ export class SwapBox {
 
         <deal-status-box
           visible={this.transformInfoVisible}
-          from={this.transformFromInfo}
-          to={this.transformToInfo}
+          send={state.send}
+          receive={state.receive}
           onClose={() => (this.transformInfoVisible = false)}
         ></deal-status-box>
       </Fragment>
