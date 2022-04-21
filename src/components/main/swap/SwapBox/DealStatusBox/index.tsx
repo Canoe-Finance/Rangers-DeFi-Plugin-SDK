@@ -1,6 +1,7 @@
 import { Component, h, State, Prop, Event, EventEmitter } from '@stencil/core'
 import * as workerTimers from 'worker-timers'
 import { ITransformTokenInfo } from '../../../../../interface'
+import { dodoSwap } from 'api/ethers/dodo'
 
 @Component({
   tag: 'deal-status-box',
@@ -17,6 +18,7 @@ export class DealStatusBox {
   @State() buttonText: string = 'CONFIRM'
 
   @Prop() visible: boolean = false
+  @Prop() swapData = null
   @Prop() send: ITransformTokenInfo = { symbol: '', logoURI: '' }
   @Prop() receive: ITransformTokenInfo = { symbol: '', logoURI: '' }
 
@@ -38,6 +40,16 @@ export class DealStatusBox {
     this.buttonText = 'PENDING'
     this.statusIcon = '../../../../../assets/icon/transforming.svg'
     this.timeout = 60
+    dodoSwap(this.swapData)
+      .then(res => {
+        console.log('swap res', res)
+        this.setSuccess()
+        workerTimers.clearInterval(this.intervalId)
+      })
+      .catch(_ => {
+        this.setError()
+        workerTimers.clearInterval(this.intervalId)
+      })
     this.intervalId = workerTimers.setInterval(() => {
       if (this.timeout > 0) {
         this.timeout--
@@ -45,10 +57,6 @@ export class DealStatusBox {
         workerTimers.clearInterval(this.intervalId)
       }
     }, 1000)
-    setTimeout(() => {
-      this.setSuccess()
-      // this.setError()
-    }, 3000)
   }
 
   setSuccess = () => {
@@ -103,7 +111,7 @@ export class DealStatusBox {
           <div class="token-line token-from">
             <img class="token-icon" src={this.send.logoURI} />
             <div class="token-name">{this.send.symbol}</div>
-            <div class="token-price"></div>
+            <div class="token-price">{this.swapData.showFromAmount}</div>
           </div>
           <div class="transform-icon">
             <img class="icon" src={this.statusIcon} alt="logo" />
@@ -111,7 +119,7 @@ export class DealStatusBox {
           <div class="token-line token-from">
             <img class="token-icon" src={this.receive.logoURI} />
             <div class="token-name">{this.receive.symbol}</div>
-            <div class="token-price"></div>
+            <div class="token-price">{this.swapData.showToAmount}</div>
           </div>
         </div>
         <bottom-button type={this.type} loading={this.type === 'info'} onClick={this.handleButtonClick}>

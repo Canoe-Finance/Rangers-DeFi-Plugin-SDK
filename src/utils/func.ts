@@ -19,3 +19,12 @@ export const getChainList = (): chainItemType[] => {
 export const getShortAddress = (address: string): string => {
   return address ? `${address.substr(0, 4)}...${address.substr(-4)}` : ''
 }
+
+export const showEthersError = info => {
+  // TODO:
+  console.log('ethers error:', info.message)
+  // ElNotification.warning({
+  //   title: 'Error Info',
+  //   message: info.message || '',
+  // })
+}

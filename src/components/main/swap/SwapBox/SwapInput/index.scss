@@ -42,7 +42,7 @@
     }
 
     input.customs {
-      width: 80px;
+      width: 140px;
       line-height: 100%;
       color: #fff;
       background-color: $text-bg-color;
@@ -60,8 +60,19 @@
       }
     }
 
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+
     input {
       outline: none;
+    }
+
+    input:focus {
+      outline: 0;
+      box-shadow: none;
     }
   }
 }

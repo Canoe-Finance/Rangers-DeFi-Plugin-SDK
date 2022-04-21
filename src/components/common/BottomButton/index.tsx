@@ -8,12 +8,12 @@ import { Component, Prop, h } from '@stencil/core'
 export class BottomButton {
   // default primary info success error
   @Prop() type: string = 'default'
-  @Prop() disabled: boolean = false
-  @Prop() loading: boolean = false
+  @Prop({ mutable: true }) disabled: boolean = false
+  @Prop({ mutable: true }) loading: boolean = false
 
   render() {
     return (
-      <div
+      <xy-button
         class={{
           'm-bottom-button': true,
           'm-bottom-button--default': this.type === 'default',
@@ -24,6 +24,7 @@ export class BottomButton {
           'm-bottom-button--disabled': this.disabled,
           'm-bottom-button--loading': this.loading,
         }}
+        disabled={this.disabled || this.loading}
       >
         <span class="prefix">
           <slot name="prefix"></slot>
@@ -35,7 +36,7 @@ export class BottomButton {
         <span class="suffix">
           <slot name="suffix"></slot>
         </span>
-      </div>
+      </xy-button>
     )
   }
 }

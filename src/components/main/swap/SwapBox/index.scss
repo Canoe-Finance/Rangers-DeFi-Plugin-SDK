@@ -10,9 +10,26 @@
   height: 100%;
   padding: 20px 20px 0;
 
+  .router-container {
+    width: 320px;
+    height: 97px;
+    background: #323645;
+    border-radius: 4px;
+  }
+
   .bottom-button {
-    .icon {
+    margin-top: 10px;
+
+    .icon-swap {
       font-size: 24px;
+    }
+
+    .icon-approve {
+      font-size: 20px;
+    }
+
+    .icon-wallet {
+      font-size: 16px;
     }
   }
 }

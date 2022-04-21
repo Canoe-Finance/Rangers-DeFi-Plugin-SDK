@@ -55,8 +55,18 @@ export interface IState {
   appShow: boolean
   chain: chainItemType
   userAddress: string
+  userBalance: number
   shortUserAddress: string
   send: IToken
   receive: IToken
   info: IInfo
+}
+
+export interface IDodoRouterRes {
+  type: string
+  resAmount: number
+  priceImpact: number
+  resPricePerFromToken: number
+  resPricePerToToken: number
+  useSource: string
 }

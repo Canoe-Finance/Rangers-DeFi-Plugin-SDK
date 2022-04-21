@@ -9,7 +9,8 @@ export class MyTab {
   tabRef!: HTMLElement
 
   @Prop() tabList = []
-  @Prop() disabled: boolean = false
+  @Prop({ mutable: true }) disabled: boolean = false
+
   @State() currentTab: number = 0
   @State() tabLeft: string = '0'
   @State() tabWidth: string = '0'
@@ -30,7 +31,8 @@ export class MyTab {
 
   @Event() clickMenu: EventEmitter
   handleMenu = (menuName: string) => {
-    this.clickMenu.emit(menuName)
+    const cName = this.tabList[this.currentTab].cName
+    this.clickMenu.emit({ cName, menuName })
   }
 
   render() {
@@ -60,7 +62,7 @@ export class MyTab {
           </div>
           <div class="title-menu">
             {this.menuList.map((item, i) => (
-              <xy-button
+              <div
                 class="menu-item"
                 onClick={() => {
                   this.handleMenu(item.name)
@@ -68,7 +70,7 @@ export class MyTab {
                 key={i}
               >
                 <xy-icon class="icon" name={item.icon}></xy-icon>
-              </xy-button>
+              </div>
             ))}
           </div>
         </div>

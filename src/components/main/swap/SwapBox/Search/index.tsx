@@ -51,7 +51,7 @@ export class Autocomplete implements ComponentInterface {
   /**
    * The maximally shown suggestions in the list
    */
-  @Prop() maxSuggestions = 5
+  @Prop() maxSuggestions = 10
 
   /**
    * Timing to suggest on empty (-1 to disable)
@@ -243,9 +243,9 @@ export class Autocomplete implements ComponentInterface {
           class={this.cssClasses.input}
           onKeyDown={e => this.handleKeyDown(e)}
           onKeyUp={e => this.handleKeyUp(e.key, e.target['value'])}
-          //   onBlur={e => {
-          //     this.handleBlur(e)
-          //   }}
+          onBlur={e => {
+            this.handleBlur(e)
+          }}
           onFocus={e => {
             this.handleFocus(e)
           }}

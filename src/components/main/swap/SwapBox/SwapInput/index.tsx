@@ -15,12 +15,21 @@ export class SwapInput {
     decimals: 0,
   }
   @Prop() value: number = 0
+  @Event() tokenBlur: EventEmitter
+  @Event() updateValue: EventEmitter
   @Event() openSearch: EventEmitter
 
+  private onBlur = () => {
+    this.tokenBlur.emit()
+  }
   private _openSearch = () => {
     this.openSearch.emit()
   }
 
+  _blockInvalidChar = e => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()
+  _updateValue = (e: any) => {
+    this.updateValue.emit(e.target.value)
+  }
   render() {
     return (
       <div class="input-container">
@@ -28,7 +37,15 @@ export class SwapInput {
           <img src={this.token.logoURI} class="token-logo" />
           <span class="token-symbol">{this.token.symbol}</span>
         </div>
-        <input class="customs focus:outline-none" placeholder="0" inputmode="numeric" type="text" value={this.value} />
+        <input
+          class="customs focus:outline-none"
+          placeholder="0"
+          type="number"
+          value={this.value}
+          onInput={this._updateValue}
+          onBlur={this.onBlur}
+          onKeyDown={this._blockInvalidChar}
+        />
       </div>
     )
   }

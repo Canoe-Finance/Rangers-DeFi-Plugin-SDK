@@ -80,10 +80,10 @@ class XyDialog extends HTMLElement {
         }
         .btn-close{
             position:absolute;
-            right:10px;
-            top:10px;
+            right:0px;
+            top:0px;
             border:0;
-            display: none;
+            // display: none;
         }
         .dialog-footer xy-button {
             margin-left:10px;
