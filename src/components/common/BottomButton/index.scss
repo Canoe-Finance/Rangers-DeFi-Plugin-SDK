@@ -1,5 +1,6 @@
 :host {
   width: 100%;
+  border: 0;
 }
 
 .m-bottom-button {
@@ -11,6 +12,7 @@
   height: 40px;
   padding: 0 12px;
   cursor: pointer;
+  border: 0;
   border-radius: 8px;
 
   .text {

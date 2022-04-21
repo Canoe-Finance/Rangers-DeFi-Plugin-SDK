@@ -10,34 +10,40 @@ export class SwapMain {
   tabList = [
     {
       title: 'swap',
+      cName: 'swap',
       menuList: [
-        { name: 'swapRefresh', icon: 'refresh' },
-        { name: 'swapReload', icon: 'reload' },
-        { name: 'swapCustomize', icon: 'customize' },
+        { name: 'refresh', icon: 'refresh' },
+        { name: 'reload', icon: 'reload' },
+        { name: 'customize', icon: 'customize' },
       ],
     },
     {
       title: 'credit card',
+      cName: 'credit',
       menuList: [],
     },
     {
       title: 'Transfer',
+      cName: 'transfer',
       menuList: [],
     },
   ]
   tabRef!: HTMLElement
+  swapBoxRef!: HTMLElement
+  creditBoxRef!: HTMLElement
+  transferBoxRef!: HTMLElement
 
-  @State() showContent: boolean = false
-  @State() currentTab: number = 0
-  @State() tabLeft: string = '0'
-  @State() tabWidth: string = '0'
+  @State() showContent: boolean = true
 
-  handleRefresh = () => {}
-  handleReload = () => {}
-  handleCustomize = () => {}
-
-  clickTabMenu = ({ detail }) => {
-    console.log('click tab menu:', detail)
+  clickTabMenu = async ({ detail }) => {
+    const { cName, menuName } = detail
+    if (cName === 'swap') {
+      await this.swapBoxRef['clickMenu'](menuName)
+    } else if (cName === 'credit') {
+      await this.creditBoxRef['clickMenu'](menuName)
+    } else if (cName === 'transfer') {
+      await this.transferBoxRef['clickMenu'](menuName)
+    }
   }
 
   componentWillLoad() {
@@ -59,19 +65,19 @@ export class SwapMain {
         ></div>
         <my-tab class="my-tab grow" disabled={!this.showContent} tabList={this.tabList} onClickMenu={this.clickTabMenu}>
           <div class="content-item">
-            <swap-box class="container"></swap-box>
+            <swap-box class="container" ref={el => (this.swapBoxRef = el as HTMLElement)}></swap-box>
             <div class="footer">
               Powered by <span>MetaDEX</span>
             </div>
           </div>
           <div class="content-item">
-            <credit-box class="container"></credit-box>
+            <credit-box class="container" ref={el => (this.creditBoxRef = el as HTMLElement)}></credit-box>
             <div class="footer">
               Powered by <span>MetaDEX</span>
             </div>
           </div>
           <div class="content-item">
-            <transfer-box class="container"></transfer-box>
+            <transfer-box class="container" ref={el => (this.transferBoxRef = el as HTMLElement)}></transfer-box>
             <div class="footer">
               Powered by <span>MetaDEX</span>
             </div>

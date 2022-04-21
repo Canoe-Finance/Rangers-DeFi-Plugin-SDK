@@ -1,4 +1,4 @@
-import { BigNumber, utils } from 'ethers'
+import { BigNumber, utils, Contract, getDefaultProvider, providers } from 'ethers'
 
 /**
  * toHex

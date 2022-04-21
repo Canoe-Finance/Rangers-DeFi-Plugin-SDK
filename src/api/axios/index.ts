@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { state } from '../../store'
 import { url } from './url'
 
 // coingecko api url
@@ -51,22 +52,32 @@ export const getChartData = async (name: string) => {
 }
 
 /**
- * get dodoapi data
+ * get dodo api data
  */
-
-export const getDodoData = async (
-  fromTokenAddress: string,
-  fromTokenDecimals: number,
-  toTokenAddress: string,
-  toTokenDecimals: number,
-  fromAmount: any,
-  slippage: number,
-  userAddr: string,
-  chainId: number,
-  rpc: string,
-) => {
-  const { data } = await axios.get(
-    `${url.router}fromTokenAddress=${fromTokenAddress}&fromTokenDecimals=${fromTokenDecimals}&toTokenAddress=${toTokenAddress}&toTokenDecimals=${toTokenDecimals}&fromAmount=${fromAmount}&slippage=${slippage}&userAddr=${userAddr}&chainId=${chainId}&rpc=${rpc}`,
-  )
-  return data
+export const getDodoData = ({
+  fromTokenAddress,
+  fromTokenDecimals,
+  toTokenAddress,
+  toTokenDecimals,
+  fromAmount,
+  slippage,
+}) => {
+  const params = {
+    fromTokenAddress: fromTokenAddress,
+    fromTokenDecimals: fromTokenDecimals,
+    toTokenAddress: toTokenAddress,
+    toTokenDecimals: toTokenDecimals,
+    fromAmount: fromAmount,
+    slippage: slippage,
+    userAddr: '0x257Dc3a71607044F281B24c7A48A0a9D544e769D',
+    chainId: state.chain.chainId,
+    rpc: '',
+  }
+  return axios.get(url.router, { params: params }).then(res => {
+    if (res.status === 200) {
+      return res.data.data
+    } else {
+      return Promise.reject(res.data.data)
+    }
+  })
 }

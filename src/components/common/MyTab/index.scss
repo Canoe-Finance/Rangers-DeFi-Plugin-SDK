@@ -78,7 +78,8 @@
 
 .content {
   flex: 1;
-  overflow: hidden;
+
+  // overflow: hidden;
   opacity: 1;
   transition: transform 0.3s;
 }

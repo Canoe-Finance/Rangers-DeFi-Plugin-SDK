@@ -11,6 +11,18 @@ import autoprefixer from 'autoprefixer'
 // https://stenciljs.com/docs/config
 
 export const config: Config = {
+  enableCache: false,
+  buildEs5: 'prod',
+  extras: {
+    cssVarsShim: true,
+    dynamicImportShim: true,
+    shadowDomShim: true,
+    safari10: true,
+    scriptDataOpts: true,
+    appendChildSlotFix: false,
+    cloneNodeFix: false,
+    slotChildNodesFix: true,
+  },
   outputTargets: [
     {
       type: 'www',

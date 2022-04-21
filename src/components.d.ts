@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { IChartData as IChartData1, IState } from "interface";
+import { IChartData as IChartData1, IDodoRouterRes, IState } from "interface";
 import { IChartData, IToken, ITransformTokenInfo } from "./interface";
 export namespace Components {
     interface BaseChart {
@@ -22,6 +22,7 @@ export namespace Components {
     interface DealStatusBox {
         "receive": ITransformTokenInfo;
         "send": ITransformTokenInfo;
+        "swapData": any;
         "visible": boolean;
     }
     interface MetaChart {
@@ -49,6 +50,9 @@ export namespace Components {
     interface MyTab {
         "disabled": boolean;
         "tabList": any[];
+    }
+    interface RouterPath {
+        "dodoData": IDodoRouterRes;
     }
     interface SearchTokens {
         /**
@@ -117,9 +121,11 @@ export namespace Components {
         "value": string;
     }
     interface SwapBox {
-        "chainId": number;
-        "fromAmount": number;
-        "rpc": string;
+        "balance": string;
+        "clickMenu": (menuName: string) => Promise<void>;
+        "dodoRouterData": IDodoRouterRes;
+        "receiveAmount": number;
+        "sendAmount": number;
         "slippage": number;
         "swapTokenType": string;
         "tokens": any[];
@@ -127,6 +133,10 @@ export namespace Components {
     interface SwapInput {
         "token": IToken;
         "value": number;
+    }
+    interface SwapSetting {
+        "slippage": number;
+        "visible": boolean;
     }
     interface TokenSwap {
     }
@@ -206,6 +216,12 @@ declare global {
         prototype: HTMLMyTabElement;
         new (): HTMLMyTabElement;
     };
+    interface HTMLRouterPathElement extends Components.RouterPath, HTMLStencilElement {
+    }
+    var HTMLRouterPathElement: {
+        prototype: HTMLRouterPathElement;
+        new (): HTMLRouterPathElement;
+    };
     interface HTMLSearchTokensElement extends Components.SearchTokens, HTMLStencilElement {
     }
     var HTMLSearchTokensElement: {
@@ -223,6 +239,12 @@ declare global {
     var HTMLSwapInputElement: {
         prototype: HTMLSwapInputElement;
         new (): HTMLSwapInputElement;
+    };
+    interface HTMLSwapSettingElement extends Components.SwapSetting, HTMLStencilElement {
+    }
+    var HTMLSwapSettingElement: {
+        prototype: HTMLSwapSettingElement;
+        new (): HTMLSwapSettingElement;
     };
     interface HTMLTokenSwapElement extends Components.TokenSwap, HTMLStencilElement {
     }
@@ -249,9 +271,11 @@ declare global {
         "meta-rank": HTMLMetaRankElement;
         "meta-swap": HTMLMetaSwapElement;
         "my-tab": HTMLMyTabElement;
+        "router-path": HTMLRouterPathElement;
         "search-tokens": HTMLSearchTokensElement;
         "swap-box": HTMLSwapBoxElement;
         "swap-input": HTMLSwapInputElement;
+        "swap-setting": HTMLSwapSettingElement;
         "token-swap": HTMLTokenSwapElement;
         "transfer-box": HTMLTransferBoxElement;
     }
@@ -272,6 +296,7 @@ declare namespace LocalJSX {
         "onClose"?: (event: CustomEvent<any>) => void;
         "receive"?: ITransformTokenInfo;
         "send"?: ITransformTokenInfo;
+        "swapData"?: any;
         "visible"?: boolean;
     }
     interface MetaChart {
@@ -301,6 +326,9 @@ declare namespace LocalJSX {
         "disabled"?: boolean;
         "onClickMenu"?: (event: CustomEvent<any>) => void;
         "tabList"?: any[];
+    }
+    interface RouterPath {
+        "dodoData"?: IDodoRouterRes;
     }
     interface SearchTokens {
         /**
@@ -365,17 +393,26 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     interface SwapBox {
-        "chainId"?: number;
-        "fromAmount"?: number;
-        "rpc"?: string;
+        "balance"?: string;
+        "dodoRouterData"?: IDodoRouterRes;
+        "receiveAmount"?: number;
+        "sendAmount"?: number;
         "slippage"?: number;
         "swapTokenType"?: string;
         "tokens"?: any[];
     }
     interface SwapInput {
         "onOpenSearch"?: (event: CustomEvent<any>) => void;
+        "onTokenBlur"?: (event: CustomEvent<any>) => void;
+        "onUpdateValue"?: (event: CustomEvent<any>) => void;
         "token"?: IToken;
         "value"?: number;
+    }
+    interface SwapSetting {
+        "onChangeSlippage"?: (event: CustomEvent<any>) => void;
+        "onClose"?: (event: CustomEvent<any>) => void;
+        "slippage"?: number;
+        "visible"?: boolean;
     }
     interface TokenSwap {
     }
@@ -394,9 +431,11 @@ declare namespace LocalJSX {
         "meta-rank": MetaRank;
         "meta-swap": MetaSwap;
         "my-tab": MyTab;
+        "router-path": RouterPath;
         "search-tokens": SearchTokens;
         "swap-box": SwapBox;
         "swap-input": SwapInput;
+        "swap-setting": SwapSetting;
         "token-swap": TokenSwap;
         "transfer-box": TransferBox;
     }
@@ -417,9 +456,11 @@ declare module "@stencil/core" {
             "meta-rank": LocalJSX.MetaRank & JSXBase.HTMLAttributes<HTMLMetaRankElement>;
             "meta-swap": LocalJSX.MetaSwap & JSXBase.HTMLAttributes<HTMLMetaSwapElement>;
             "my-tab": LocalJSX.MyTab & JSXBase.HTMLAttributes<HTMLMyTabElement>;
+            "router-path": LocalJSX.RouterPath & JSXBase.HTMLAttributes<HTMLRouterPathElement>;
             "search-tokens": LocalJSX.SearchTokens & JSXBase.HTMLAttributes<HTMLSearchTokensElement>;
             "swap-box": LocalJSX.SwapBox & JSXBase.HTMLAttributes<HTMLSwapBoxElement>;
             "swap-input": LocalJSX.SwapInput & JSXBase.HTMLAttributes<HTMLSwapInputElement>;
+            "swap-setting": LocalJSX.SwapSetting & JSXBase.HTMLAttributes<HTMLSwapSettingElement>;
             "token-swap": LocalJSX.TokenSwap & JSXBase.HTMLAttributes<HTMLTokenSwapElement>;
             "transfer-box": LocalJSX.TransferBox & JSXBase.HTMLAttributes<HTMLTransferBoxElement>;
         }
