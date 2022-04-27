@@ -9,7 +9,6 @@ const projectId = 'ymg'
 export const dodoSwap = ({ dodoData, fromAddress, toAddress, fromAmount }) => {
   const key = dodoData.data.substring(0, 10)
   const decoderData = decoder(dodoData.data)
-  console.log('decoderData', decoderData)
   const params = {
     targetApproveAddr: dodoData.targetApproveAddr || dodoData.to,
     to: dodoData.to,
@@ -47,7 +46,6 @@ export const dodoMixSwapOne = ({ targetApproveAddr, to, fromAddress, toAddress, 
     decoderData[7].value,
     decoderData[8].value,
   ]
-  console.log('body', body)
   return contract.dodoMixSwapOne(...body, { value: number })
 }
 
@@ -63,7 +61,6 @@ export const dodoMixSwapTwo = ({ targetApproveAddr, to, fromAddress, toAddress, 
     decoderData[7].value,
     decoderData[8].value,
   ]
-  console.log('body', JSON.stringify(body))
   return contract.dodoMixSwapTwo(...body, { value: number })
 }
 
@@ -77,7 +74,6 @@ export const dodoSwapV2ETHToToken = ({ targetApproveAddr, to, fromAddress, toAdd
     decoderData[3].value,
     decoderData[4].value,
   ]
-  console.log('body', number, body)
   return contract.dodoSwapV2ETHToToken(...body, { value: number })
 }
 
@@ -118,7 +114,6 @@ export const dodoSwapV1 = ({ targetApproveAddr, to, fromAddress, toAddress, numb
     decoderData[5].value,
     decoderData[6].value,
   ]
-  console.log('body', body)
   return contract.dodoSwapV1(...body, { value: number })
 }
 
@@ -132,7 +127,6 @@ export const dodoSwapV2TokenToETH = ({ targetApproveAddr, to, fromAddress, toAdd
     decoderData[4].value,
     decoderData[5].value,
   ]
-  console.log('body', body)
   return contract.dodoSwapV2TokenToETH(...body, { value: number })
 }
 

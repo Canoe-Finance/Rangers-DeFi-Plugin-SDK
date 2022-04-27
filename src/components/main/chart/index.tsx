@@ -4,11 +4,11 @@ import { Chart, init } from 'klinecharts'
 import { IChartData } from '../../../interface'
 
 @Component({
-  tag: 'meta-chart',
+  tag: 'canoe-chart',
   styleUrl: 'index.scss',
   shadow: true,
 })
-export class MetaChart {
+export class CanoeChart {
   @Prop() data: IChartData[]
 
   chartDom!: HTMLDivElement

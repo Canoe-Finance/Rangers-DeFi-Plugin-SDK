@@ -60,6 +60,8 @@ export interface IState {
   send: IToken
   receive: IToken
   info: IInfo
+  receiveAmount: number
+  sendAmount: number
 }
 
 export interface IDodoRouterRes {

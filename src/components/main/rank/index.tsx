@@ -6,11 +6,11 @@ import { state } from 'store'
 import { formatAddress } from '../../../utils/format'
 
 @Component({
-  tag: 'meta-rank',
+  tag: 'canoe-rank',
   styleUrl: 'index.scss',
   shadow: true,
 })
-export class MetaRank {
+export class CanoeRank {
   @Prop() state: IState = state
   @State() copied = false
 

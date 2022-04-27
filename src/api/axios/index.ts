@@ -2,26 +2,11 @@ import axios from 'axios'
 import { state } from '../../store'
 import { url } from './url'
 
-// coingecko api url
-const chainName = {
-  1: 'ethereum',
-  56: 'binance-smart-chain',
-  137: 'polygon-pos',
-}
-
 /**
  * get coingecko market info
  */
 export const getCoinMarketInfo = async (name: string) => {
   const { data } = await axios.get(`${url.market}${name.toLowerCase()}`)
-  return data[0]
-}
-
-/**
- * get coingecko coin info
- */
-export const getCoinInfo = async (chainId: number, address: string) => {
-  const { data } = await axios.get(`${url.coins}/${chainName[chainId]}/contract/${address.toLowerCase()}`)
   return data[0]
 }
 
@@ -34,21 +19,12 @@ export const getHolders = async (name: string) => {
 }
 
 /**
- * get mini-chart
- */
-export const getMiniChartData = async (name: string) => {
-  const apiUrl = url['mini-chart'].replace('name', name.toLowerCase())
-  const { data } = await axios.get(apiUrl)
-  return data
-}
-
-/**
  * get chart
  */
-export const getChartData = async (name: string) => {
-  const apiUrl = url.chart.replace('name', name.toLowerCase())
+export const getChartData = async (send: string, receive: string, from: string, to: string) => {
+  const apiUrl = `${url.chart}${send}/${receive}&interval=15m&limit=96&addresses=${from}/${to}&network=bsc-mainnet`
   const { data } = await axios.get(apiUrl)
-  return data
+  return data.data
 }
 
 /**

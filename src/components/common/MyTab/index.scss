@@ -113,3 +113,16 @@
     }
   }
 }
+
+.time-ro {
+  animation: time-rotate 30s infinite linear;
+}
+@keyframes time-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}

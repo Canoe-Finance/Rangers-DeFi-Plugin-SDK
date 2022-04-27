@@ -17,6 +17,30 @@ export namespace Components {
         "loading": boolean;
         "type": string;
     }
+    interface CanoeChart {
+        "data": IChartData[];
+    }
+    interface CanoeDex {
+        "token": string;
+    }
+    interface CanoeHeader {
+    }
+    interface CanoeMain {
+        "data": IChartData[];
+        "state": IState;
+    }
+    interface CanoeMini {
+        "mini": any[];
+        "state": IState;
+    }
+    interface CanoePrice {
+        "state": IState;
+    }
+    interface CanoeRank {
+        "state": IState;
+    }
+    interface CanoeZoom {
+    }
     interface CreditBox {
     }
     interface DealStatusBox {
@@ -24,28 +48,6 @@ export namespace Components {
         "send": ITransformTokenInfo;
         "swapData": any;
         "visible": boolean;
-    }
-    interface MetaChart {
-        "data": IChartData[];
-    }
-    interface MetaHeader {
-    }
-    interface MetaMain {
-        "data": IChartData[];
-        "state": IState;
-    }
-    interface MetaMini {
-        "mini": any[];
-        "state": IState;
-    }
-    interface MetaPrice {
-        "state": IState;
-    }
-    interface MetaRank {
-        "state": IState;
-    }
-    interface MetaSwap {
-        "token": string;
     }
     interface MyTab {
         "disabled": boolean;
@@ -55,80 +57,13 @@ export namespace Components {
         "dodoData": IDodoRouterRes;
     }
     interface SearchTokens {
-        /**
-          * Clears the form field (suggestions and selection)
-         */
-        "clear": () => Promise<void>;
-        /**
-          * If no value is selected, clear the input and emit unselected, if false, the value will not be cleared (usefull for suggesting values on a free text search)
-         */
-        "clearOnUnselectedClosing": boolean;
-        /**
-          * The class names, which should be set on the rendered html elements
-         */
-        "cssClasses": { wrapper: string; input: string; suggestions: string; suggestion: string; active: string; };
-        /**
-          * Enable/Disable the input field
-         */
-        "disabled": boolean;
-        /**
-          * Timing to suggest on empty (-1 to disable)
-         */
-        "emptySuggestionTime": number;
-        /**
-          * Returns the `text` of the selected item
-         */
-        "getText": () => Promise<string>;
-        /**
-          * Returns the `value` of the selected item
-         */
-        "getValue": () => Promise<string>;
-        /**
-          * id of the input field
-         */
-        "inputId": string;
-        /**
-          * A hint to the browser for which keyboard to display. Possible values: `"none"`, `"text"`, `"tel"`, `"url"`, `"email"`, `"numeric"`, `"decimal"`, and `"search"`.
-         */
-        "inputmode"?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
-        /**
-          * The maximally shown suggestions in the list
-         */
-        "maxSuggestions": number;
-        /**
-          * The minimum input size for generating suggestions
-         */
-        "minInput": number;
-        /**
-          * The placeholder for the input field
-         */
-        "placeholder": string;
-        /**
-          * Form validation: is the form input required
-         */
-        "required": boolean;
-        /**
-          * Async suggestion generator: `text` is the displayed for users in the form after selection (if no `suggesion` also as suggesion) `value` is the actual value of the form field optional `suggesion` if the autocomplete suggestion item should be formatted differently than `text`
-         */
-        "suggestionGenerator": (text: string) => Promise<Array<{ text: string; value: string; suggestion?: string }>>;
-        /**
-          * The text is displayed by the form field for users
-         */
-        "text": string;
-        /**
-          * The actual value of the form field
-         */
-        "value": string;
     }
     interface SwapBox {
-        "balance": string;
+        /**
+          * clickMenu
+         */
         "clickMenu": (menuName: string) => Promise<void>;
         "dodoRouterData": IDodoRouterRes;
-        "receiveAmount": number;
-        "sendAmount": number;
-        "slippage": number;
-        "swapTokenType": string;
-        "tokens": any[];
     }
     interface SwapInput {
         "token": IToken;
@@ -156,6 +91,54 @@ declare global {
         prototype: HTMLBottomButtonElement;
         new (): HTMLBottomButtonElement;
     };
+    interface HTMLCanoeChartElement extends Components.CanoeChart, HTMLStencilElement {
+    }
+    var HTMLCanoeChartElement: {
+        prototype: HTMLCanoeChartElement;
+        new (): HTMLCanoeChartElement;
+    };
+    interface HTMLCanoeDexElement extends Components.CanoeDex, HTMLStencilElement {
+    }
+    var HTMLCanoeDexElement: {
+        prototype: HTMLCanoeDexElement;
+        new (): HTMLCanoeDexElement;
+    };
+    interface HTMLCanoeHeaderElement extends Components.CanoeHeader, HTMLStencilElement {
+    }
+    var HTMLCanoeHeaderElement: {
+        prototype: HTMLCanoeHeaderElement;
+        new (): HTMLCanoeHeaderElement;
+    };
+    interface HTMLCanoeMainElement extends Components.CanoeMain, HTMLStencilElement {
+    }
+    var HTMLCanoeMainElement: {
+        prototype: HTMLCanoeMainElement;
+        new (): HTMLCanoeMainElement;
+    };
+    interface HTMLCanoeMiniElement extends Components.CanoeMini, HTMLStencilElement {
+    }
+    var HTMLCanoeMiniElement: {
+        prototype: HTMLCanoeMiniElement;
+        new (): HTMLCanoeMiniElement;
+    };
+    interface HTMLCanoePriceElement extends Components.CanoePrice, HTMLStencilElement {
+    }
+    var HTMLCanoePriceElement: {
+        prototype: HTMLCanoePriceElement;
+        new (): HTMLCanoePriceElement;
+    };
+    interface HTMLCanoeRankElement extends Components.CanoeRank, HTMLStencilElement {
+    }
+    var HTMLCanoeRankElement: {
+        prototype: HTMLCanoeRankElement;
+        new (): HTMLCanoeRankElement;
+    };
+    interface HTMLCanoeZoomElement extends Components.CanoeZoom, HTMLStencilElement {
+    }
+    var HTMLCanoeZoomElement: {
+        prototype: HTMLCanoeZoomElement;
+        new (): HTMLCanoeZoomElement;
+    };
     interface HTMLCreditBoxElement extends Components.CreditBox, HTMLStencilElement {
     }
     var HTMLCreditBoxElement: {
@@ -167,48 +150,6 @@ declare global {
     var HTMLDealStatusBoxElement: {
         prototype: HTMLDealStatusBoxElement;
         new (): HTMLDealStatusBoxElement;
-    };
-    interface HTMLMetaChartElement extends Components.MetaChart, HTMLStencilElement {
-    }
-    var HTMLMetaChartElement: {
-        prototype: HTMLMetaChartElement;
-        new (): HTMLMetaChartElement;
-    };
-    interface HTMLMetaHeaderElement extends Components.MetaHeader, HTMLStencilElement {
-    }
-    var HTMLMetaHeaderElement: {
-        prototype: HTMLMetaHeaderElement;
-        new (): HTMLMetaHeaderElement;
-    };
-    interface HTMLMetaMainElement extends Components.MetaMain, HTMLStencilElement {
-    }
-    var HTMLMetaMainElement: {
-        prototype: HTMLMetaMainElement;
-        new (): HTMLMetaMainElement;
-    };
-    interface HTMLMetaMiniElement extends Components.MetaMini, HTMLStencilElement {
-    }
-    var HTMLMetaMiniElement: {
-        prototype: HTMLMetaMiniElement;
-        new (): HTMLMetaMiniElement;
-    };
-    interface HTMLMetaPriceElement extends Components.MetaPrice, HTMLStencilElement {
-    }
-    var HTMLMetaPriceElement: {
-        prototype: HTMLMetaPriceElement;
-        new (): HTMLMetaPriceElement;
-    };
-    interface HTMLMetaRankElement extends Components.MetaRank, HTMLStencilElement {
-    }
-    var HTMLMetaRankElement: {
-        prototype: HTMLMetaRankElement;
-        new (): HTMLMetaRankElement;
-    };
-    interface HTMLMetaSwapElement extends Components.MetaSwap, HTMLStencilElement {
-    }
-    var HTMLMetaSwapElement: {
-        prototype: HTMLMetaSwapElement;
-        new (): HTMLMetaSwapElement;
     };
     interface HTMLMyTabElement extends Components.MyTab, HTMLStencilElement {
     }
@@ -261,15 +202,16 @@ declare global {
     interface HTMLElementTagNameMap {
         "base-chart": HTMLBaseChartElement;
         "bottom-button": HTMLBottomButtonElement;
+        "canoe-chart": HTMLCanoeChartElement;
+        "canoe-dex": HTMLCanoeDexElement;
+        "canoe-header": HTMLCanoeHeaderElement;
+        "canoe-main": HTMLCanoeMainElement;
+        "canoe-mini": HTMLCanoeMiniElement;
+        "canoe-price": HTMLCanoePriceElement;
+        "canoe-rank": HTMLCanoeRankElement;
+        "canoe-zoom": HTMLCanoeZoomElement;
         "credit-box": HTMLCreditBoxElement;
         "deal-status-box": HTMLDealStatusBoxElement;
-        "meta-chart": HTMLMetaChartElement;
-        "meta-header": HTMLMetaHeaderElement;
-        "meta-main": HTMLMetaMainElement;
-        "meta-mini": HTMLMetaMiniElement;
-        "meta-price": HTMLMetaPriceElement;
-        "meta-rank": HTMLMetaRankElement;
-        "meta-swap": HTMLMetaSwapElement;
         "my-tab": HTMLMyTabElement;
         "router-path": HTMLRouterPathElement;
         "search-tokens": HTMLSearchTokensElement;
@@ -290,6 +232,32 @@ declare namespace LocalJSX {
         "loading"?: boolean;
         "type"?: string;
     }
+    interface CanoeChart {
+        "data"?: IChartData[];
+    }
+    interface CanoeDex {
+        "token"?: string;
+    }
+    interface CanoeHeader {
+    }
+    interface CanoeMain {
+        "data"?: IChartData[];
+        "state"?: IState;
+    }
+    interface CanoeMini {
+        "mini"?: any[];
+        "onOpenSwap"?: (event: CustomEvent<any>) => void;
+        "state"?: IState;
+    }
+    interface CanoePrice {
+        "state"?: IState;
+    }
+    interface CanoeRank {
+        "state"?: IState;
+    }
+    interface CanoeZoom {
+        "onClickClose"?: (event: CustomEvent<any>) => void;
+    }
     interface CreditBox {
     }
     interface DealStatusBox {
@@ -298,29 +266,6 @@ declare namespace LocalJSX {
         "send"?: ITransformTokenInfo;
         "swapData"?: any;
         "visible"?: boolean;
-    }
-    interface MetaChart {
-        "data"?: IChartData[];
-    }
-    interface MetaHeader {
-    }
-    interface MetaMain {
-        "data"?: IChartData[];
-        "state"?: IState;
-    }
-    interface MetaMini {
-        "mini"?: any[];
-        "onOpenSwap"?: (event: CustomEvent<any>) => void;
-        "state"?: IState;
-    }
-    interface MetaPrice {
-        "state"?: IState;
-    }
-    interface MetaRank {
-        "state"?: IState;
-    }
-    interface MetaSwap {
-        "token"?: string;
     }
     interface MyTab {
         "disabled"?: boolean;
@@ -332,74 +277,12 @@ declare namespace LocalJSX {
     }
     interface SearchTokens {
         /**
-          * If no value is selected, clear the input and emit unselected, if false, the value will not be cleared (usefull for suggesting values on a free text search)
-         */
-        "clearOnUnselectedClosing"?: boolean;
-        /**
-          * The class names, which should be set on the rendered html elements
-         */
-        "cssClasses"?: { wrapper: string; input: string; suggestions: string; suggestion: string; active: string; };
-        /**
-          * Enable/Disable the input field
-         */
-        "disabled"?: boolean;
-        /**
-          * Timing to suggest on empty (-1 to disable)
-         */
-        "emptySuggestionTime"?: number;
-        /**
-          * id of the input field
-         */
-        "inputId"?: string;
-        /**
-          * A hint to the browser for which keyboard to display. Possible values: `"none"`, `"text"`, `"tel"`, `"url"`, `"email"`, `"numeric"`, `"decimal"`, and `"search"`.
-         */
-        "inputmode"?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
-        /**
-          * The maximally shown suggestions in the list
-         */
-        "maxSuggestions"?: number;
-        /**
-          * The minimum input size for generating suggestions
-         */
-        "minInput"?: number;
-        /**
           * Emitted when an item from suggestions was selected
          */
         "onSelected"?: (event: CustomEvent<any>) => void;
-        /**
-          * Emitted when item was cleared/unselected
-         */
-        "onUnselected"?: (event: CustomEvent<any>) => void;
-        /**
-          * The placeholder for the input field
-         */
-        "placeholder"?: string;
-        /**
-          * Form validation: is the form input required
-         */
-        "required"?: boolean;
-        /**
-          * Async suggestion generator: `text` is the displayed for users in the form after selection (if no `suggesion` also as suggesion) `value` is the actual value of the form field optional `suggesion` if the autocomplete suggestion item should be formatted differently than `text`
-         */
-        "suggestionGenerator"?: (text: string) => Promise<Array<{ text: string; value: string; suggestion?: string }>>;
-        /**
-          * The text is displayed by the form field for users
-         */
-        "text"?: string;
-        /**
-          * The actual value of the form field
-         */
-        "value"?: string;
     }
     interface SwapBox {
-        "balance"?: string;
         "dodoRouterData"?: IDodoRouterRes;
-        "receiveAmount"?: number;
-        "sendAmount"?: number;
-        "slippage"?: number;
-        "swapTokenType"?: string;
-        "tokens"?: any[];
     }
     interface SwapInput {
         "onOpenSearch"?: (event: CustomEvent<any>) => void;
@@ -421,15 +304,16 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "base-chart": BaseChart;
         "bottom-button": BottomButton;
+        "canoe-chart": CanoeChart;
+        "canoe-dex": CanoeDex;
+        "canoe-header": CanoeHeader;
+        "canoe-main": CanoeMain;
+        "canoe-mini": CanoeMini;
+        "canoe-price": CanoePrice;
+        "canoe-rank": CanoeRank;
+        "canoe-zoom": CanoeZoom;
         "credit-box": CreditBox;
         "deal-status-box": DealStatusBox;
-        "meta-chart": MetaChart;
-        "meta-header": MetaHeader;
-        "meta-main": MetaMain;
-        "meta-mini": MetaMini;
-        "meta-price": MetaPrice;
-        "meta-rank": MetaRank;
-        "meta-swap": MetaSwap;
         "my-tab": MyTab;
         "router-path": RouterPath;
         "search-tokens": SearchTokens;
@@ -446,15 +330,16 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "base-chart": LocalJSX.BaseChart & JSXBase.HTMLAttributes<HTMLBaseChartElement>;
             "bottom-button": LocalJSX.BottomButton & JSXBase.HTMLAttributes<HTMLBottomButtonElement>;
+            "canoe-chart": LocalJSX.CanoeChart & JSXBase.HTMLAttributes<HTMLCanoeChartElement>;
+            "canoe-dex": LocalJSX.CanoeDex & JSXBase.HTMLAttributes<HTMLCanoeDexElement>;
+            "canoe-header": LocalJSX.CanoeHeader & JSXBase.HTMLAttributes<HTMLCanoeHeaderElement>;
+            "canoe-main": LocalJSX.CanoeMain & JSXBase.HTMLAttributes<HTMLCanoeMainElement>;
+            "canoe-mini": LocalJSX.CanoeMini & JSXBase.HTMLAttributes<HTMLCanoeMiniElement>;
+            "canoe-price": LocalJSX.CanoePrice & JSXBase.HTMLAttributes<HTMLCanoePriceElement>;
+            "canoe-rank": LocalJSX.CanoeRank & JSXBase.HTMLAttributes<HTMLCanoeRankElement>;
+            "canoe-zoom": LocalJSX.CanoeZoom & JSXBase.HTMLAttributes<HTMLCanoeZoomElement>;
             "credit-box": LocalJSX.CreditBox & JSXBase.HTMLAttributes<HTMLCreditBoxElement>;
             "deal-status-box": LocalJSX.DealStatusBox & JSXBase.HTMLAttributes<HTMLDealStatusBoxElement>;
-            "meta-chart": LocalJSX.MetaChart & JSXBase.HTMLAttributes<HTMLMetaChartElement>;
-            "meta-header": LocalJSX.MetaHeader & JSXBase.HTMLAttributes<HTMLMetaHeaderElement>;
-            "meta-main": LocalJSX.MetaMain & JSXBase.HTMLAttributes<HTMLMetaMainElement>;
-            "meta-mini": LocalJSX.MetaMini & JSXBase.HTMLAttributes<HTMLMetaMiniElement>;
-            "meta-price": LocalJSX.MetaPrice & JSXBase.HTMLAttributes<HTMLMetaPriceElement>;
-            "meta-rank": LocalJSX.MetaRank & JSXBase.HTMLAttributes<HTMLMetaRankElement>;
-            "meta-swap": LocalJSX.MetaSwap & JSXBase.HTMLAttributes<HTMLMetaSwapElement>;
             "my-tab": LocalJSX.MyTab & JSXBase.HTMLAttributes<HTMLMyTabElement>;
             "router-path": LocalJSX.RouterPath & JSXBase.HTMLAttributes<HTMLRouterPathElement>;
             "search-tokens": LocalJSX.SearchTokens & JSXBase.HTMLAttributes<HTMLSearchTokensElement>;

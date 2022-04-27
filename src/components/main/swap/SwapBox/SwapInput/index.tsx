@@ -14,7 +14,7 @@ export class SwapInput {
     logoURI: '',
     decimals: 0,
   }
-  @Prop() value: number = 0
+  @Prop() value = 0
   @Event() tokenBlur: EventEmitter
   @Event() updateValue: EventEmitter
   @Event() openSearch: EventEmitter
