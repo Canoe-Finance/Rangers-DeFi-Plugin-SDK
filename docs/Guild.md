@@ -43,10 +43,12 @@ First, you need to apply for id, It will be related to your profit sharing ratio
 ### token
 
 Token name of thumbnail, It will show price, rise and  simple kline.
+
 ![image.png](./images/mini.png)
 
 ### modules
 
 Modular configuration. If it is not filled in, all functional modules will be included by default.
 The module includes: 'Info', 'News', 'Social', 'Credit-Card', 'Transfer'
+
 ![image.png](./images/canoe.png)
