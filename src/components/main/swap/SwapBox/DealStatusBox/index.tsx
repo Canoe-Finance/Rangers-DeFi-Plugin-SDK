@@ -41,8 +41,7 @@ export class DealStatusBox {
     this.statusIcon = '../../../../../assets/icon/transforming.svg'
     this.timeout = 60
     dodoSwap(this.swapData)
-      .then(res => {
-        console.log('swap res', res)
+      .then(() => {
         this.setSuccess()
         workerTimers.clearInterval(this.intervalId)
       })

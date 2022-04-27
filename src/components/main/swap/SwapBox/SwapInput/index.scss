@@ -13,15 +13,17 @@
     .token-info {
       display: flex;
       align-items: center;
+      padding-right: 20px;
 
       .token-logo {
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
+        background-color: #fff;
+        border-radius: 50%;
       }
 
       .token-symbol {
         margin-left: 4px;
-        font-size: 14px;
         font-size: 16px;
         font-weight: 700;
         color: #fff;
@@ -31,7 +33,7 @@
           display: inline-block;
           width: 0;
           height: 0;
-          margin-top: 6px;
+          margin-top: 8px;
           margin-left: 4px;
           content: '';
           border-top: 5px solid #fff;
@@ -42,15 +44,18 @@
     }
 
     input.customs {
-      width: 140px;
-      line-height: 100%;
+      flex: 1;
+      width: 0;
+      height: 36px;
+      padding: 0 10px;
+      line-height: 36px;
       color: #fff;
+      text-align: right;
       background-color: $text-bg-color;
       border: none;
       outline: none;
 
       &::placeholder {
-        float: right;
         color: #fff;
       }
 
@@ -64,10 +69,6 @@
     input::-webkit-inner-spin-button {
       appearance: none;
       margin: 0;
-    }
-
-    input {
-      outline: none;
     }
 
     input:focus {

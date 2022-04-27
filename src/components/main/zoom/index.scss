@@ -1,0 +1,29 @@
+.zoom-top {
+  top: calc(45vh - 108px);
+
+  .zoom-show {
+    display: none;
+  }
+
+  .zoom-hide,
+  .zoom-show {
+    width: 5px;
+  }
+
+  &:hover {
+    .zoom-show {
+      display: flex;
+      animation: width-show 0.2s ease-in-out forwards;
+    }
+
+    .zoom-hide {
+      display: none;
+    }
+  }
+}
+
+@keyframes width-show {
+  100% {
+    width: 12px;
+  }
+}

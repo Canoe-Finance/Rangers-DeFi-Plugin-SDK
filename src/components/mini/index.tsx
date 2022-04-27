@@ -3,11 +3,11 @@ import { IState } from 'interface'
 import { state } from 'store'
 
 @Component({
-  tag: 'meta-mini',
+  tag: 'canoe-mini',
   styleUrl: 'index.scss',
   shadow: true,
 })
-export class MetaMini {
+export class CanoeMini {
   @Prop() mini = []
   @Prop() state: IState = state
 

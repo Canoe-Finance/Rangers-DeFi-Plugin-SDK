@@ -8,11 +8,11 @@ import { formatAddressNumber, formatNumber, toDecimal2NoZero } from 'utils/numbe
 import '../xy-ui/index'
 
 @Component({
-  tag: 'meta-swap',
+  tag: 'canoe-dex',
   styleUrl: 'index.scss',
   shadow: true,
 })
-export class MetaApp {
+export class CanoeApp {
   @Prop() token: string
 
   @State() state = state
@@ -20,8 +20,8 @@ export class MetaApp {
   @State() chart: IChartData[]
   @State() intervalId: number
 
-  getInfo = async (name: string) => {
-    const data = await getChartData(name)
+  getInfo = async (name: string, send: string, receive: string, from: string, to: string) => {
+    const data = await getChartData(send, receive, from, to)
 
     const info: IMarkerData = await getCoinMarketInfo(name)
     const holders = await getHolders(name)
@@ -32,7 +32,7 @@ export class MetaApp {
       state:
         info.price_change_percentage_24h == 0 ? this.state.info.state : info.price_change_percentage_24h > 0 ? 1 : 0,
       market_cap_rank: info.market_cap_rank,
-      current_price: info.current_price < 1 ? info.current_price.toString() : toDecimal2NoZero(info.current_price),
+      current_price: info.current_price < 0.001 ? '< 0.001' : toDecimal2NoZero(info.current_price),
       price_change_percentage: toDecimal2NoZero(info.price_change_percentage_24h),
       market_cap: formatNumber(info.market_cap),
       address_count: formatAddressNumber(holders),
@@ -54,13 +54,29 @@ export class MetaApp {
   }
 
   componentWillLoad() {
-    this.getInfo(this.state.send.name)
+    this.getInfo(
+      this.state.send.name,
+      this.state.send.symbol,
+      this.state.receive.symbol,
+      this.state.send.address,
+      this.state.receive.address,
+    )
     onChange('send', async val => {
-      this.getInfo(val.name)
+      this.getInfo(val.name, val.symbol, this.state.receive.symbol, val.address, this.state.receive.address)
+    })
+
+    onChange('receive', async val => {
+      this.getInfo(this.state.send.name, this.state.send.symbol, val.symbol, this.state.send.address, val.address)
     })
 
     this.intervalId = workerTimers.setInterval(() => {
-      this.getInfo(this.state.send.name)
+      this.getInfo(
+        this.state.send.name,
+        this.state.send.symbol,
+        this.state.receive.symbol,
+        this.state.send.address,
+        this.state.receive.address,
+      )
     }, 30000)
   }
 
@@ -75,13 +91,14 @@ export class MetaApp {
   render() {
     return (
       <div class={`app-main app-mini ${this.state.appShow ? 'show' : 'hide'}`}>
-        <meta-mini
+        <canoe-zoom onClickClose={() => this.handleClick(false)}></canoe-zoom>
+        <canoe-mini
           class={this.state.appShow ? 'hidden' : ''}
           onOpenSwap={() => this.handleClick(true)}
           mini={this.mini}
           state={this.state}
-        ></meta-mini>
-        <meta-main class={this.state.appShow ? '' : 'invisible'} data={this.chart} state={this.state}></meta-main>
+        ></canoe-mini>
+        <canoe-main class={this.state.appShow ? '' : 'invisible'} data={this.chart} state={this.state}></canoe-main>
       </div>
     )
   }

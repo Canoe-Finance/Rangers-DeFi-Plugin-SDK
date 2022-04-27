@@ -13,11 +13,11 @@ import {
 } from '../../../api/ethereum/index'
 
 @Component({
-  tag: 'meta-header',
+  tag: 'canoe-header',
   styleUrl: 'index.scss',
   shadow: true,
 })
-export class MetaHeader {
+export class CanoeHeader {
   networkPopover!: HTMLElement
   walletPopover!: HTMLElement
   networkList: chainItemType[] = getChainList()
@@ -82,8 +82,7 @@ export class MetaHeader {
       const account = await requestAccounts()
       this.setUserAddress(account)
     } catch (err) {
-      const message = err.message || 'Connect error.'
-      console.log('message', message)
+      // const message = err.message || 'Connect error.'
     }
   }
 
@@ -113,7 +112,7 @@ export class MetaHeader {
       <header class="flex items-center">
         <div class="header-logo h-full flex flex-1 items-center">
           <img src="../../assets/images/logo.svg" alt="logo" />
-          <div class="font-bold">MetaDEX</div>
+          <div class="font-bold">Canoe</div>
         </div>
         <div class="network-container h-full flex items-center">
           <xy-popover class="popover">

@@ -1,4 +1,5 @@
-import { Component, Method, h, Fragment, Prop, State, Element } from '@stencil/core'
+import { Component, Method, h, Fragment, Prop, State, Watch } from '@stencil/core'
+import * as workerTimers from 'worker-timers'
 import { state } from 'store'
 import { getDodoData } from 'api/axios'
 import { parseUnits } from 'api/ethers/utils'
@@ -13,16 +14,24 @@ import storage from 'utils/storage'
   shadow: true,
 })
 export class SwapBox {
-  @Element() el: HTMLElement
-
-  @Prop({ mutable: true }) slippage: number = 5
-  @Prop() tokens = []
-  @Prop() swapTokenType: string = 'send'
-  @Prop() balance: string = '0'
-  @Prop({ mutable: true }) receiveAmount: number = 0
-  @Prop({ mutable: true }) sendAmount: number = 0
+  @State() changeIcon: string = '../../../../assets/icon/change.svg'
+  @State() slippage: number = 0.5
+  @State() tokens = []
+  @State() swapTokenType: string = 'send'
+  @State() balance: string = '0'
+  @State() receiveAmount = 0
+  @State() sendAmount = 0
   @State() swapData = {}
   @State() showSearch: boolean = false
+  @State() timeInterval: number
+  @Watch('sendAmount')
+  watchSendAmount(value) {
+    if (value == 0) {
+      workerTimers.clearInterval(this.timeInterval)
+    } else {
+      this.setTimeInterval()
+    }
+  }
   @Prop() dodoRouterData: IDodoRouterRes = {
     type: 'send',
     useSource: '',
@@ -35,24 +44,23 @@ export class SwapBox {
     this.swapTokenType = type
     this.showSearch = !this.showSearch
   }
+  getBalance = () => {
+    getBalanceByToken(state.send.address).then(res => {
+      this.balance = res
+    })
+  }
 
   _selectToken = async ({ detail }) => {
-    const searchTokens = this.el
-    const input = searchTokens.shadowRoot.querySelector('search-tokens')
-    input.clear()
+    console.log(detail)
     if (this.swapTokenType === 'send') {
       state.send = detail
+      this.getBalance()
       this._checkApprove(detail.address)
     } else {
       state.receive = detail
     }
     this.showSearch = false
     this.getTransformInfo()
-  }
-  getBalance = () => {
-    getBalanceByToken(state.send.address).then(res => {
-      this.balance = res
-    })
   }
 
   @State() getTransformInfoLoading: boolean = false
@@ -85,26 +93,27 @@ export class SwapBox {
       .then(data => {
         this.getTransformInfoLoading = false
         this.dodoRouterData = data
+        const resAmount = data.resAmount
         if (type === 'send') {
+          this.receiveAmount = resAmount
           this.dodoRouterData = {
             type: 'send',
             useSource: data.useSource,
             priceImpact: data.priceImpact,
             resPricePerToToken: data.resPricePerToToken,
             resPricePerFromToken: data.resPricePerFromToken,
-            resAmount: data.resAmount,
+            resAmount: resAmount,
           }
-          this.receiveAmount = data.resAmount
         } else {
+          this.sendAmount = resAmount
           this.dodoRouterData = {
             type: 'receive',
             useSource: data.useSource,
             priceImpact: data.priceImpact,
             resPricePerToToken: data.resPricePerFromToken,
             resPricePerFromToken: data.resPricePerToToken,
-            resAmount: data.resAmount,
+            resAmount: resAmount,
           }
-          this.sendAmount = data.resAmount
         }
         this.swapData = {
           dodoData: data,
@@ -114,41 +123,10 @@ export class SwapBox {
           showFromAmount: this.sendAmount,
           showToAmount: this.receiveAmount,
         }
-        console.log('dodoData', data)
       })
       .catch(_ => {
-        console.log('get transform info err: ', _)
         this.getTransformInfoLoading = false
       })
-  }
-
-  componentDidLoad() {
-    const searchTokens = this.el
-    const input = searchTokens.shadowRoot.querySelector('search-tokens')
-    // TODO:
-    input.suggestionGenerator = function (text) {
-      return fetch('https://tokens.pancakeswap.finance/coingecko.json')
-        .then(response => response.json())
-        .then(data =>
-          data.tokens.filter(token => {
-            const symbol = token.symbol.toLowerCase()
-            const address = token.address.toLowerCase()
-            return symbol.search(text.toLowerCase()) >= 0 || address.search(text.toLowerCase()) >= 0
-          }),
-        )
-        .then(tokens =>
-          tokens.map(token => {
-            return {
-              symbol: token.symbol,
-              name: token.name,
-              logoURI: token.logoURI,
-              decimals: token.decimals,
-              address: token.address,
-              suggestion: `${token.symbol} (${token.name})`,
-            }
-          }),
-        )
-    }
   }
 
   @State() transformInfoVisible: boolean = false
@@ -162,22 +140,29 @@ export class SwapBox {
   @State() settingVisible: boolean = false
   openSetting = () => {
     this.settingVisible = true
-    console.log('handleCustomize', this.settingVisible)
   }
 
   handleRefresh = () => {
-    console.log('handleRefresh')
+    this._swapInputBlur('send')
   }
+
+  setTimeInterval = () => {
+    this.timeInterval = workerTimers.setInterval(() => {
+      this._swapInputBlur('send')
+    }, 30000)
+  }
+
   handleReload = () => {
-    console.log('handleReload')
+    this._swapInputBlur('send')
   }
   handleCustomize = () => {
     this.openSetting()
   }
 
-  // eslint-disable-next-line
+  /**
+   * clickMenu
+   */
   @Method()
-  // eslint-disable-next-line
   async clickMenu(menuName: string) {
     if (menuName === 'refresh') {
       this.handleRefresh()
@@ -235,16 +220,28 @@ export class SwapBox {
       )
     } else {
       if (this.isApproved) {
-        return (
-          <bottom-button
-            class="bottom-button"
-            loading={this.getTransformInfoLoading}
-            onClick={this.openTransformInfoBox}
-          >
-            <xy-icon class="icon-swap" slot="prefix" name="swap-m"></xy-icon>
-            SWAP
-          </bottom-button>
-        )
+        if (this.balance == '0') {
+          return (
+            <bottom-button class="bottom-button opacity-50 cursor-not-allowed pointer-events-none">
+              Insufficient Balance
+            </bottom-button>
+          )
+        } else {
+          return (
+            <bottom-button
+              class={
+                this.sendAmount == 0
+                  ? 'bottom-button opacity-50 cursor-not-allowed pointer-events-none'
+                  : 'bottom-button'
+              }
+              loading={this.getTransformInfoLoading}
+              onClick={this.openTransformInfoBox}
+            >
+              <xy-icon class="icon-swap" slot="prefix" name="swap-m"></xy-icon>
+              SWAP
+            </bottom-button>
+          )
+        }
       } else {
         return (
           <bottom-button
@@ -298,6 +295,19 @@ export class SwapBox {
     }
     state.userAddress = address
   }
+  changeCoin = () => {
+    let sendCopy = JSON.parse(JSON.stringify(state.send))
+    let receiveCopy = JSON.parse(JSON.stringify(state.receive))
+    state.send = receiveCopy
+    state.receive = sendCopy
+    this.sendAmount = 0
+    this.receiveAmount = 0
+    this.dodoRouterData.resAmount = 0
+  }
+
+  disconnectedCallback() {
+    workerTimers.clearInterval(this.timeInterval)
+  }
   render() {
     return (
       <Fragment>
@@ -306,28 +316,36 @@ export class SwapBox {
             <swap-input
               token={state.send}
               value={this.sendAmount}
-              onBlur={() => this._swapInputBlur('send')}
+              // onTokenBlur={() => this._swapInputBlur('send')}
               onUpdateValue={e => {
                 this.sendAmount = e.detail
+                state.sendAmount = e.detail
                 this._swapInputBlur('send')
               }}
               onOpenSearch={() => this._openSearch('send')}
             ></swap-input>
-            <div class="flex items-center justify-end h-[26px] text-[12px]">
+            <div class="flex items-center justify-end h-[26px] text-[12px] relative">
+              <img
+                onClick={this.changeCoin}
+                class="icon absolute left-0 cursor-pointer"
+                src={this.changeIcon}
+                alt="change"
+              />
               {this.dodoRouterData.resAmount ? (
                 <span>
                   1{state.send.symbol} = {this.dodoRouterData.resPricePerFromToken} {state.receive.symbol}
                 </span>
               ) : null}
               <span>Balance {this.balance}</span>
-              <button class="flex items-center w-[25px] h-[13px] bg-[#323645] text-[#A2A8BA] ml-[4px]">MAX</button>
+              {/* <span class="flex items-center bg-[#323645] text-color ml-[4px]">MAX</span> */}
             </div>
             <swap-input
               token={state.receive}
               value={this.receiveAmount}
-              onBlur={() => this._swapInputBlur('receive')}
+              // onTokenBlur={() => this._swapInputBlur('receive')}
               onUpdateValue={e => {
                 this.receiveAmount = e.detail
+                state.receiveAmount = e.detail
                 this._swapInputBlur('receive')
               }}
               onOpenSearch={() => this._openSearch('receive')}
@@ -335,28 +353,28 @@ export class SwapBox {
             {this.receiveAmount ? (
               <div class="router-container mt-[15px] divide-y divide-[#43485E]">
                 <div class="router-path h-[30px] flex justify-center items-center text-sm">
-                  <span class="text-[#A2A8BA]">{state.send.symbol}</span>
-                  <span class="text-[#A2A8BA]"> &gt; </span>
+                  <span class="text-color">{state.send.symbol}</span>
+                  <span class="text-color"> &gt; </span>
                   <span>{this.dodoRouterData.useSource}</span>
-                  <span class="text-[#A2A8BA]"> &gt; </span>
-                  <span class="text-[#A2A8BA]">{state.receive.symbol}</span>
+                  <span class="text-color"> &gt; </span>
+                  <span class="text-color">{state.receive.symbol}</span>
                 </div>
                 <div class="router-amount flex flex-col h-[60px] px-[10px] text-xs justify-around">
                   <div class="amount-item flex justify-between">
-                    <span class="text-[#A2A8BA]">
+                    <span class="text-color">
                       {this.dodoRouterData.type === 'send' ? 'Minimum Received' : 'Maximum sold'}
                     </span>
-                    <span class="text-[#A2A8BA]">{this.dodoRouterData.resAmount}</span>
+                    <span class="text-color">{this.dodoRouterData.resAmount}</span>
                   </div>
                   <div class="amount-item flex justify-between">
-                    <span class="text-[#A2A8BA]">{this.dodoRouterData.type === 'send' ? 'Received' : 'Sold'}</span>
-                    <span class="text-[#A2A8BA]">
+                    <span class="text-color">{this.dodoRouterData.type === 'send' ? 'Received' : 'Sold'}</span>
+                    <span class="text-color">
                       {this.dodoRouterData.type === 'send' ? state.receive.symbol : state.send.symbol}
                     </span>
                   </div>
                   <div class="amount-item flex justify-between">
-                    <span class="text-[#A2A8BA]">Price Impact</span>
-                    <span class="text-[#A2A8BA]">{this.dodoRouterData.priceImpact}</span>
+                    <span class="text-color">Price Impact</span>
+                    <span class="text-color">{this.dodoRouterData.priceImpact}</span>
                   </div>
                 </div>
               </div>
@@ -369,9 +387,9 @@ export class SwapBox {
           {this.getBottomButton()}
         </div>
 
-        <xy-dialog open={this.showSearch}>
+        <div class={`search-container fixed top-5 bottom-5 left-5 right-5 z-10 ${this.showSearch ? 'show' : 'hide'}`}>
           <search-tokens onSelected={this._selectToken}></search-tokens>
-        </xy-dialog>
+        </div>
 
         <deal-status-box
           visible={this.transformInfoVisible}
@@ -386,6 +404,7 @@ export class SwapBox {
           slippage={this.slippage}
           onChangeSlippage={({ detail }) => {
             this.slippage = detail
+            this.getTransformInfo()
           }}
           onClose={() => (this.settingVisible = false)}
         ></swap-setting>

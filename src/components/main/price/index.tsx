@@ -3,11 +3,11 @@ import { IState } from 'interface'
 import { state } from 'store'
 
 @Component({
-  tag: 'meta-price',
+  tag: 'canoe-price',
   styleUrl: 'index.scss',
   shadow: true,
 })
-export class MetaPrice {
+export class CanoePrice {
   @Prop() state: IState = state
 
   render() {

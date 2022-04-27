@@ -2,7 +2,7 @@
   "parser": "@typescript-eslint/parser",
   "extends": ["plugin:@stencil/recommended"],
   "rules": {
-    "@stencil/async-methods": "error",
+    "@stencil/async-methods": "off",
     "@stencil/ban-prefix": ["error", ["stencil", "stnl", "st"]],
     "@stencil/decorators-context": "off",
     "@stencil/decorators-style": [
@@ -23,7 +23,7 @@
     "@stencil/no-unused-watch": "off",
     "@stencil/own-methods-must-be-private": "off",
     "@stencil/own-props-must-be-private": "error",
-    "@stencil/prefer-vdom-listener": "error",
+    "@stencil/prefer-vdom-listener": "off",
     "@stencil/props-must-be-public": "error",
     "@stencil/props-must-be-readonly": "error",
     "@stencil/render-returns-host": "error",

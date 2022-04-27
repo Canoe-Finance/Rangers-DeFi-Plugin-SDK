@@ -17,16 +17,16 @@ export class SwapMain {
         { name: 'customize', icon: 'customize' },
       ],
     },
-    {
-      title: 'credit card',
-      cName: 'credit',
-      menuList: [],
-    },
-    {
-      title: 'Transfer',
-      cName: 'transfer',
-      menuList: [],
-    },
+    // {
+    //   title: 'credit card',
+    //   cName: 'credit',
+    //   menuList: [],
+    // },
+    // {
+    //   title: 'Transfer',
+    //   cName: 'transfer',
+    //   menuList: [],
+    // },
   ]
   tabRef!: HTMLElement
   swapBoxRef!: HTMLElement
@@ -65,21 +65,24 @@ export class SwapMain {
         ></div>
         <my-tab class="my-tab grow" disabled={!this.showContent} tabList={this.tabList} onClickMenu={this.clickTabMenu}>
           <div class="content-item">
-            <swap-box class="container" ref={el => (this.swapBoxRef = el as HTMLElement)}></swap-box>
+            <swap-box class="flex-1 flex-shrink-0" ref={el => (this.swapBoxRef = el as HTMLElement)}></swap-box>
             <div class="footer">
-              Powered by <span>MetaDEX</span>
+              Powered by <span>Canoe</span>
             </div>
           </div>
           <div class="content-item">
-            <credit-box class="container" ref={el => (this.creditBoxRef = el as HTMLElement)}></credit-box>
+            <credit-box class="flex-1 flex-shrink-0" ref={el => (this.creditBoxRef = el as HTMLElement)}></credit-box>
             <div class="footer">
-              Powered by <span>MetaDEX</span>
+              Powered by <span>Canoe</span>
             </div>
           </div>
           <div class="content-item">
-            <transfer-box class="container" ref={el => (this.transferBoxRef = el as HTMLElement)}></transfer-box>
+            <transfer-box
+              class="flex-1 flex-shrink-0"
+              ref={el => (this.transferBoxRef = el as HTMLElement)}
+            ></transfer-box>
             <div class="footer">
-              Powered by <span>MetaDEX</span>
+              Powered by <span>Canoe</span>
             </div>
           </div>
         </my-tab>

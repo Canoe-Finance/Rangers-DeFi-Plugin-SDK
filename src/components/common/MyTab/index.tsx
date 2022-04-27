@@ -1,4 +1,5 @@
 import { Component, State, h, Prop, Event, EventEmitter } from '@stencil/core'
+import { state } from 'store'
 
 @Component({
   tag: 'my-tab',
@@ -15,7 +16,6 @@ export class MyTab {
   @State() tabLeft: string = '0'
   @State() tabWidth: string = '0'
   @State() menuList = []
-
   handleTabChange = (e, i) => {
     const { offsetLeft, offsetWidth } = e.target
     this.tabLeft = offsetLeft + 'px'
@@ -69,7 +69,7 @@ export class MyTab {
                 }}
                 key={i}
               >
-                <xy-icon class="icon" name={item.icon}></xy-icon>
+                <xy-icon class={i == 0 && state.sendAmount > 0 ? 'time-ro icon' : 'icon'} name={item.icon}></xy-icon>
               </div>
             ))}
           </div>

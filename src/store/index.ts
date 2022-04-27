@@ -3,7 +3,7 @@ import { IState } from 'interface'
 import { getShortAddress } from '../utils/func'
 
 const { state, onChange } = createStore<IState>({
-  appShow: false,
+  appShow: true,
   chain: {
     chainId: 0,
     chainName: '',
@@ -11,12 +11,14 @@ const { state, onChange } = createStore<IState>({
   userAddress: '',
   userBalance: 0,
   shortUserAddress: '',
+  receiveAmount: 0,
+  sendAmount: 0,
   send: {
     name: 'Ethereum',
     symbol: 'ETH',
     address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
     decimals: 18,
-    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+    logoURI: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
 
     // address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     // decimals: 18,

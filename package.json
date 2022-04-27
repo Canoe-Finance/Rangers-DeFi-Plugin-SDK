@@ -18,6 +18,7 @@
     "@saasquatch/stencil-hooks": "^2.0.2",
     "@stencil/core": "^2.15.0",
     "@stencil/store": "^1.5.0",
+    "@trevoreyre/autocomplete-js": "^2.2.0",
     "axios": "^0.26.1",
     "chart.js": "2.8.0",
     "copy-to-clipboard": "^3.3.1",
