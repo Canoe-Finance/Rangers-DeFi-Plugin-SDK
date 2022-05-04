@@ -29,6 +29,12 @@
   color: $text-color;
 }
 
+.token-disable {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.5;
+}
+
 .autocomplete-input {
   position: relative;
   box-sizing: border-box;

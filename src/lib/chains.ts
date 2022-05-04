@@ -1,7 +1,7 @@
 export default {
-  // bsc test
+  // bsc testnet
   97: {
-    showName: 'BSC Testnet',
+    showName: 'BSC',
     chainId: 97,
     chainName: 'Binance Smart Chain Testnet',
     rpcUrls: [
@@ -19,9 +19,9 @@ export default {
       decimals: 18,
     },
   },
-  // bsc main
+  // bsc mainnet
   56: {
-    showName: 'BSC Mainnet',
+    showName: 'BSC',
     chainId: 56,
     chainName: 'Binance Smart Chain Mainnet',
     rpcUrls: [
@@ -47,9 +47,9 @@ export default {
     },
   },
 
-  // eth test
+  // eth testnet
   3: {
-    showName: 'ETH Testnet',
+    showName: 'Ethereum',
     chainId: 3,
     chainName: 'Ethereum Testnet Ropsten',
     rpcUrls: ['https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
@@ -60,9 +60,9 @@ export default {
       decimals: 18,
     },
   },
-  // eth main
+  // eth mainnet
   1: {
-    showName: 'Ethereum Mainnet',
+    showName: 'Ethereum',
     chainId: 1,
     chainName: 'Ethereum Mainnet',
     rpcUrls: ['https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],

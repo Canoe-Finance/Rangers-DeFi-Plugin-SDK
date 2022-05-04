@@ -1,20 +1,34 @@
 import InputDataDecoder from 'ethereum-input-data-decoder'
-import { getContractSigner } from './index.js'
-import metaDexABI from '../../abi/metaDexABI'
-import dodoABI from '../../abi/dodoABI'
+import { getContractSigner, getContract } from './index'
+import metaDexABI from '../../abi/metaDexABI.json'
+import metaDex2ABI from '../../abi/metaDex2ABI.json'
+import dodoABI from '../../abi/dodoABI.json'
+import { toBigNumberString } from './utils'
+import config from 'config'
 
-const contractAddress = '0x257Dc3a71607044F281B24c7A48A0a9D544e769D'
+// metadex asset search contract
+const contract2Address = '0xFdab977F215436FF8ec79AbF3A598f7e8766b1dA'
+// TODO: change this from canoe-dex
 const projectId = 'ymg'
 
-export const dodoSwap = ({ dodoData, fromAddress, toAddress, fromAmount }) => {
+export const getFeePercentage = async () => {
+  const contract = getContract(contract2Address, metaDex2ABI)
+  const projectFee = (await contract.projectFee(projectId)) || 0
+  const treasuryFee = (await contract.treasuryFee()) || 0
+  const free = Number(toBigNumberString(projectFee)) + Number(toBigNumberString(treasuryFee))
+  return (100 - free) / 100
+}
+
+export const dodoSwap = ({ dodoData, fromAddress, toAddress, fromAmount, number }) => {
   const key = dodoData.data.substring(0, 10)
   const decoderData = decoder(dodoData.data)
   const params = {
     targetApproveAddr: dodoData.targetApproveAddr || dodoData.to,
     to: dodoData.to,
-    fromAddress: fromAddress,
-    toAddress: toAddress,
-    fromAmount: fromAmount,
+    fromAddress,
+    toAddress,
+    fromAmount,
+    number,
     decoderData: getDataObj(decoderData),
   }
   if (key === '0x7617b389') {
@@ -35,7 +49,7 @@ export const dodoSwap = ({ dodoData, fromAddress, toAddress, fromAmount }) => {
 }
 
 export const dodoMixSwapOne = ({ targetApproveAddr, to, fromAddress, toAddress, number, decoderData }) => {
-  const contract = getContractSigner(contractAddress, metaDexABI)
+  const contract = getContractSigner(config.agencyContract, metaDexABI)
   const body = [
     projectId,
     [targetApproveAddr, to, fromAddress, toAddress],
@@ -50,7 +64,7 @@ export const dodoMixSwapOne = ({ targetApproveAddr, to, fromAddress, toAddress, 
 }
 
 export const dodoMixSwapTwo = ({ targetApproveAddr, to, fromAddress, toAddress, number, decoderData }) => {
-  const contract = getContractSigner(contractAddress, metaDexABI)
+  const contract = getContractSigner(config.agencyContract, metaDexABI)
   const body = [
     projectId,
     [targetApproveAddr, to, fromAddress, toAddress],
@@ -64,8 +78,8 @@ export const dodoMixSwapTwo = ({ targetApproveAddr, to, fromAddress, toAddress, 
   return contract.dodoMixSwapTwo(...body, { value: number })
 }
 
-export const dodoSwapV2ETHToToken = ({ targetApproveAddr, to, fromAddress, toAddress, number, decoderData }) => {
-  const contract = getContractSigner(contractAddress, metaDexABI)
+export const dodoSwapV2ETHToToken = ({ toAddress, number, decoderData }) => {
+  const contract = getContractSigner(config.agencyContract, metaDexABI)
   const body = [
     projectId,
     toAddress,
@@ -78,7 +92,7 @@ export const dodoSwapV2ETHToToken = ({ targetApproveAddr, to, fromAddress, toAdd
 }
 
 export const dodoSwapV2TokenToToken = ({ targetApproveAddr, to, fromAddress, toAddress, number, decoderData }) => {
-  const contract = getContractSigner(contractAddress, metaDexABI)
+  const contract = getContractSigner(config.agencyContract, metaDexABI)
   const body = [
     projectId,
     [targetApproveAddr, to, fromAddress, toAddress],
@@ -91,7 +105,7 @@ export const dodoSwapV2TokenToToken = ({ targetApproveAddr, to, fromAddress, toA
 }
 
 export const externalSwap = ({ targetApproveAddr, to, fromAddress, toAddress, number, decoderData }) => {
-  const contract = getContractSigner(contractAddress, metaDexABI)
+  const contract = getContractSigner(config.agencyContract, metaDexABI)
   const body = [
     projectId,
     [targetApproveAddr, to, fromAddress, toAddress],
@@ -105,7 +119,7 @@ export const externalSwap = ({ targetApproveAddr, to, fromAddress, toAddress, nu
 }
 
 export const dodoSwapV1 = ({ targetApproveAddr, to, fromAddress, toAddress, number, decoderData }) => {
-  const contract = getContractSigner(contractAddress, metaDexABI)
+  const contract = getContractSigner(config.agencyContract, metaDexABI)
   const body = [
     projectId,
     [targetApproveAddr, to, fromAddress, toAddress],
@@ -117,8 +131,8 @@ export const dodoSwapV1 = ({ targetApproveAddr, to, fromAddress, toAddress, numb
   return contract.dodoSwapV1(...body, { value: number })
 }
 
-export const dodoSwapV2TokenToETH = ({ targetApproveAddr, to, fromAddress, toAddress, number, decoderData }) => {
-  const contract = getContractSigner(contractAddress, metaDexABI)
+export const dodoSwapV2TokenToETH = ({ targetApproveAddr, to, fromAddress, number, decoderData }) => {
+  const contract = getContractSigner(config.agencyContract, metaDexABI)
   const body = [
     projectId,
     [targetApproveAddr, to, fromAddress],

@@ -16,7 +16,7 @@ export class CanoePrice {
         <div class="flex justify-between">
           <div class="w-1/3">
             <label>Price</label>
-            <div class="font-bold mt-1">${this.state.info.current_price}</div>
+            <div class="font-bold mt-1">{this.state.info.current_price}</div>
           </div>
           <div class="w-1/3">
             <label>24h Change</label>
@@ -30,7 +30,7 @@ export class CanoePrice {
           </div>
           <div class="w-1/3">
             <label>Market Cap</label>
-            <div class="font-bold mt-1">${this.state.info.market_cap}</div>
+            <div class="font-bold mt-1">{this.state.info.market_cap}</div>
           </div>
         </div>
         <div class="mt-4 flex justify-between">
@@ -49,12 +49,12 @@ export class CanoePrice {
                 class={this.state.info.liquid_value < 0 ? 'red-color' : 'green-color'}
                 name={this.state.info.liquid_value < 0 ? 'price-down' : 'price-up'}
               ></xy-icon>
-              ${this.state.info.liquid}
+              {this.state.info.liquid}
             </div>
           </div>
           <div class="w-1/3">
             <label>24h Volume</label>
-            <div class="font-bold mt-1">${this.state.info.total_volume}</div>
+            <div class="font-bold mt-1">{this.state.info.total_volume}</div>
           </div>
         </div>
       </section>

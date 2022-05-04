@@ -6,14 +6,12 @@ www/
 *~
 *.sw[mnpcod]
 *.log
-*.lock
 *.tmp
 *.tmp.*
 log.txt
 *.sublime-project
 *.sublime-workspace
 *-lock.yaml
-*-lock.json
 
 .stencil/
 .idea/

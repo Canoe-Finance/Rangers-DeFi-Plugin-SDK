@@ -15,6 +15,7 @@ header {
 }
 
 .network-container {
+  min-width: 80px;
   cursor: pointer;
   background-color: $network-bg-color;
 
@@ -26,6 +27,7 @@ header {
 }
 
 .wallet-container {
+  min-width: 120px;
   cursor: pointer;
   background-color: $wallet-bg-color;
 

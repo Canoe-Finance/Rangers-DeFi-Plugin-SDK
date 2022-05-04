@@ -1,5 +1,5 @@
 import { Component, State, h, Prop, Event, EventEmitter } from '@stencil/core'
-import { state } from 'store'
+import { state, onChange } from 'store'
 
 @Component({
   tag: 'my-tab',
@@ -16,6 +16,13 @@ export class MyTab {
   @State() tabLeft: string = '0'
   @State() tabWidth: string = '0'
   @State() menuList = []
+  @State() loading = false
+
+  radius = 6
+  strokeWidth = 2
+  normalizedRadius = this.radius - Math.floor(this.strokeWidth / 2)
+  circumference = this.normalizedRadius * 2 * Math.PI
+
   handleTabChange = (e, i) => {
     const { offsetLeft, offsetWidth } = e.target
     this.tabLeft = offsetLeft + 'px'
@@ -27,6 +34,9 @@ export class MyTab {
   componentDidLoad() {
     // select first tab
     this.handleTabChange({ target: this.tabRef.childNodes[0] }, 0)
+    onChange('circle', status => {
+      this.loading = status
+    })
   }
 
   @Event() clickMenu: EventEmitter
@@ -69,7 +79,37 @@ export class MyTab {
                 }}
                 key={i}
               >
-                <xy-icon class={i == 0 && state.sendAmount > 0 ? 'time-ro icon' : 'icon'} name={item.icon}></xy-icon>
+                {i == 0 && this.loading ? (
+                  <svg class="svg" height={this.radius * 2} width={this.radius * 2}>
+                    <circle
+                      cx={this.radius}
+                      cy={this.radius}
+                      r={this.normalizedRadius}
+                      stroke-width={this.strokeWidth}
+                      stroke="#EAEFF4"
+                      fill="none"
+                      opacity="0.1"
+                    />
+                    <circle
+                      class="progress"
+                      cx={this.radius}
+                      cy={this.radius}
+                      r={this.normalizedRadius}
+                      stroke-width={this.strokeWidth}
+                      stroke="#fff"
+                      stroke-linecap="round"
+                      stroke-dasharray={`${this.circumference} ${this.circumference}`}
+                      fill="none"
+                    />
+                  </svg>
+                ) : (
+                  i > 0 && (
+                    <xy-icon
+                      class={`icon cursor-pointer ${i == 1 && state.reload ? 'spin' : ''}`}
+                      name={item.icon}
+                    ></xy-icon>
+                  )
+                )}
               </div>
             ))}
           </div>

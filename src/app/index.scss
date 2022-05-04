@@ -1,7 +1,8 @@
 .app-main,
 .app-mini {
   position: fixed;
-  right: 5vh;
+  right: 36px;
+  z-index: 99999;
 }
 
 .app-main {

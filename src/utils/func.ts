@@ -6,6 +6,10 @@ export const copy = data => {
   return JSON.parse(JSON.stringify(data))
 }
 
+export const getBlockExplorerUrls = (id: number): string => {
+  return chains[id].blockExplorerUrls[0]
+}
+
 export const getChainList = (): chainItemType[] => {
   return config.chainIds.map(x => {
     const chain = chains[x]

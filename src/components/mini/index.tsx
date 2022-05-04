@@ -28,7 +28,7 @@ export class CanoeMini {
               <div class="token-info flex flex-col items-start ml-2">
                 <div class="token-symbol">{this.state.info.name}</div>
                 <div class="token-price flex">
-                  <div class="price-value">${this.state.info.current_price}</div>
+                  <div class="price-value">{this.state.info.current_price}</div>
                   <div class={`ml-2 flex items-center ${this.state.info.state == 0 ? 'red-color' : 'green-color'}`}>
                     <xy-icon
                       class={this.state.info.state == 0 ? 'red-color' : 'green-color'}
