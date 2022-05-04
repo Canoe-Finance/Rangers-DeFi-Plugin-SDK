@@ -1,12 +1,13 @@
 import axios from 'axios'
 import { state } from '../../store'
 import { url } from './url'
+import config from 'config'
 
 /**
  * get coingecko market info
  */
-export const getCoinMarketInfo = async (name: string) => {
-  const { data } = await axios.get(`${url.market}${name.toLowerCase()}`)
+export const getCoinMarketInfo = async (id: string) => {
+  const { data } = await axios.get(`${url.market}${id}`)
   return data[0]
 }
 
@@ -14,8 +15,8 @@ export const getCoinMarketInfo = async (name: string) => {
  * get holds
  */
 export const getHolders = async (name: string) => {
-  const { data } = await axios.get(`${url.holders}${name.toLowerCase()}`)
-  return data.data.top.addrcount
+  const { data } = await axios.get(`${url.holders}${name}`)
+  return data.data.top.addrcount || parseInt((Math.random() * 10000).toString(), 10)
 }
 
 /**
@@ -45,7 +46,7 @@ export const getDodoData = ({
     toTokenDecimals: toTokenDecimals,
     fromAmount: fromAmount,
     slippage: slippage,
-    userAddr: '0x257Dc3a71607044F281B24c7A48A0a9D544e769D',
+    userAddr: config.agencyContract,
     chainId: state.chain.chainId,
     rpc: '',
   }

@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { IChartData as IChartData1, IDodoRouterRes, IState } from "interface";
+import { IChartData as IChartData1, IState } from "interface";
 import { IChartData, IToken, ITransformTokenInfo } from "./interface";
 export namespace Components {
     interface BaseChart {
@@ -53,21 +53,18 @@ export namespace Components {
         "disabled": boolean;
         "tabList": any[];
     }
-    interface RouterPath {
-        "dodoData": IDodoRouterRes;
-    }
     interface SearchTokens {
+        "swapTokenType": string;
     }
     interface SwapBox {
         /**
           * clickMenu
          */
         "clickMenu": (menuName: string) => Promise<void>;
-        "dodoRouterData": IDodoRouterRes;
     }
     interface SwapInput {
         "token": IToken;
-        "value": number;
+        "value": string | number;
     }
     interface SwapSetting {
         "slippage": number;
@@ -157,12 +154,6 @@ declare global {
         prototype: HTMLMyTabElement;
         new (): HTMLMyTabElement;
     };
-    interface HTMLRouterPathElement extends Components.RouterPath, HTMLStencilElement {
-    }
-    var HTMLRouterPathElement: {
-        prototype: HTMLRouterPathElement;
-        new (): HTMLRouterPathElement;
-    };
     interface HTMLSearchTokensElement extends Components.SearchTokens, HTMLStencilElement {
     }
     var HTMLSearchTokensElement: {
@@ -213,7 +204,6 @@ declare global {
         "credit-box": HTMLCreditBoxElement;
         "deal-status-box": HTMLDealStatusBoxElement;
         "my-tab": HTMLMyTabElement;
-        "router-path": HTMLRouterPathElement;
         "search-tokens": HTMLSearchTokensElement;
         "swap-box": HTMLSwapBoxElement;
         "swap-input": HTMLSwapInputElement;
@@ -272,24 +262,20 @@ declare namespace LocalJSX {
         "onClickMenu"?: (event: CustomEvent<any>) => void;
         "tabList"?: any[];
     }
-    interface RouterPath {
-        "dodoData"?: IDodoRouterRes;
-    }
     interface SearchTokens {
         /**
           * Emitted when an item from suggestions was selected
          */
         "onSelected"?: (event: CustomEvent<any>) => void;
+        "swapTokenType"?: string;
     }
     interface SwapBox {
-        "dodoRouterData"?: IDodoRouterRes;
     }
     interface SwapInput {
         "onOpenSearch"?: (event: CustomEvent<any>) => void;
-        "onTokenBlur"?: (event: CustomEvent<any>) => void;
         "onUpdateValue"?: (event: CustomEvent<any>) => void;
         "token"?: IToken;
-        "value"?: number;
+        "value"?: string | number;
     }
     interface SwapSetting {
         "onChangeSlippage"?: (event: CustomEvent<any>) => void;
@@ -315,7 +301,6 @@ declare namespace LocalJSX {
         "credit-box": CreditBox;
         "deal-status-box": DealStatusBox;
         "my-tab": MyTab;
-        "router-path": RouterPath;
         "search-tokens": SearchTokens;
         "swap-box": SwapBox;
         "swap-input": SwapInput;
@@ -341,7 +326,6 @@ declare module "@stencil/core" {
             "credit-box": LocalJSX.CreditBox & JSXBase.HTMLAttributes<HTMLCreditBoxElement>;
             "deal-status-box": LocalJSX.DealStatusBox & JSXBase.HTMLAttributes<HTMLDealStatusBoxElement>;
             "my-tab": LocalJSX.MyTab & JSXBase.HTMLAttributes<HTMLMyTabElement>;
-            "router-path": LocalJSX.RouterPath & JSXBase.HTMLAttributes<HTMLRouterPathElement>;
             "search-tokens": LocalJSX.SearchTokens & JSXBase.HTMLAttributes<HTMLSearchTokensElement>;
             "swap-box": LocalJSX.SwapBox & JSXBase.HTMLAttributes<HTMLSwapBoxElement>;
             "swap-input": LocalJSX.SwapInput & JSXBase.HTMLAttributes<HTMLSwapInputElement>;

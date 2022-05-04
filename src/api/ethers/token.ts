@@ -1,7 +1,9 @@
+import { ethers } from 'ethers'
+
 import { getContractSigner, getContract } from './index.js'
 import { showEthersError } from 'utils/func'
-import sendCoinABI from '../../abi/sendCoinABI'
-import erc20ABI from '../../abi/erc20ABI'
+import sendCoinABI from '../../abi/sendCoinABI.json'
+// import erc20ABI from '../../abi/erc20ABI.json'
 import config from 'config'
 import { state } from 'store'
 import { isNumberGt } from 'utils/math'
@@ -27,9 +29,14 @@ export const tokenApprove = token => {
   })
 }
 
-export const getBalanceByToken = token => {
-  const contract = getContract(token, erc20ABI)
+export const getBalanceByToken = async (token, decimals) => {
+  if (token == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
+    const provider = new ethers.providers.Web3Provider(window['ethereum'])
+    const data = await provider.getBalance(window['ethereum'].selectedAddress)
+    return ethers.utils.formatEther(data)
+  }
+  const contract = getContract(token, sendCoinABI)
   return contract.balanceOf(state.userAddress).then(res => {
-    return formatUnits(res)
+    return formatUnits(res, decimals)
   })
 }

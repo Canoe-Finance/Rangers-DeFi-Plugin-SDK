@@ -25,6 +25,8 @@ export interface IMarkerData {
 }
 
 export interface IToken {
+  id: string
+  code: string
   name: string
   address: string
   decimals: number
@@ -53,6 +55,9 @@ export interface IInfo {
 
 export interface IState {
   appShow: boolean
+  loading: boolean
+  circle: boolean
+  reload: boolean
   chain: chainItemType
   userAddress: string
   userBalance: number
@@ -67,7 +72,7 @@ export interface IState {
 export interface IDodoRouterRes {
   type: string
   resAmount: number
-  priceImpact: number
+  priceImpact: string
   resPricePerFromToken: number
   resPricePerToToken: number
   useSource: string

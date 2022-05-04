@@ -20,11 +20,11 @@ export class CanoeApp {
   @State() chart: IChartData[]
   @State() intervalId: number
 
-  getInfo = async (name: string, send: string, receive: string, from: string, to: string) => {
+  getInfo = async (id: string, code: string, send: string, receive: string, from: string, to: string) => {
     const data = await getChartData(send, receive, from, to)
 
-    const info: IMarkerData = await getCoinMarketInfo(name)
-    const holders = await getHolders(name)
+    const info: IMarkerData = await getCoinMarketInfo(id)
+    const holders = await getHolders(code)
     this.state.info = {
       name: info.name,
       symbol: info.symbol.toUpperCase(),
@@ -32,13 +32,13 @@ export class CanoeApp {
       state:
         info.price_change_percentage_24h == 0 ? this.state.info.state : info.price_change_percentage_24h > 0 ? 1 : 0,
       market_cap_rank: info.market_cap_rank,
-      current_price: info.current_price < 0.001 ? '< 0.001' : toDecimal2NoZero(info.current_price),
+      current_price: info.current_price < 0.001 ? '< $0.001' : '$' + toDecimal2NoZero(info.current_price),
       price_change_percentage: toDecimal2NoZero(info.price_change_percentage_24h),
-      market_cap: formatNumber(info.market_cap),
+      market_cap: '$' + formatNumber(info.market_cap),
       address_count: formatAddressNumber(holders),
-      liquid: formatNumber(info.market_cap_change_24h),
+      liquid: '$' + formatNumber(info.market_cap_change_24h),
       liquid_value: info.market_cap_change_24h,
-      total_volume: formatNumber(info.total_volume),
+      total_volume: '$' + formatNumber(info.total_volume),
     }
 
     this.mini = data.map(item => item[4])
@@ -49,29 +49,40 @@ export class CanoeApp {
         low: item[3],
         open: item[1],
         timestamp: item[0],
+        volume: item[5],
       }
     })
+    state.loading = false
   }
 
   componentWillLoad() {
     this.getInfo(
-      this.state.send.name,
+      this.state.send.id,
+      this.state.send.code,
       this.state.send.symbol,
       this.state.receive.symbol,
       this.state.send.address,
       this.state.receive.address,
     )
     onChange('send', async val => {
-      this.getInfo(val.name, val.symbol, this.state.receive.symbol, val.address, this.state.receive.address)
+      this.getInfo(val.id, val.code, val.symbol, this.state.receive.symbol, val.address, this.state.receive.address)
     })
 
     onChange('receive', async val => {
-      this.getInfo(this.state.send.name, this.state.send.symbol, val.symbol, this.state.send.address, val.address)
+      this.getInfo(
+        this.state.send.id,
+        this.state.send.code,
+        this.state.send.symbol,
+        val.symbol,
+        this.state.send.address,
+        val.address,
+      )
     })
 
     this.intervalId = workerTimers.setInterval(() => {
       this.getInfo(
-        this.state.send.name,
+        this.state.send.id,
+        this.state.send.code,
         this.state.send.symbol,
         this.state.receive.symbol,
         this.state.send.address,

@@ -8,27 +8,32 @@ import { IToken } from '../../../../../interface'
 })
 export class SwapInput {
   @Prop() token: IToken = {
+    id: '',
+    code: '',
     name: '',
     address: '',
     symbol: '',
     logoURI: '',
     decimals: 0,
   }
-  @Prop() value = 0
-  @Event() tokenBlur: EventEmitter
+  @Prop() value: string | number = 0
   @Event() updateValue: EventEmitter
   @Event() openSearch: EventEmitter
 
-  private onBlur = () => {
-    this.tokenBlur.emit()
-  }
   private _openSearch = () => {
     this.openSearch.emit()
   }
 
-  _blockInvalidChar = e => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()
-  _updateValue = (e: any) => {
-    this.updateValue.emit(e.target.value)
+  handleInput = e => {
+    let value = e.target.value
+    if (/^0[0-9]/.test(value)) {
+      value = '0'
+    } else {
+      const regex = new RegExp(`^\\D*(\\d*(?:\\.\\d{0,${this.token.decimals}})?).*$`, 'g')
+      value = value.replace(regex, '$1')
+    }
+    e.target.value = value
+    this.updateValue.emit(value)
   }
   render() {
     return (
@@ -37,15 +42,7 @@ export class SwapInput {
           <img src={this.token.logoURI} class="token-logo" />
           <span class="token-symbol">{this.token.symbol}</span>
         </div>
-        <input
-          class="customs focus:outline-none"
-          placeholder="0"
-          type="number"
-          value={this.value}
-          onInput={this._updateValue}
-          onBlur={this.onBlur}
-          onKeyDown={this._blockInvalidChar}
-        />
+        <input class="customs focus:outline-none" value={this.value} onInput={this.handleInput} />
       </div>
     )
   }

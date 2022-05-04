@@ -1,11 +1,14 @@
-import { Component, Method, h, Fragment, Prop, State, Watch } from '@stencil/core'
+import { Component, Method, h, Fragment, State, Watch } from '@stencil/core'
 import * as workerTimers from 'worker-timers'
 import { state } from 'store'
+import config from 'config'
+import { getChainList } from 'utils/func'
 import { getDodoData } from 'api/axios'
 import { parseUnits } from 'api/ethers/utils'
 import { IDodoRouterRes } from 'interface'
 import { checkTokenApprove, tokenApprove, getBalanceByToken } from 'api/ethers/token'
-import { checkEthereum, requestAccounts } from 'api/ethereum/index'
+import { getFeePercentage } from 'api/ethers/dodo'
+import { changeEthereumChainForPc, checkEthereum, getUserAddress, requestAccounts } from 'api/ethereum/index'
 import storage from 'utils/storage'
 
 @Component({
@@ -14,57 +17,111 @@ import storage from 'utils/storage'
   shadow: true,
 })
 export class SwapBox {
-  @State() changeIcon: string = '../../../../assets/icon/change.svg'
+  timeInterval = null
   @State() slippage: number = 0.5
   @State() tokens = []
   @State() swapTokenType: string = 'send'
   @State() balance: string = '0'
-  @State() receiveAmount = 0
-  @State() sendAmount = 0
+  @State() receiveAmount: number | string = 0
+  @State() sendAmount: number | string = 0
   @State() swapData = {}
   @State() showSearch: boolean = false
-  @State() timeInterval: number
-  @Watch('sendAmount')
-  watchSendAmount(value) {
-    if (value == 0) {
-      workerTimers.clearInterval(this.timeInterval)
-    } else {
-      this.setTimeInterval()
-    }
-  }
-  @Prop() dodoRouterData: IDodoRouterRes = {
+  @State() feePercentage: number = 1
+  @State() getTransformInfoLoading: boolean = false
+  @State() transformInfoVisible: boolean = false
+  @State() settingVisible: boolean = false
+  @State() connectWalletLoading: boolean = false
+  // approve
+  @State() isApproved: boolean = false
+  @State() checkApproveLoading: boolean = false
+  @State() tokenApproveLoading: boolean = false
+  @State() dodoRouterData: IDodoRouterRes = {
     type: 'send',
     useSource: '',
-    priceImpact: 0,
+    priceImpact: '',
     resPricePerToToken: 0,
     resPricePerFromToken: 0,
     resAmount: 0,
   }
+
+  timer: any = 0
+
+  @Watch('sendAmount')
+  watchSendAmount(value) {
+    if (!value) {
+      workerTimers.clearInterval(this.timeInterval)
+      this.timeInterval = null
+    } else {
+      this.setTimeInterval()
+    }
+  }
+
   _openSearch = (type: string) => {
     this.swapTokenType = type
     this.showSearch = !this.showSearch
   }
   getBalance = () => {
-    getBalanceByToken(state.send.address).then(res => {
+    getBalanceByToken(state.send.address, state.send.decimals).then(res => {
       this.balance = res
     })
   }
 
   _selectToken = async ({ detail }) => {
-    console.log(detail)
+    state.loading = true
     if (this.swapTokenType === 'send') {
+      if (detail.address == state.receive.address) {
+        state.receive = state.send
+      }
       state.send = detail
-      this.getBalance()
-      this._checkApprove(detail.address)
+      if (state.chain.chainId > 0 && state.userAddress) {
+        this._checkApprove(detail.address)
+        this.getBalance()
+      }
     } else {
+      if (detail.address == state.send.address) {
+        state.send = state.receive
+      }
       state.receive = detail
     }
     this.showSearch = false
-    this.getTransformInfo()
+    if (this.sendAmount > 0) {
+      this.getTransformInfo()
+    }
   }
 
-  @State() getTransformInfoLoading: boolean = false
   getTransformInfo = async (type: string = 'send') => {
+    const dodoRouterData = {
+      type: '',
+      useSource: '',
+      priceImpact: '',
+      resPricePerToToken: 0,
+      resPricePerFromToken: 0,
+      resAmount: 0,
+    }
+    if (type === 'send' && this.sendAmount <= 0) {
+      state.circle = false
+      this.receiveAmount = 0
+      dodoRouterData.type = 'send'
+      this.dodoRouterData = dodoRouterData
+      if (this.timeInterval) {
+        workerTimers.clearInterval(this.timeInterval)
+        this.timeInterval = null
+      }
+      return
+    }
+    if (type === 'receive' && this.receiveAmount <= 0) {
+      state.circle = false
+      this.sendAmount = 0
+      dodoRouterData.type = 'receive'
+      this.dodoRouterData = dodoRouterData
+      if (this.timeInterval) {
+        workerTimers.clearInterval(this.timeInterval)
+        this.timeInterval = null
+      }
+      return
+    }
+
+    state.circle = false
     this.getTransformInfoLoading = true
     let body
     let fromAmount
@@ -93,25 +150,26 @@ export class SwapBox {
       .then(data => {
         this.getTransformInfoLoading = false
         this.dodoRouterData = data
-        const resAmount = data.resAmount
+
+        const resAmount = data.resAmount * this.feePercentage
         if (type === 'send') {
-          this.receiveAmount = resAmount
+          this.receiveAmount = resAmount || '0'
           this.dodoRouterData = {
             type: 'send',
             useSource: data.useSource,
-            priceImpact: data.priceImpact,
+            priceImpact: parseFloat((data.priceImpact * 100).toString()).toPrecision(3),
             resPricePerToToken: data.resPricePerToToken,
-            resPricePerFromToken: data.resPricePerFromToken,
+            resPricePerFromToken: data.resPricePerFromToken * this.feePercentage,
             resAmount: resAmount,
           }
         } else {
-          this.sendAmount = resAmount
+          this.sendAmount = resAmount || '0'
           this.dodoRouterData = {
             type: 'receive',
             useSource: data.useSource,
-            priceImpact: data.priceImpact,
+            priceImpact: parseFloat((data.priceImpact * 100).toString()).toPrecision(3),
             resPricePerToToken: data.resPricePerFromToken,
-            resPricePerFromToken: data.resPricePerToToken,
+            resPricePerFromToken: data.resPricePerToToken * this.feePercentage,
             resAmount: resAmount,
           }
         }
@@ -123,13 +181,14 @@ export class SwapBox {
           showFromAmount: this.sendAmount,
           showToAmount: this.receiveAmount,
         }
+        state.circle = true
       })
       .catch(_ => {
         this.getTransformInfoLoading = false
+        state.circle = false
       })
   }
 
-  @State() transformInfoVisible: boolean = false
   openTransformInfoBox = async () => {
     try {
       await this.getTransformInfo()
@@ -137,23 +196,29 @@ export class SwapBox {
     } catch (e) {}
   }
 
-  @State() settingVisible: boolean = false
   openSetting = () => {
     this.settingVisible = true
   }
 
   handleRefresh = () => {
-    this._swapInputBlur('send')
+    this.getTransformInfo('send')
   }
 
   setTimeInterval = () => {
+    if (this.timeInterval) {
+      workerTimers.clearInterval(this.timeInterval)
+      this.timeInterval = null
+    }
     this.timeInterval = workerTimers.setInterval(() => {
-      this._swapInputBlur('send')
+      this.getTransformInfo('send')
     }, 30000)
   }
 
-  handleReload = () => {
-    this._swapInputBlur('send')
+  handleReload = async () => {
+    state.reload = true
+    this.setTimeInterval()
+    await this.getTransformInfo('send')
+    state.reload = false
   }
   handleCustomize = () => {
     this.openSetting()
@@ -173,9 +238,6 @@ export class SwapBox {
     }
   }
 
-  // approve
-  @State() isApproved: boolean = false
-  @State() checkApproveLoading: boolean = false
   _checkApprove = (address: string): void => {
     this.isApproved = false
     if (state.chain.chainId === 56 && address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
@@ -193,7 +255,7 @@ export class SwapBox {
         this.isApproved = false
       })
   }
-  @State() tokenApproveLoading: boolean = false
+
   handleTokenApprove = () => {
     if (state.chain.chainId === 56 && state.send.address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
       this.isApproved = true
@@ -210,70 +272,22 @@ export class SwapBox {
       })
   }
 
-  getBottomButton = () => {
-    if (!state.userAddress) {
-      return (
-        <bottom-button class="bottom-button" loading={this.connectWalletLoading} onClick={this.handleWalletConnect}>
-          <xy-icon class="icon-wallet" slot="prefix" name="wallet"></xy-icon>
-          Connect Wallet
-        </bottom-button>
-      )
-    } else {
-      if (this.isApproved) {
-        if (this.balance == '0') {
-          return (
-            <bottom-button class="bottom-button opacity-50 cursor-not-allowed pointer-events-none">
-              Insufficient Balance
-            </bottom-button>
-          )
-        } else {
-          return (
-            <bottom-button
-              class={
-                this.sendAmount == 0
-                  ? 'bottom-button opacity-50 cursor-not-allowed pointer-events-none'
-                  : 'bottom-button'
-              }
-              loading={this.getTransformInfoLoading}
-              onClick={this.openTransformInfoBox}
-            >
-              <xy-icon class="icon-swap" slot="prefix" name="swap-m"></xy-icon>
-              SWAP
-            </bottom-button>
-          )
-        }
+  handleUpdateValue(e, type) {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+    this.timer = setTimeout(() => {
+      if (type === 'send') {
+        this.sendAmount = e.detail
+        state.sendAmount = e.detail
       } else {
-        return (
-          <bottom-button
-            class="bottom-button"
-            loading={this.checkApproveLoading || this.tokenApproveLoading}
-            onClick={this.handleTokenApprove}
-          >
-            <xy-icon class="icon-approve" slot="prefix" name="approve"></xy-icon>
-            {this.checkApproveLoading ? 'CHECK APPROVE' : 'APPROVE'}
-          </bottom-button>
-        )
+        this.receiveAmount = e.detail
+        state.receiveAmount = e.detail
       }
-    }
+      this.getTransformInfo(type)
+    }, 800)
   }
 
-  debounce(func, timeout = 300) {
-    let timer
-    return (...args) => {
-      if (!timer) {
-        func.apply(this, args)
-      }
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-        timer = undefined
-      }, timeout)
-    }
-  }
-  _swapInputBlur = type => {
-    this.debounce(this.getTransformInfo(type))
-  }
-
-  @State() connectWalletLoading: boolean = false
   handleWalletConnect = async () => {
     if (!checkEthereum()) {
       return
@@ -295,7 +309,34 @@ export class SwapBox {
     }
     state.userAddress = address
   }
+
+  handleNetworkConnect = () => {
+    if (!checkEthereum()) {
+      return
+    }
+    if (config.chainIds.length) {
+      const chainId = config.chainIds[0]
+      changeEthereumChainForPc(chainId)
+        .then(() => {
+          this.setNetworkInfo(chainId)
+        })
+        .catch(err => {
+          const msg = err.message || 'Connect error.'
+          console.log('error:', msg)
+        })
+    }
+  }
+  setNetworkInfo = (chainId: number): void => {
+    const chainList = getChainList()
+    const item = chainList.find(x => x.chainId === chainId)
+    if (item) {
+      state.chain = item
+    } else {
+      state.chain = { chainId: 0, chainName: '' }
+    }
+  }
   changeCoin = () => {
+    state.loading = true
     let sendCopy = JSON.parse(JSON.stringify(state.send))
     let receiveCopy = JSON.parse(JSON.stringify(state.receive))
     state.send = receiveCopy
@@ -303,32 +344,47 @@ export class SwapBox {
     this.sendAmount = 0
     this.receiveAmount = 0
     this.dodoRouterData.resAmount = 0
+    this._checkApprove(receiveCopy.address)
+    this.getBalance()
+  }
+
+  componentWillRender() {
+    if (checkEthereum()) {
+      getUserAddress().then(userAddress => {
+        if (userAddress) {
+          getFeePercentage().then(res => {
+            this.feePercentage = res
+          })
+          this.getBalance()
+        }
+      })
+    }
   }
 
   disconnectedCallback() {
     workerTimers.clearInterval(this.timeInterval)
+    this.timeInterval = null
   }
+
   render() {
     return (
       <Fragment>
         <div class="swap-box flex flex-col items-center">
           <div class="grow">
+            <div class="text-right text-xs mb-1">
+              <span>Balance: {this.balance}</span>
+            </div>
             <swap-input
               token={state.send}
               value={this.sendAmount}
-              // onTokenBlur={() => this._swapInputBlur('send')}
-              onUpdateValue={e => {
-                this.sendAmount = e.detail
-                state.sendAmount = e.detail
-                this._swapInputBlur('send')
-              }}
+              onUpdateValue={e => this.handleUpdateValue(e, 'send')}
               onOpenSearch={() => this._openSearch('send')}
             ></swap-input>
-            <div class="flex items-center justify-end h-[26px] text-[12px] relative">
+            <div class="flex items-center justify-end h-[26px] text-xs relative">
               <img
                 onClick={this.changeCoin}
                 class="icon absolute left-0 cursor-pointer"
-                src={this.changeIcon}
+                src="https://g-dex.canoe.finance/assets/icon/change.svg"
                 alt="change"
               />
               {this.dodoRouterData.resAmount ? (
@@ -336,27 +392,20 @@ export class SwapBox {
                   1{state.send.symbol} = {this.dodoRouterData.resPricePerFromToken} {state.receive.symbol}
                 </span>
               ) : null}
-              <span>Balance {this.balance}</span>
-              {/* <span class="flex items-center bg-[#323645] text-color ml-[4px]">MAX</span> */}
             </div>
             <swap-input
               token={state.receive}
               value={this.receiveAmount}
-              // onTokenBlur={() => this._swapInputBlur('receive')}
-              onUpdateValue={e => {
-                this.receiveAmount = e.detail
-                state.receiveAmount = e.detail
-                this._swapInputBlur('receive')
-              }}
+              onUpdateValue={e => this.handleUpdateValue(e, 'receive')}
               onOpenSearch={() => this._openSearch('receive')}
             ></swap-input>
-            {this.receiveAmount ? (
+            {this.receiveAmount > 0 ? (
               <div class="router-container mt-[15px] divide-y divide-[#43485E]">
                 <div class="router-path h-[30px] flex justify-center items-center text-sm">
                   <span class="text-color">{state.send.symbol}</span>
-                  <span class="text-color"> &gt; </span>
+                  <span class="text-color">&nbsp; &gt; &nbsp;</span>
                   <span>{this.dodoRouterData.useSource}</span>
-                  <span class="text-color"> &gt; </span>
+                  <span class="text-color">&nbsp; &gt; &nbsp;</span>
                   <span class="text-color">{state.receive.symbol}</span>
                 </div>
                 <div class="router-amount flex flex-col h-[60px] px-[10px] text-xs justify-around">
@@ -374,21 +423,18 @@ export class SwapBox {
                   </div>
                   <div class="amount-item flex justify-between">
                     <span class="text-color">Price Impact</span>
-                    <span class="text-color">{this.dodoRouterData.priceImpact}</span>
+                    <span class="text-color">{this.dodoRouterData.priceImpact}%</span>
                   </div>
                 </div>
               </div>
             ) : null}
-            {/* <bottom-button class="bottom-button" onClick={this.getTransformInfo}>
-            <xy-icon class="icon-wallet" slot="prefix" name="wallet"></xy-icon>
-            Test
-          </bottom-button> */}
           </div>
-          {this.getBottomButton()}
+          <this.MyBottomButton />
         </div>
 
-        <div class={`search-container fixed top-5 bottom-5 left-5 right-5 z-10 ${this.showSearch ? 'show' : 'hide'}`}>
-          <search-tokens onSelected={this._selectToken}></search-tokens>
+        <div class={`search-container fixed top-3 left-5 right-5 z-10 ${this.showSearch ? 'show' : 'hide'}`}>
+          <search-tokens onSelected={this._selectToken} swapTokenType={this.swapTokenType}></search-tokens>
+          <div class="search-wrap" onClick={() => (this.showSearch = false)}></div>
         </div>
 
         <deal-status-box
@@ -396,7 +442,11 @@ export class SwapBox {
           send={state.send}
           receive={state.receive}
           swapData={this.swapData}
-          onClose={() => (this.transformInfoVisible = false)}
+          onClose={() => {
+            this.transformInfoVisible = false
+            this.getTransformInfo()
+            this.getBalance()
+          }}
         ></deal-status-box>
 
         <swap-setting
@@ -410,5 +460,54 @@ export class SwapBox {
         ></swap-setting>
       </Fragment>
     )
+  }
+
+  MyBottomButton = () => {
+    if (!state.userAddress) {
+      return (
+        <bottom-button class="bottom-button" loading={this.connectWalletLoading} onClick={this.handleWalletConnect}>
+          <xy-icon class="icon-wallet" slot="prefix" name="wallet"></xy-icon>
+          Connect Wallet
+        </bottom-button>
+      )
+    }
+    if (!state.chain.chainName) {
+      return (
+        <bottom-button class="bottom-button" loading={this.connectWalletLoading} onClick={this.handleNetworkConnect}>
+          Wrong Network
+        </bottom-button>
+      )
+    }
+    if (Number(this.balance) == 0 || Number(this.balance) < this.sendAmount) {
+      return (
+        <bottom-button class="bottom-button opacity-50 cursor-not-allowed pointer-events-none">
+          Insufficient Balance
+        </bottom-button>
+      )
+    } else if (this.isApproved || state.send.address == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
+      return (
+        <bottom-button
+          class={
+            this.sendAmount == 0 ? 'bottom-button opacity-50 cursor-not-allowed pointer-events-none' : 'bottom-button'
+          }
+          loading={this.getTransformInfoLoading}
+          onClick={this.openTransformInfoBox}
+        >
+          <xy-icon class="icon-swap" slot="prefix" name="swap-m"></xy-icon>
+          SWAP
+        </bottom-button>
+      )
+    } else {
+      return (
+        <bottom-button
+          class="bottom-button"
+          loading={this.checkApproveLoading || this.tokenApproveLoading}
+          onClick={this.handleTokenApprove}
+        >
+          <xy-icon class="icon-approve" slot="prefix" name="approve"></xy-icon>
+          {this.checkApproveLoading ? 'CHECK APPROVE' : 'APPROVE'}
+        </bottom-button>
+      )
+    }
   }
 }

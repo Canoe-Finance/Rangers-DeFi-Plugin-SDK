@@ -1,7 +1,8 @@
-import { Component, h, State, Event, EventEmitter } from '@stencil/core'
+import { Component, h, Prop, State, Event, EventEmitter } from '@stencil/core'
 import Autocomplete from '@trevoreyre/autocomplete-js'
 import { IToken } from 'interface'
-import { throttle } from 'utils'
+import { state, onChange } from 'store'
+import tokens from 'tokens/bsc.json'
 
 @Component({
   tag: 'search-tokens',
@@ -9,22 +10,18 @@ import { throttle } from 'utils'
   shadow: true,
 })
 export class SearchTokens {
-  @State() tokens: IToken[] = []
+  @Prop() swapTokenType: string
+
+  @State() disableAddress: string = state.send.address
 
   autocomplete: HTMLDivElement
+
+  timer: any = 0
 
   /**
    * Emitted when an item from suggestions was selected
    */
   @Event() selected: EventEmitter
-
-  componentDidLoad() {
-    fetch('https://api.1inch.exchange/v4.0/56/tokens')
-      .then(response => response.json())
-      .then(data => {
-        this.tokens = Object.values(data.tokens) as IToken[]
-      })
-  }
 
   componentDidRender() {
     new Autocomplete(this.autocomplete, {
@@ -33,14 +30,19 @@ export class SearchTokens {
         if (!input || input.length < 1) {
           return []
         }
-        return this.tokens.filter(token => {
-          const value = token.name || token.symbol || token.address
-          return value.toLowerCase().startsWith(input.toLowerCase())
+        return tokens.filter(token => {
+          return (
+            token.name.toLowerCase().startsWith(input.toLowerCase()) ||
+            token.symbol.toLowerCase().startsWith(input.toLowerCase()) ||
+            token.address.toLowerCase() == input.toLowerCase()
+          )
         })
       },
       getResultValue: (result: IToken) => result.symbol,
       renderResult: (result: IToken, props) => `
-        <li class="flex items-center token-info" ${props}>
+        <li class="flex items-center token-info ${
+          this.disableAddress == result.address ? 'token-disable' : ''
+        }" ${props}>
           <div class="token-img">
             <img src=${result.logoURI} />
           </div>
@@ -52,8 +54,26 @@ export class SearchTokens {
           </div>
         </li>`,
       onSubmit: result => {
-        throttle(this.selected.emit(result))
+        if (this.timer) {
+          clearTimeout(this.timer)
+        }
+        this.timer = setTimeout(() => {
+          this.selected.emit(result)
+          this.autocomplete.querySelector('input').value = ''
+        }, 300)
       },
+    })
+
+    onChange('send', val => {
+      if (this.swapTokenType == 'send') {
+        this.disableAddress = val.address
+      }
+    })
+
+    onChange('receive', val => {
+      if (this.swapTokenType == 'receive') {
+        this.disableAddress = val.address
+      }
     })
   }
 

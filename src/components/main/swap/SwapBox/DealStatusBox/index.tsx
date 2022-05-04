@@ -2,6 +2,8 @@ import { Component, h, State, Prop, Event, EventEmitter } from '@stencil/core'
 import * as workerTimers from 'worker-timers'
 import { ITransformTokenInfo } from '../../../../../interface'
 import { dodoSwap } from 'api/ethers/dodo'
+import { getBlockExplorerUrls } from 'utils/func'
+import { state } from 'store'
 
 @Component({
   tag: 'deal-status-box',
@@ -9,12 +11,12 @@ import { dodoSwap } from 'api/ethers/dodo'
   shadow: true,
 })
 export class DealStatusBox {
-  @State() intervalId: number
-
+  hash = ''
+  @State() intervalId = null
   @State() timeout: number = 0
   @State() type: string = 'primary'
   @State() title: string = 'SWAP CONFIRMATION'
-  @State() statusIcon: string = '../../../../../assets/icon/transform.svg'
+  @State() statusIcon: string = 'https://g-dex.canoe.finance/assets/icon/transform.svg'
   @State() buttonText: string = 'CONFIRM'
 
   @Prop() visible: boolean = false
@@ -26,36 +28,41 @@ export class DealStatusBox {
     if (this.type === 'primary') {
       this.setPending()
     } else if (this.type === 'success' || this.type === 'error') {
-      // TODO:
-      console.log('view swap detail')
+      if (this.hash) {
+        const url = getBlockExplorerUrls(state.chain.chainId) + '/tx/' + this.hash
+        window.open(url)
+      }
     }
   }
-  handleViewDetail = () => {
-    console.log('view detail')
-  }
-
-  setPending = () => {
-    this.title = 'PENDING'
-    this.type = 'info'
-    this.buttonText = 'PENDING'
-    this.statusIcon = '../../../../../assets/icon/transforming.svg'
-    this.timeout = 60
-    dodoSwap(this.swapData)
-      .then(() => {
-        this.setSuccess()
-        workerTimers.clearInterval(this.intervalId)
-      })
-      .catch(_ => {
-        this.setError()
-        workerTimers.clearInterval(this.intervalId)
-      })
-    this.intervalId = workerTimers.setInterval(() => {
-      if (this.timeout > 0) {
-        this.timeout--
-      } else {
+  setPending = async () => {
+    try {
+      this.hash = ''
+      this.title = 'PENDING'
+      this.type = 'info'
+      this.buttonText = 'PENDING'
+      this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/transforming.svg'
+      const tx = await dodoSwap(this.swapData)
+      this.hash = tx.hash
+      this.timeout = 60
+      if (this.intervalId) {
         workerTimers.clearInterval(this.intervalId)
       }
-    }, 1000)
+
+      this.intervalId = workerTimers.setInterval(() => {
+        if (this.timeout > 0) {
+          this.timeout--
+        } else {
+          this.setError()
+          workerTimers.clearInterval(this.intervalId)
+        }
+      }, 1000)
+      await tx.wait()
+      this.setSuccess()
+      workerTimers.clearInterval(this.intervalId)
+    } catch (e) {
+      this.setError()
+      workerTimers.clearInterval(this.intervalId)
+    }
   }
 
   setSuccess = () => {
@@ -64,15 +71,15 @@ export class DealStatusBox {
     this.title = 'SWAP succeed'
     this.type = 'success'
     this.buttonText = 'VIEW SWAP DETAIL'
-    this.statusIcon = '../../../../../assets/icon/success.svg'
+    this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/success.svg'
   }
   setError = () => {
     this.timeout = 0
     workerTimers.clearInterval(this.intervalId)
     this.title = 'failure'
     this.type = 'error'
-    this.buttonText = 'VIEW SWAP DETAIL'
-    this.statusIcon = '../../../../../assets/icon/error.svg'
+    this.buttonText = this.hash ? 'VIEW SWAP DETAIL' : 'ERROR'
+    this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/error.svg'
   }
   setInit = () => {
     this.timeout = 0
@@ -80,11 +87,12 @@ export class DealStatusBox {
     this.title = 'SWAP CONFIRMATION'
     this.type = 'primary'
     this.buttonText = 'CONFIRM'
-    this.statusIcon = '../../../../../assets/icon/transform.svg'
+    this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/transform.svg'
   }
 
   @Event() close: EventEmitter
   handleClose = () => {
+    this.hash = ''
     this.setInit()
     this.close.emit()
   }

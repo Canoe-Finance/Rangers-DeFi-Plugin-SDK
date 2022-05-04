@@ -1,4 +1,4 @@
-import { BigNumber, utils, Contract, getDefaultProvider, providers } from 'ethers'
+import { BigNumber, utils } from 'ethers'
 
 /**
  * toHex
@@ -40,7 +40,7 @@ export const hexToNumber = hex => parseInt(hex.toString().slice(2), 16)
 /**
  * parse and format
  */
-export const parseUnits = (value, unit = 'ether') => {
+export const parseUnits = (value, unit: string | number = 'ether') => {
   return utils.parseUnits(value, unit).toString()
 }
 export const formatUnits = (value, unit = 'ether') => {

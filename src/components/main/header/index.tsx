@@ -93,6 +93,9 @@ export class CanoeHeader {
   }
 
   componentDidLoad() {
+    if (!checkEthereum()) {
+      return
+    }
     this.initNetworkInfo()
     this.initUserAddress()
 
@@ -111,7 +114,7 @@ export class CanoeHeader {
     return (
       <header class="flex items-center">
         <div class="header-logo h-full flex flex-1 items-center">
-          <img src="../../assets/images/logo.svg" alt="logo" />
+          <img src="https://g-dex.canoe.finance/assets/icon/favicon.svg" class="w-6" alt="logo" />
           <div class="font-bold">Canoe</div>
         </div>
         <div class="network-container h-full flex items-center">

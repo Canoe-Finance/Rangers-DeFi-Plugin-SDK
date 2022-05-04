@@ -40,7 +40,6 @@
       font-weight: 700;
       color: $text-color;
       text-transform: uppercase;
-      cursor: pointer;
       border: 0;
       border-radius: 0;
 
@@ -62,7 +61,6 @@
       justify-content: center;
       width: 20px;
       height: 100%;
-      cursor: pointer;
       border: 0;
       border-radius: 0;
 
@@ -114,15 +112,36 @@
   }
 }
 
-.time-ro {
-  animation: time-rotate 30s infinite linear;
+.svg {
+  transform: rotate(-90deg);
 }
-@keyframes time-rotate {
+
+.progress {
+  animation: rotate 30s linear infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes rotate {
+  from {
+    stroke-dashoffset: 30px;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.spin {
+  animation: spin 2s linear infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
 
   to {
-    transform: rotate(359deg);
+    transform: rotate(360deg);
   }
 }

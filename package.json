@@ -23,7 +23,7 @@
     "chart.js": "2.8.0",
     "copy-to-clipboard": "^3.3.1",
     "decimal.js-light": "^2.5.1",
-    "ethereum-input-data-decoder": "0.4.0",
+    "ethereum-input-data-decoder": "^0.4.1",
     "ethers": "5.6.1",
     "klinecharts": "^8.3.6",
     "numabbr": "^0.1.0",

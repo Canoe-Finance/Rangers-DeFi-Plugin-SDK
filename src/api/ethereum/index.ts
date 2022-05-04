@@ -1,16 +1,16 @@
 import { hexToNumber, toHex } from '../ethers/utils'
-import chains from '../../lib/chains.js'
-import { copy } from '../../utils/func.js'
+import chains from '../../lib/chains'
+import { copy } from '../../utils/func'
 
 /**
  * check ethereum
  * @return {Boolean}
  */
 export const checkEthereum = () => {
-  if (window.ethereum && window.ethereum.isMetaMask) {
+  if (window['ethereum'] && window['ethereum'].isMetaMask) {
     return true
   }
-  console.log('place install MetaMask')
+  console.log('Please Install MetaMask')
   return false
 }
 
@@ -21,7 +21,7 @@ export const checkEthereum = () => {
  * @return {Promise} Promise
  */
 export const requestAccounts = () => {
-  return window.ethereum
+  return window['ethereum']
     .request({ method: 'eth_requestAccounts' })
     .then(accounts => {
       return accounts[0]
@@ -51,7 +51,7 @@ export const requestAccounts = () => {
  * @return {Promise} Promise
  */
 export const getUserAddress = () => {
-  return window.ethereum
+  return window['ethereum']
     .request({ method: 'eth_accounts' })
     .then(accounts => {
       return accounts[0] || ''
@@ -86,7 +86,7 @@ export const addEthereumChain = chainId => {
   params.chainId = toHex(chainId)
   delete params.showName
   console.log('add chain', chainId, params)
-  return window.ethereum
+  return window['ethereum']
     .request({
       method: 'wallet_addEthereumChain',
       params: [params],
@@ -124,7 +124,7 @@ export const addEthereumChain = chainId => {
  * @return {Promise} Promise Object
  */
 export const switchEthereumChain = chainId => {
-  return window.ethereum
+  return window['ethereum']
     .request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: toHex(chainId) }],
@@ -162,7 +162,7 @@ export const switchEthereumChain = chainId => {
  * @return {Promise}
  */
 export const getWindowNetwork = () => {
-  return window.ethereum
+  return window['ethereum']
     .request({ method: 'eth_chainId' })
     .then(res => {
       res = hexToNumber(res)
@@ -181,7 +181,7 @@ export const changeEthereumChainForMobile = chainId => {
     // Dialog.alert({ message: 'Please refresh the page' })
   }, 10000)
   return addEthereumChain(chainId)
-    .then(res => {
+    .then(() => {
       clearTimeout(timer)
       window.location.reload()
     })
@@ -189,7 +189,7 @@ export const changeEthereumChainForMobile = chainId => {
       clearTimeout(timer)
       if (error.code === -32602) {
         return switchEthereumChain(chainId)
-          .then(res => {
+          .then(() => {
             window.location.reload()
           })
           .catch(error => {
@@ -213,7 +213,7 @@ export const changeEthereumChainForPc = chainId => {
     .catch(error => {
       if (error.code === 4902) {
         return addEthereumChain(chainId)
-          .then(res => {
+          .then(() => {
             return Promise.resolve()
           })
           .catch(error => {
