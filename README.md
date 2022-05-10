@@ -41,3 +41,21 @@ yarn start
 ```bash
 yarn build
 ```
+
+## Use
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script nomodule src="https://dex.canoe.finance/build/app.js"></script>
+  </head>
+  <body>
+    <canoe-dex
+      id=[YOUR ID]
+      token="BNB"
+      modules="['Info', 'News', 'Social', 'Credit-Card', 'Transfer']"
+    ></canoe-dex>
+  </body>
+</html>
+```
