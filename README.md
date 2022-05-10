@@ -1,6 +1,6 @@
 # MetaDex-SDK
 
-![MetaDex](./docs/images/metadex.gif)
+![MetaDex](./docs/images/canoe.gif)
 
 ## MetaDex swap plugin solution
 
