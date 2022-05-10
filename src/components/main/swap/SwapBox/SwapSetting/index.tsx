@@ -70,7 +70,7 @@ export class SwapInput {
         <div class="content">
           <div class="grow">
             <div class="flex items-center justify-between">
-              <span>Slippage Tolerance</span>
+              <span class="subtitle">Slippage Tolerance</span>
               <div class="flex items-center justify-end">
                 {this.slippageList.map((item, i) => (
                   <xy-button class="slippage-item" key={i} onClick={() => this.handleItemSelected(item)}>

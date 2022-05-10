@@ -1,6 +1,5 @@
 import { createStore } from '@stencil/store'
 import { IState } from 'interface'
-import { getShortAddress } from '../utils/func'
 
 const { state, onChange } = createStore<IState>({
   appShow: false,
@@ -13,17 +12,16 @@ const { state, onChange } = createStore<IState>({
   },
   userAddress: '',
   userBalance: 0,
-  shortUserAddress: '',
   receiveAmount: 0,
   sendAmount: 0,
   send: {
-    id: 'binancecoin',
-    code: 'binance-coin',
-    name: 'Binance Coin',
-    symbol: 'BNB',
-    address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    id: 'metafinance',
+    code: 'metapoolfinance',
+    name: 'MetaFinance',
+    symbol: 'MFI',
+    address: '0x808f1350dff684C099F4837A01D863fC61A86BC6',
     decimals: 18,
-    logoURI: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png?1644979850',
+    logoURI: 'https://assets.coingecko.com/coins/images/17365/thumb/meta.PNG?1627435447',
   },
   receive: {
     id: 'tether',
@@ -48,10 +46,6 @@ const { state, onChange } = createStore<IState>({
     liquid_value: 0,
     total_volume: '',
   },
-})
-
-onChange('userAddress', value => {
-  state.shortUserAddress = getShortAddress(value)
 })
 
 export { state, onChange }

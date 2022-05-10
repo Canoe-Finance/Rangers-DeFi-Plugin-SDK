@@ -1,5 +1,4 @@
 import { Component, h, Prop, State, Event, EventEmitter } from '@stencil/core'
-import Autocomplete from '@trevoreyre/autocomplete-js'
 import { IToken } from 'interface'
 import { state, onChange } from 'store'
 import tokens from 'tokens/bsc.json'
@@ -14,6 +13,8 @@ export class SearchTokens {
 
   @State() disableAddress: string = state.send.address
 
+  @State() list: IToken[] = tokens
+
   autocomplete: HTMLDivElement
 
   timer: any = 0
@@ -23,47 +24,32 @@ export class SearchTokens {
    */
   @Event() selected: EventEmitter
 
-  componentDidRender() {
-    new Autocomplete(this.autocomplete, {
-      baseClass: 'search',
-      search: input => {
-        if (!input || input.length < 1) {
-          return []
-        }
-        return tokens.filter(token => {
-          return (
-            token.name.toLowerCase().startsWith(input.toLowerCase()) ||
-            token.symbol.toLowerCase().startsWith(input.toLowerCase()) ||
-            token.address.toLowerCase() == input.toLowerCase()
-          )
-        })
-      },
-      getResultValue: (result: IToken) => result.symbol,
-      renderResult: (result: IToken, props) => `
-        <li class="flex items-center token-info ${
-          this.disableAddress == result.address ? 'token-disable' : ''
-        }" ${props}>
-          <div class="token-img">
-            <img src=${result.logoURI} />
-          </div>
-          <div class="token-symbol">
-            ${result.symbol}
-          </div>
-          <div class="token-name">
-            ${result.name}
-          </div>
-        </li>`,
-      onSubmit: result => {
-        if (this.timer) {
-          clearTimeout(this.timer)
-        }
-        this.timer = setTimeout(() => {
-          this.selected.emit(result)
-          this.autocomplete.querySelector('input').value = ''
-        }, 300)
-      },
-    })
+  handleInput = e => {
+    const value = e.target.value
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+    this.timer = setTimeout(() => {
+      if (value) {
+        this.list = tokens.filter(
+          token =>
+            token.name.toLowerCase().startsWith(value.toLowerCase()) ||
+            token.symbol.toLowerCase().startsWith(value.toLowerCase()) ||
+            token.address.toLowerCase() == value.toLowerCase(),
+        )
+      } else {
+        this.list = tokens
+      }
+    }, 300)
+  }
 
+  handleSelect = (token: IToken) => {
+    this.selected.emit(token)
+    this.autocomplete.querySelector('input').value = ''
+    this.list = tokens
+  }
+
+  componentDidLoad() {
     onChange('send', val => {
       if (this.swapTokenType == 'send') {
         this.disableAddress = val.address
@@ -79,9 +65,33 @@ export class SearchTokens {
 
   render() {
     return (
-      <div class="search" data-position="below" ref={el => (this.autocomplete = el)}>
-        <input type="text" class="autocomplete-input" />
-        <ul class="result-list"></ul>
+      <div class="search" ref={el => (this.autocomplete = el)}>
+        <input class="autocomplete-input" onInput={this.handleInput} placeholder="Search name or paste address" />
+        <ul class={`result-list ${this.list.length ? '' : 'flex flex-col items-center justify-center'}`}>
+          {this.list.length ? (
+            this.list.map(item => {
+              return (
+                <li
+                  class={`flex items-center token-info ${this.disableAddress == item.address ? 'token-disable' : ''}`}
+                  onClick={() => this.handleSelect(item)}
+                >
+                  <div class="token-img">
+                    <img src={item.logoURI} />
+                  </div>
+                  <div class="token-symbol">{item.symbol}</div>
+                  <div class="token-name">{item.name}</div>
+                </li>
+              )
+            })
+          ) : (
+            <div class="flex flex-col items-center justify-center">
+              <div>
+                <xy-icon name="frown" size="30"></xy-icon>
+              </div>
+              <div class="mt-2 text-sm">No Data</div>
+            </div>
+          )}
+        </ul>
       </div>
     )
   }

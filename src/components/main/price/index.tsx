@@ -35,11 +35,11 @@ export class CanoePrice {
         </div>
         <div class="mt-4 flex justify-between">
           <div class="w-1/3">
-            <label>Address</label>
+            <label>Holders</label>
             <div class="font-bold mt-1">{this.state.info.address_count}</div>
           </div>
           <div class="w-1/3">
-            <label>Liquid</label>
+            <label>Liquidity</label>
             <div
               class={`font-bold mt-1 flex items-center ${
                 this.state.info.liquid_value < 0 ? 'red-color' : 'green-color'

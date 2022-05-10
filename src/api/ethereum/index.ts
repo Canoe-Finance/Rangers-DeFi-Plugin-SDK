@@ -85,7 +85,6 @@ export const addEthereumChain = chainId => {
   const params = copy(chains[chainId])
   params.chainId = toHex(chainId)
   delete params.showName
-  console.log('add chain', chainId, params)
   return window['ethereum']
     .request({
       method: 'wallet_addEthereumChain',

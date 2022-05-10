@@ -1,6 +1,6 @@
 import { Component, Method, h, Fragment, State, Watch } from '@stencil/core'
 import * as workerTimers from 'worker-timers'
-import { state } from 'store'
+import { state, onChange } from 'store'
 import config from 'config'
 import { getChainList } from 'utils/func'
 import { getDodoData } from 'api/axios'
@@ -10,6 +10,7 @@ import { checkTokenApprove, tokenApprove, getBalanceByToken } from 'api/ethers/t
 import { getFeePercentage } from 'api/ethers/dodo'
 import { changeEthereumChainForPc, checkEthereum, getUserAddress, requestAccounts } from 'api/ethereum/index'
 import storage from 'utils/storage'
+import { formatNumber, numberSub } from 'utils/math'
 
 @Component({
   tag: 'swap-box',
@@ -39,18 +40,17 @@ export class SwapBox {
     type: 'send',
     useSource: '',
     priceImpact: '',
-    resPricePerToToken: 0,
-    resPricePerFromToken: 0,
-    resAmount: 0,
+    resPricePerToToken: '0',
+    resPricePerFromToken: '0',
+    resAmount: '0',
   }
 
   timer: any = 0
 
   @Watch('sendAmount')
   watchSendAmount(value) {
-    if (!value) {
-      workerTimers.clearInterval(this.timeInterval)
-      this.timeInterval = null
+    if (!value && this.timeInterval) {
+      this.clearTimer()
     } else {
       this.setTimeInterval()
     }
@@ -61,9 +61,11 @@ export class SwapBox {
     this.showSearch = !this.showSearch
   }
   getBalance = () => {
-    getBalanceByToken(state.send.address, state.send.decimals).then(res => {
-      this.balance = res
-    })
+    if (storage.getIsLogin()) {
+      getBalanceByToken(state.send.address, state.send.decimals).then(res => {
+        this.balance = res
+      })
+    }
   }
 
   _selectToken = async ({ detail }) => {
@@ -94,19 +96,16 @@ export class SwapBox {
       type: '',
       useSource: '',
       priceImpact: '',
-      resPricePerToToken: 0,
-      resPricePerFromToken: 0,
-      resAmount: 0,
+      resPricePerToToken: '0',
+      resPricePerFromToken: '0',
+      resAmount: '0',
     }
     if (type === 'send' && this.sendAmount <= 0) {
       state.circle = false
       this.receiveAmount = 0
       dodoRouterData.type = 'send'
       this.dodoRouterData = dodoRouterData
-      if (this.timeInterval) {
-        workerTimers.clearInterval(this.timeInterval)
-        this.timeInterval = null
-      }
+      this.clearTimer()
       return
     }
     if (type === 'receive' && this.receiveAmount <= 0) {
@@ -114,10 +113,7 @@ export class SwapBox {
       this.sendAmount = 0
       dodoRouterData.type = 'receive'
       this.dodoRouterData = dodoRouterData
-      if (this.timeInterval) {
-        workerTimers.clearInterval(this.timeInterval)
-        this.timeInterval = null
-      }
+      this.clearTimer()
       return
     }
 
@@ -153,24 +149,24 @@ export class SwapBox {
 
         const resAmount = data.resAmount * this.feePercentage
         if (type === 'send') {
-          this.receiveAmount = resAmount || '0'
+          this.receiveAmount = formatNumber(resAmount) || '0'
           this.dodoRouterData = {
             type: 'send',
             useSource: data.useSource,
-            priceImpact: parseFloat((data.priceImpact * 100).toString()).toPrecision(3),
+            priceImpact: formatNumber(data.priceImpact * 100, 3),
             resPricePerToToken: data.resPricePerToToken,
-            resPricePerFromToken: data.resPricePerFromToken * this.feePercentage,
-            resAmount: resAmount,
+            resPricePerFromToken: formatNumber(data.resPricePerFromToken * this.feePercentage),
+            resAmount: formatNumber(resAmount),
           }
         } else {
-          this.sendAmount = resAmount || '0'
+          this.sendAmount = formatNumber(resAmount) || '0'
           this.dodoRouterData = {
             type: 'receive',
             useSource: data.useSource,
-            priceImpact: parseFloat((data.priceImpact * 100).toString()).toPrecision(3),
+            priceImpact: formatNumber(data.priceImpact * 100, 3),
             resPricePerToToken: data.resPricePerFromToken,
-            resPricePerFromToken: data.resPricePerToToken * this.feePercentage,
-            resAmount: resAmount,
+            resPricePerFromToken: formatNumber(data.resPricePerFromToken * this.feePercentage),
+            resAmount: formatNumber(resAmount),
           }
         }
         this.swapData = {
@@ -205,10 +201,7 @@ export class SwapBox {
   }
 
   setTimeInterval = () => {
-    if (this.timeInterval) {
-      workerTimers.clearInterval(this.timeInterval)
-      this.timeInterval = null
-    }
+    this.clearTimer()
     this.timeInterval = workerTimers.setInterval(() => {
       this.getTransformInfo('send')
     }, 30000)
@@ -239,6 +232,7 @@ export class SwapBox {
   }
 
   _checkApprove = (address: string): void => {
+    if (!storage.getIsLogin()) return
     this.isApproved = false
     if (state.chain.chainId === 56 && address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
       this.isApproved = true
@@ -270,6 +264,20 @@ export class SwapBox {
       .finally(_ => {
         this.tokenApproveLoading = false
       })
+  }
+
+  handleBalanceMax = () => {
+    if (Number(this.balance) > 0) {
+      let balance = this.balance
+      if (
+        state.chain.chainId === 56 &&
+        state.send.address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE' &&
+        Number(this.balance) > 0.01
+      ) {
+        balance = numberSub(null, balance, '0.01')
+      }
+      this.handleUpdateValue({ detail: balance }, 'send')
+    }
   }
 
   handleUpdateValue(e, type) {
@@ -337,18 +345,27 @@ export class SwapBox {
   }
   changeCoin = () => {
     state.loading = true
+    state.circle = false
     let sendCopy = JSON.parse(JSON.stringify(state.send))
     let receiveCopy = JSON.parse(JSON.stringify(state.receive))
     state.send = receiveCopy
     state.receive = sendCopy
     this.sendAmount = 0
     this.receiveAmount = 0
-    this.dodoRouterData.resAmount = 0
+    this.dodoRouterData.resAmount = '0'
     this._checkApprove(receiveCopy.address)
     this.getBalance()
   }
 
-  componentWillRender() {
+  componentDidLoad() {
+    onChange('userAddress', val => {
+      if (val) {
+        this.getBalance()
+        this._checkApprove(state.send.address)
+      } else {
+        this.balance = '0'
+      }
+    })
     if (checkEthereum()) {
       getUserAddress().then(userAddress => {
         if (userAddress) {
@@ -356,14 +373,45 @@ export class SwapBox {
             this.feePercentage = res
           })
           this.getBalance()
+          this._checkApprove(state.send.address)
         }
       })
     }
   }
 
-  disconnectedCallback() {
-    workerTimers.clearInterval(this.timeInterval)
-    this.timeInterval = null
+  clearTimer() {
+    if (this.timeInterval) {
+      workerTimers.clearInterval(this.timeInterval)
+      this.timeInterval = null
+    }
+  }
+
+  getUseSourceLogo = name => {
+    if (name.startsWith('pancake')) {
+      return 'https://dex.canoe.finance/assets/png/pancake.png'
+    }
+    if (name.startsWith('dodo')) {
+      return 'https://dex.canoe.finance/assets/png/dodo.png'
+    }
+    if (name.startsWith('0x')) {
+      return 'https://dex.canoe.finance/assets/png/0x.png'
+    }
+    if (name.startsWith('1inch')) {
+      return 'https://dex.canoe.finance/assets/png/1inch.png'
+    }
+    if (name.startsWith('paraSwap')) {
+      return 'https://dex.canoe.finance/assets/png/paraSwap.png'
+    }
+    return ''
+  }
+
+  getUseSourceText = name => {
+    const text = ['pancake', 'dodo', '0x', '1inch', 'paraSwap']
+    const find = text.find(item => name.includes(item))
+    if (find) {
+      return find
+    }
+    return ''
   }
 
   render() {
@@ -371,8 +419,11 @@ export class SwapBox {
       <Fragment>
         <div class="swap-box flex flex-col items-center">
           <div class="grow">
-            <div class="text-right text-xs mb-1">
+            <div class="flex items-center justify-end text-right text-xs mb-1">
               <span>Balance: {this.balance}</span>
+              <div class="balance-max" onClick={this.handleBalanceMax}>
+                MAX
+              </div>
             </div>
             <swap-input
               token={state.send}
@@ -380,15 +431,15 @@ export class SwapBox {
               onUpdateValue={e => this.handleUpdateValue(e, 'send')}
               onOpenSearch={() => this._openSearch('send')}
             ></swap-input>
-            <div class="flex items-center justify-end h-[26px] text-xs relative">
+            <div class="flex items-center h-[26px] text-xs relative">
               <img
                 onClick={this.changeCoin}
-                class="icon absolute left-0 cursor-pointer"
-                src="https://g-dex.canoe.finance/assets/icon/change.svg"
+                class="icon cursor-pointer"
+                src="https://dex.canoe.finance/assets/icon/change.svg"
                 alt="change"
               />
               {this.dodoRouterData.resAmount ? (
-                <span>
+                <span class="ml-[2px]">
                   1{state.send.symbol} = {this.dodoRouterData.resPricePerFromToken} {state.receive.symbol}
                 </span>
               ) : null}
@@ -404,12 +455,13 @@ export class SwapBox {
                 <div class="router-path h-[30px] flex justify-center items-center text-sm">
                   <span class="text-color">{state.send.symbol}</span>
                   <span class="text-color">&nbsp; &gt; &nbsp;</span>
-                  <span>{this.dodoRouterData.useSource}</span>
+                  <img class="source-logo" src={this.getUseSourceLogo(this.dodoRouterData.useSource)} alt="" />
+                  <span>{this.getUseSourceText(this.dodoRouterData.useSource)}</span>
                   <span class="text-color">&nbsp; &gt; &nbsp;</span>
                   <span class="text-color">{state.receive.symbol}</span>
                 </div>
                 <div class="router-amount flex flex-col h-[60px] px-[10px] text-xs justify-around">
-                  <div class="amount-item flex justify-between">
+                  <div class="amount-item flex justify-between mt-1">
                     <span class="text-color">
                       {this.dodoRouterData.type === 'send' ? 'Minimum Received' : 'Maximum sold'}
                     </span>
@@ -434,7 +486,9 @@ export class SwapBox {
 
         <div class={`search-container fixed top-3 left-5 right-5 z-10 ${this.showSearch ? 'show' : 'hide'}`}>
           <search-tokens onSelected={this._selectToken} swapTokenType={this.swapTokenType}></search-tokens>
-          <div class="search-wrap" onClick={() => (this.showSearch = false)}></div>
+          <div class="bg-transparent mt-1 flex items-center justify-center">
+            <xy-icon class="cursor-pointer" name="close" onClick={() => (this.showSearch = false)}></xy-icon>
+          </div>
         </div>
 
         <deal-status-box

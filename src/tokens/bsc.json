@@ -1,5 +1,45 @@
 [
   {
+    "id": "tether",
+    "code": "tether",
+    "name": "Tether",
+    "symbol": "USDT",
+    "address": "0x55d398326f99059fF775485246999027B3197955",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/325/thumb/Tether-logo.png?1598003707"
+  },
+  {
+    "id": "usd-coin",
+    "code": "usdc",
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "address": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
+  },
+  {
+    "id": "binance-usd",
+    "code": "binanceusd",
+    "name": "Binance USD",
+    "symbol": "BUSD",
+    "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/9576/thumb/BUSD.png?1568947766"
+  },
+  {
+    "id": "dai",
+    "code": "dai",
+    "name": "Dai",
+    "symbol": "DAI",
+    "address": "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/9956/thumb/4943.png?1636636734"
+  },
+  {
     "id": "binancecoin",
     "code": "binance-coin",
     "name": "Binance Coin",
@@ -8,6 +48,26 @@
     "chainId": 56,
     "decimals": 18,
     "logoURI": "https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png?1644979850"
+  },
+  {
+    "id": "binance-bitcoin",
+    "code": "binance-bitcoin",
+    "name": "Binance Bitcoin",
+    "symbol": "BTCB",
+    "address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/14108/thumb/Binance-bitcoin.png?1617332330"
+  },
+  {
+    "id": "weth",
+    "code": "weth",
+    "name": "WETH",
+    "symbol": "ETH",
+    "address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/2518/thumb/weth.png?1628852295"
   },
   {
     "id": "baby-doge-coin",
@@ -30,66 +90,6 @@
     "logoURI": "https://assets.coingecko.com/coins/images/12632/thumb/pancakeswap-cake-logo_%281%29.png?1629359065"
   },
   {
-    "id": "binance-usd",
-    "code": "binanceusd",
-    "name": "Binance USD",
-    "symbol": "BUSD",
-    "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/9576/thumb/BUSD.png?1568947766"
-  },
-  {
-    "id": "tether",
-    "code": "tether",
-    "name": "Tether",
-    "symbol": "USDT",
-    "address": "0x55d398326f99059fF775485246999027B3197955",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/325/thumb/Tether-logo.png?1598003707"
-  },
-  {
-    "id": "wbnb",
-    "code": "wrappedbnb",
-    "name": "Wrapped BNB",
-    "symbol": "WBNB",
-    "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/12591/thumb/binance-coin-logo.png?1600947313"
-  },
-  {
-    "id": "usd-coin",
-    "code": "usdc",
-    "name": "USD Coin",
-    "symbol": "USDC",
-    "address": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/6319/thumb/USD_Coin_icon.png?1547042389"
-  },
-  {
-    "id": "weth",
-    "code": "weth",
-    "name": "WETH",
-    "symbol": "ETH",
-    "address": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/2518/thumb/weth.png?1628852295"
-  },
-  {
-    "id": "binance-bitcoin",
-    "code": "binance-bitcoin",
-    "name": "Binance Bitcoin",
-    "symbol": "BTCB",
-    "address": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/14108/thumb/Binance-bitcoin.png?1617332330"
-  },
-  {
     "id": "true-usd",
     "code": "true-usd",
     "name": "TrueUSD",
@@ -110,26 +110,6 @@
     "logoURI": "https://assets.coingecko.com/coins/images/15457/thumb/-Tj2WF_6_400x400.jpg?1620895613"
   },
   {
-    "id": "gambit",
-    "code": "green-metaverse",
-    "name": "GreekMythology",
-    "symbol": "GMT",
-    "address": "0x7a59cE9c4248F8B078Fd96D9965E6E5dC8e6F0a8",
-    "chainId": 56,
-    "decimals": 9,
-    "logoURI": "https://assets.coingecko.com/coins/images/24042/thumb/uxr1prT.png?1646138792"
-  },
-  {
-    "id": "dai",
-    "code": "dai",
-    "name": "Dai",
-    "symbol": "DAI",
-    "address": "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/9956/thumb/4943.png?1636636734"
-  },
-  {
     "id": "chainlink",
     "code": "chainlink",
     "name": "Chainlink",
@@ -148,16 +128,6 @@
     "chainId": 56,
     "decimals": 18,
     "logoURI": "https://assets.coingecko.com/coins/images/15455/thumb/ZE8LxNBf_400x400.jpg?1620894681"
-  },
-  {
-    "id": "wrapped-ust",
-    "code": "terrausd",
-    "name": "Wrapped UST",
-    "symbol": "UST",
-    "address": "0x23396cF899Ca06c4472205fC903bDB4de249D6fC",
-    "chainId": 56,
-    "decimals": 18,
-    "logoURI": "https://assets.coingecko.com/coins/images/15462/thumb/ust.png?1620910058"
   },
   {
     "id": "binance-peg-dogecoin",
@@ -279,7 +249,6 @@
     "decimals": 18,
     "logoURI": "https://assets.coingecko.com/coins/images/15456/thumb/LrysCc5Q_400x400.jpg?1620895206"
   },
-
   {
     "id": "tron-bsc",
     "code": "tron",
@@ -439,5 +408,25 @@
     "chainId": 56,
     "decimals": 18,
     "logoURI": "https://assets.coingecko.com/coins/images/5312/thumb/SCC.png?1649213287"
+  },
+  {
+    "id": "place-war",
+    "code": "place-war",
+    "name": "PlaceWar Governance Token",
+    "symbol": "PLACE",
+    "address": "0x07728696eE70A28c9C032926577AF1D524Df30f9",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/19993/thumb/place.png?1636361494"
+  },
+  {
+    "id": "metafinance",
+    "code": "metapoolfinance",
+    "name": "MetaFinance",
+    "symbol": "MFI",
+    "address": "0x808f1350dff684C099F4837A01D863fC61A86BC6",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/17365/thumb/meta.PNG?1627435447"
   }
 ]

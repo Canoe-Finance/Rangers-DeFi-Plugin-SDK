@@ -1,5 +1,8 @@
 .chart {
   width: 340px;
-  height: calc(90vh - 660px);
+  height: calc(100vh - 666px);
+  min-height: 170px;
   margin-top: 8px;
+  background: $text-bg-color;
+  border-radius: 6px;
 }

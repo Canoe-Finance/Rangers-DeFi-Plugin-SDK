@@ -1,8 +1,8 @@
-import { Component, h, State, Prop, Event, EventEmitter } from '@stencil/core'
+import { Component, Watch, h, State, Prop, Event, EventEmitter } from '@stencil/core'
 import * as workerTimers from 'worker-timers'
 import { ITransformTokenInfo } from '../../../../../interface'
 import { dodoSwap } from 'api/ethers/dodo'
-import { getBlockExplorerUrls } from 'utils/func'
+import { copy, getBlockExplorerUrls } from 'utils/func'
 import { state } from 'store'
 
 @Component({
@@ -16,13 +16,28 @@ export class DealStatusBox {
   @State() timeout: number = 0
   @State() type: string = 'primary'
   @State() title: string = 'SWAP CONFIRMATION'
-  @State() statusIcon: string = 'https://g-dex.canoe.finance/assets/icon/transform.svg'
+  @State() statusIcon: string = 'https://dex.canoe.finance/assets/icon/transform.svg'
   @State() buttonText: string = 'CONFIRM'
+  @State() currentSwapData = {
+    dodoData: {},
+    fromAmount: 0,
+    fromAddress: '',
+    toAddress: '',
+    showFromAmount: 0,
+    showToAmount: 0,
+  }
 
   @Prop() visible: boolean = false
   @Prop() swapData = null
   @Prop() send: ITransformTokenInfo = { symbol: '', logoURI: '' }
   @Prop() receive: ITransformTokenInfo = { symbol: '', logoURI: '' }
+
+  @Watch('visible')
+  watchVisible(value) {
+    if (value) {
+      this.setInit()
+    }
+  }
 
   handleButtonClick = () => {
     if (this.type === 'primary') {
@@ -36,58 +51,67 @@ export class DealStatusBox {
   }
   setPending = async () => {
     try {
+      this.currentSwapData = copy(this.swapData)
       this.hash = ''
       this.title = 'PENDING'
       this.type = 'info'
       this.buttonText = 'PENDING'
-      this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/transforming.svg'
-      const tx = await dodoSwap(this.swapData)
+      this.statusIcon = 'https://dex.canoe.finance/assets/icon/transforming.svg'
+      const tx = await dodoSwap(this.currentSwapData)
       this.hash = tx.hash
       this.timeout = 60
-      if (this.intervalId) {
-        workerTimers.clearInterval(this.intervalId)
-      }
+      this.clearTimer()
 
       this.intervalId = workerTimers.setInterval(() => {
         if (this.timeout > 0) {
           this.timeout--
         } else {
           this.setError()
-          workerTimers.clearInterval(this.intervalId)
+          this.clearTimer()
         }
       }, 1000)
       await tx.wait()
-      this.setSuccess()
-      workerTimers.clearInterval(this.intervalId)
+      if (this.timeout > 0) {
+        this.setSuccess()
+        this.clearTimer()
+      }
     } catch (e) {
+      console.log(e)
       this.setError()
-      workerTimers.clearInterval(this.intervalId)
+      this.clearTimer()
     }
   }
 
   setSuccess = () => {
     this.timeout = 0
-    workerTimers.clearInterval(this.intervalId)
+    this.clearTimer()
     this.title = 'SWAP succeed'
     this.type = 'success'
     this.buttonText = 'VIEW SWAP DETAIL'
-    this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/success.svg'
+    this.statusIcon = 'https://dex.canoe.finance/assets/icon/success.svg'
   }
   setError = () => {
     this.timeout = 0
-    workerTimers.clearInterval(this.intervalId)
+    this.clearTimer()
     this.title = 'failure'
     this.type = 'error'
     this.buttonText = this.hash ? 'VIEW SWAP DETAIL' : 'ERROR'
-    this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/error.svg'
+    this.statusIcon = 'https://dex.canoe.finance/assets/icon/error.svg'
   }
   setInit = () => {
     this.timeout = 0
-    workerTimers.clearInterval(this.intervalId)
+    this.clearTimer()
     this.title = 'SWAP CONFIRMATION'
     this.type = 'primary'
     this.buttonText = 'CONFIRM'
-    this.statusIcon = 'https://g-dex.canoe.finance/assets/icon/transform.svg'
+    this.statusIcon = 'https://dex.canoe.finance/assets/icon/transform.svg'
+  }
+
+  clearTimer() {
+    if (this.intervalId) {
+      workerTimers.clearInterval(this.intervalId)
+      this.intervalId = null
+    }
   }
 
   @Event() close: EventEmitter
@@ -126,7 +150,9 @@ export class DealStatusBox {
           <div class="token-line token-from">
             <img class="token-icon" src={this.receive.logoURI} />
             <div class="token-name">{this.receive.symbol}</div>
-            <div class="token-price">{this.swapData.showToAmount}</div>
+            <div class="token-price">
+              {this.type === 'primary' ? this.swapData.showToAmount : this.currentSwapData.showToAmount}
+            </div>
           </div>
         </div>
         <bottom-button type={this.type} loading={this.type === 'info'} onClick={this.handleButtonClick}>

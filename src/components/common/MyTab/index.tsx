@@ -1,5 +1,5 @@
 import { Component, State, h, Prop, Event, EventEmitter } from '@stencil/core'
-import { state, onChange } from 'store'
+import { state } from 'store'
 
 @Component({
   tag: 'my-tab',
@@ -16,7 +16,6 @@ export class MyTab {
   @State() tabLeft: string = '0'
   @State() tabWidth: string = '0'
   @State() menuList = []
-  @State() loading = false
 
   radius = 6
   strokeWidth = 2
@@ -34,9 +33,6 @@ export class MyTab {
   componentDidLoad() {
     // select first tab
     this.handleTabChange({ target: this.tabRef.childNodes[0] }, 0)
-    onChange('circle', status => {
-      this.loading = status
-    })
   }
 
   @Event() clickMenu: EventEmitter
@@ -79,7 +75,7 @@ export class MyTab {
                 }}
                 key={i}
               >
-                {i == 0 && this.loading ? (
+                {i == 0 ? (
                   <svg class="svg" height={this.radius * 2} width={this.radius * 2}>
                     <circle
                       cx={this.radius}
@@ -90,25 +86,25 @@ export class MyTab {
                       fill="none"
                       opacity="0.1"
                     />
-                    <circle
-                      class="progress"
-                      cx={this.radius}
-                      cy={this.radius}
-                      r={this.normalizedRadius}
-                      stroke-width={this.strokeWidth}
-                      stroke="#fff"
-                      stroke-linecap="round"
-                      stroke-dasharray={`${this.circumference} ${this.circumference}`}
-                      fill="none"
-                    />
+                    {state.circle && (
+                      <circle
+                        class="progress"
+                        cx={this.radius}
+                        cy={this.radius}
+                        r={this.normalizedRadius}
+                        stroke-width={this.strokeWidth}
+                        stroke="#fff"
+                        stroke-linecap="round"
+                        stroke-dasharray={`${this.circumference} ${this.circumference}`}
+                        fill="none"
+                      />
+                    )}
                   </svg>
                 ) : (
-                  i > 0 && (
-                    <xy-icon
-                      class={`icon cursor-pointer ${i == 1 && state.reload ? 'spin' : ''}`}
-                      name={item.icon}
-                    ></xy-icon>
-                  )
+                  <xy-icon
+                    class={`icon cursor-pointer ${i == 1 && state.reload ? 'spin' : ''}`}
+                    name={item.icon}
+                  ></xy-icon>
                 )}
               </div>
             ))}

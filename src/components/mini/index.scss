@@ -1,6 +1,7 @@
 .mini-chart {
   width: 300px;
   height: 64px;
+  overflow: hidden;
   background: linear-gradient(0deg, rgb(43 255 1 / 6%), rgb(43 255 1 / 6%)), #18181c;
   border-radius: 12px;
   box-shadow: 0 6.4177px 38.2739px rgb(25 25 30 / 20%), 0 2.968px 17.8722px rgb(25 25 30 / 12.8%),

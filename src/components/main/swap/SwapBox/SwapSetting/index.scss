@@ -33,6 +33,7 @@
     display: inline-block;
     height: 30px;
     font-size: 12px;
+    font-weight: 900;
     line-height: 30px;
     text-transform: uppercase;
     border-bottom: 2px solid #a2a8ba;
@@ -44,6 +45,12 @@
   flex: 1;
   flex-direction: column;
   padding: 20px 20px 0;
+
+  .subtitle {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+  }
 
   .slippage-item {
     width: 40px;
