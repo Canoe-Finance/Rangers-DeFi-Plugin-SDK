@@ -1,5 +1,5 @@
 import { Component, h } from '@stencil/core'
-import { getChainList } from '../../../utils/func'
+import { getChainList, getShortAddress } from '../../../utils/func'
 import { chainItemType } from '../../../interface'
 import storage from '../../../utils/storage'
 import { hexToNumber } from '../../../api/ethers/utils'
@@ -114,7 +114,7 @@ export class CanoeHeader {
     return (
       <header class="flex items-center">
         <div class="header-logo h-full flex flex-1 items-center">
-          <img src="https://g-dex.canoe.finance/assets/icon/favicon.svg" class="w-6" alt="logo" />
+          <img src="https://dex.canoe.finance/assets/icon/favicon.svg" class="w-6" alt="logo" />
           <div class="font-bold">Canoe</div>
         </div>
         <div class="network-container h-full flex items-center">
@@ -152,7 +152,7 @@ export class CanoeHeader {
             <xy-popover class="popover">
               <div class="wallet-title h-full flex items-center has-right-arrow">
                 <xy-icon class="icon" name="wallet"></xy-icon>
-                <div class="font-bold">{state.shortUserAddress}</div>
+                <div class="font-bold">{getShortAddress(state.userAddress)}</div>
               </div>
               <xy-popcon class="popover-content" ref={el => (this.walletPopover = el as HTMLElement)}>
                 <div class="popover-list">

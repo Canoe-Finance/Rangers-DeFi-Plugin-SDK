@@ -1,5 +1,6 @@
 .zoom-top {
-  top: calc(45vh - 108px);
+  top: calc(50vh - 90px);
+  left: -18px;
 
   .zoom-show {
     display: none;
@@ -7,13 +8,15 @@
 
   .zoom-hide,
   .zoom-show {
+    position: absolute;
+    right: 0;
     width: 5px;
   }
 
   &:hover {
     .zoom-show {
       display: flex;
-      animation: width-show 0.2s ease-in-out forwards;
+      animation: width-show 0.2s linear forwards;
     }
 
     .zoom-hide {

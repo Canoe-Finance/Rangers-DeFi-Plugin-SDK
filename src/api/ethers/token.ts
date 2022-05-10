@@ -3,10 +3,9 @@ import { ethers } from 'ethers'
 import { getContractSigner, getContract } from './index.js'
 import { showEthersError } from 'utils/func'
 import sendCoinABI from '../../abi/sendCoinABI.json'
-// import erc20ABI from '../../abi/erc20ABI.json'
 import config from 'config'
 import { state } from 'store'
-import { isNumberGt } from 'utils/math'
+import { formatNumber, isNumberGt } from 'utils/math'
 import { toBigNumberString, formatUnits } from './utils'
 
 export const checkTokenApprove = token => {
@@ -33,10 +32,10 @@ export const getBalanceByToken = async (token, decimals) => {
   if (token == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
     const provider = new ethers.providers.Web3Provider(window['ethereum'])
     const data = await provider.getBalance(window['ethereum'].selectedAddress)
-    return ethers.utils.formatEther(data)
+    return data.gt(0) ? formatNumber(ethers.utils.formatEther(data)) : '0'
   }
   const contract = getContract(token, sendCoinABI)
   return contract.balanceOf(state.userAddress).then(res => {
-    return formatUnits(res, decimals)
+    return res > 0 ? formatNumber(formatUnits(res, decimals)) : '0'
   })
 }

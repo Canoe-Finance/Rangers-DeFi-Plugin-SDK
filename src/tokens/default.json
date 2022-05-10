@@ -840,14 +840,6 @@
     "logoURI": "https://raw.githubusercontent.com/complusnetwork/default-token-list/master/src/bsc/0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD/logo.png"
   },
   {
-    "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
-    "chainId": 56,
-    "name": "Wrapped Binance",
-    "symbol": "WBNB",
-    "decimals": 18,
-    "logoURI": "https://raw.githubusercontent.com/complusnetwork/default-token-list/master/src/bsc/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c/logo.png"
-  },
-  {
     "address": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47",
     "chainId": 56,
     "name": "Cardano Token",

@@ -61,7 +61,6 @@ export interface IState {
   chain: chainItemType
   userAddress: string
   userBalance: number
-  shortUserAddress: string
   send: IToken
   receive: IToken
   info: IInfo
@@ -71,9 +70,9 @@ export interface IState {
 
 export interface IDodoRouterRes {
   type: string
-  resAmount: number
+  resAmount: string
   priceImpact: string
-  resPricePerFromToken: number
-  resPricePerToToken: number
+  resPricePerFromToken: string
+  resPricePerToToken: string
   useSource: string
 }

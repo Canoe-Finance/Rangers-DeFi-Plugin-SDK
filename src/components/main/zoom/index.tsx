@@ -11,7 +11,7 @@ export class MetaZoom {
   render() {
     return (
       <div
-        class="zoom-top absolute w-[12px] h-[180px] -left-[11px] cursor-pointer"
+        class="zoom-top absolute w-[12px] h-[180px] cursor-pointer"
         onClick={() => {
           this.clickClose.emit()
         }}

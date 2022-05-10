@@ -49,3 +49,6 @@ export const isNumberEq = (num1, num2) => {
 export const isNumberZero = num => {
   return new Decimal(num).isZero()
 }
+export const formatNumber = (num, decimal = 6) => {
+  return new Decimal(num).toDecimalPlaces(decimal, Decimal.ROUND_DOWN).toString()
+}

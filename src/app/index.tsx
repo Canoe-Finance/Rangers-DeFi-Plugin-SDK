@@ -4,6 +4,7 @@ import { getChartData, getCoinMarketInfo, getHolders } from 'api/axios'
 import { IChartData, IMarkerData } from 'interface'
 import { onChange, state } from 'store'
 import { formatAddressNumber, formatNumber, toDecimal2NoZero } from 'utils/number'
+import tokens from 'tokens/bsc.json'
 
 import '../xy-ui/index'
 
@@ -20,42 +21,53 @@ export class CanoeApp {
   @State() chart: IChartData[]
   @State() intervalId: number
 
-  getInfo = async (id: string, code: string, send: string, receive: string, from: string, to: string) => {
-    const data = await getChartData(send, receive, from, to)
+  timer: any = 0
 
-    const info: IMarkerData = await getCoinMarketInfo(id)
-    const holders = await getHolders(code)
-    this.state.info = {
-      name: info.name,
-      symbol: info.symbol.toUpperCase(),
-      image: info.image,
-      state:
-        info.price_change_percentage_24h == 0 ? this.state.info.state : info.price_change_percentage_24h > 0 ? 1 : 0,
-      market_cap_rank: info.market_cap_rank,
-      current_price: info.current_price < 0.001 ? '< $0.001' : '$' + toDecimal2NoZero(info.current_price),
-      price_change_percentage: toDecimal2NoZero(info.price_change_percentage_24h),
-      market_cap: '$' + formatNumber(info.market_cap),
-      address_count: formatAddressNumber(holders),
-      liquid: '$' + formatNumber(info.market_cap_change_24h),
-      liquid_value: info.market_cap_change_24h,
-      total_volume: '$' + formatNumber(info.total_volume),
+  getInfo = (id: string, code: string, send: string, receive: string, from: string, to: string) => {
+    if (this.timer) {
+      clearTimeout(this.timer)
     }
+    this.timer = setTimeout(async () => {
+      const data = await getChartData(send, receive, from, to)
 
-    this.mini = data.map(item => item[4])
-    this.chart = data.map(item => {
-      return {
-        close: item[4],
-        high: item[2],
-        low: item[3],
-        open: item[1],
-        timestamp: item[0],
-        volume: item[5],
+      const info: IMarkerData = await getCoinMarketInfo(id)
+      const holders = await getHolders(code)
+      this.state.info = {
+        name: info.name,
+        symbol: info.symbol.toUpperCase(),
+        image: info.image,
+        state:
+          info.price_change_percentage_24h == 0 ? this.state.info.state : info.price_change_percentage_24h > 0 ? 1 : 0,
+        market_cap_rank: info.market_cap_rank,
+        current_price: info.current_price < 0.001 ? '< $0.001' : '$' + toDecimal2NoZero(info.current_price),
+        price_change_percentage: toDecimal2NoZero(info.price_change_percentage_24h),
+        market_cap: '$' + formatNumber(info.market_cap),
+        address_count: formatAddressNumber(holders),
+        liquid: '$' + formatNumber(info.market_cap_change_24h),
+        liquid_value: info.market_cap_change_24h,
+        total_volume: '$' + formatNumber(info.total_volume),
       }
-    })
-    state.loading = false
+
+      this.mini = data.map(item => item[4])
+      this.chart = data.map(item => {
+        return {
+          close: item[4],
+          high: item[2],
+          low: item[3],
+          open: item[1],
+          timestamp: item[0],
+          volume: item[5],
+        }
+      })
+      state.loading = false
+    }, 500)
   }
 
   componentWillLoad() {
+    const find = tokens.find(item => item.symbol == this.token)
+    if (find) {
+      state.send = find
+    }
     this.getInfo(
       this.state.send.id,
       this.state.send.code,
@@ -64,11 +76,11 @@ export class CanoeApp {
       this.state.send.address,
       this.state.receive.address,
     )
-    onChange('send', async val => {
+    onChange('send', val => {
       this.getInfo(val.id, val.code, val.symbol, this.state.receive.symbol, val.address, this.state.receive.address)
     })
 
-    onChange('receive', async val => {
+    onChange('receive', val => {
       this.getInfo(
         this.state.send.id,
         this.state.send.code,
@@ -92,7 +104,10 @@ export class CanoeApp {
   }
 
   disconnectedCallback() {
-    workerTimers.clearInterval(this.intervalId)
+    if (this.intervalId) {
+      workerTimers.clearInterval(this.intervalId)
+      this.intervalId = null
+    }
   }
 
   private handleClick = (status: boolean) => {

@@ -15,8 +15,12 @@ export const getCoinMarketInfo = async (id: string) => {
  * get holds
  */
 export const getHolders = async (name: string) => {
-  const { data } = await axios.get(`${url.holders}${name}`)
-  return data.data.top.addrcount || parseInt((Math.random() * 10000).toString(), 10)
+  const { data } = await axios.get(`${url.holders}${name}`).catch(() => {
+    return {
+      data: {},
+    }
+  })
+  return data?.data?.top?.addrcount || parseInt((Math.random() * 10000).toString(), 10)
 }
 
 /**
@@ -24,8 +28,10 @@ export const getHolders = async (name: string) => {
  */
 export const getChartData = async (send: string, receive: string, from: string, to: string) => {
   const apiUrl = `${url.chart}${send}/${receive}&interval=15m&limit=96&addresses=${from}/${to}&network=bsc-mainnet`
-  const { data } = await axios.get(apiUrl)
-  return data.data
+  const { data } = await axios.get(apiUrl).catch(() => {
+    return { data: [] }
+  })
+  return data?.data || []
 }
 
 /**
@@ -48,7 +54,6 @@ export const getDodoData = ({
     slippage: slippage,
     userAddr: config.agencyContract,
     chainId: state.chain.chainId,
-    rpc: '',
   }
   return axios.get(url.router, { params: params }).then(res => {
     if (res.status === 200) {

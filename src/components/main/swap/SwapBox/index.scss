@@ -26,11 +26,35 @@
   height: 100%;
   padding: 10px 20px 0;
 
+  .balance-max {
+    height: 16px;
+    padding: 0 4px;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: #a2a8ba;
+    cursor: pointer;
+    background: #323645;
+    border-radius: 2px;
+
+    &:active {
+      transform: translate(1px, 1px);
+    }
+  }
+
   .router-container {
     width: 320px;
     height: 97px;
     background: $text-bg-color;
     border-radius: 4px;
+
+    .source-logo {
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
+      border-radius: 50%;
+    }
   }
 
   .bottom-button {

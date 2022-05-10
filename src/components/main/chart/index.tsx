@@ -18,6 +18,15 @@ export class CanoeChart {
   @Watch('data')
   watchData(value: IChartData[]) {
     this.chart.applyNewData(value)
+    if (value.length) {
+      let priceDecimals = 2
+      if (value[0].close < 0.000000001) {
+        priceDecimals = 18
+      } else if (value[0].close < 0.1) {
+        priceDecimals = 10
+      }
+      this.chart.setPriceVolumePrecision(priceDecimals, state.send.decimals)
+    }
   }
 
   componentDidLoad() {
@@ -34,12 +43,14 @@ export class CanoeChart {
           showRule: 'follow_cross',
           showType: 'rect',
           labels: ['T: ', 'O: ', 'C: ', 'H: ', 'L: ', 'V: '],
+          text: {
+            size: 10,
+          },
         },
       },
       technicalIndicator: {
         tooltip: {
-          showRule: 'follow_cross',
-          showType: 'rect',
+          showRule: 'none',
         },
       },
     })
@@ -50,7 +61,7 @@ export class CanoeChart {
     return (
       <div class="relative">
         {state.loading && <xy-loading class="absolute top-0 left-0 right-0 bottom-0 z-50" size="50"></xy-loading>}
-        <div class="absolute top-0 left-2 text-xs">
+        <div class="absolute top-2 left-2 text-xs">
           {state.send.symbol}/{state.receive.symbol}
         </div>
         <div class="chart" ref={el => (this.chartDom = el)}></div>
