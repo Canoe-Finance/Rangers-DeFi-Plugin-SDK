@@ -9,23 +9,8 @@ import config from 'config'
 
 const getGas = async () => {
   const provider = new providers.Web3Provider(window['ethereum'])
-  const currentGasPrice = await provider.getGasPrice()
-  const gasPrice = utils.hexlify(currentGasPrice.add(currentGasPrice.div(5)))
-  return gasPrice
+  return await provider.getGasPrice()
 }
-
-const getGasLimit = value => {
-  return utils.hexlify(value.add(value.div(2)))
-}
-
-// const getGasLimit =  async (value) => {
-//   const contract = getContractSigner(fromAddress, ['function transfer(address to, uint amount)'])
-//   const currentLimit = await contract.estimateGas.transfer(toAddress, value)
-//   const gasLimit = utils.hexlify(
-//     currentLimit.add(currentLimit.div(5))
-//   )
-//   return gasLimit
-// }
 
 export const getFeePercentage = async () => {
   const contract = getContract(config.feeContractAddress, metaDex2ABI)
@@ -82,12 +67,12 @@ export const dodoMixSwapOne = async ({ targetApproveAddr, to, fromAddress, toAdd
     .then(async gasLimit => {
       options = {
         ...options,
-        gasLimit: getGasLimit(gasLimit),
+        gasLimit,
         gasPrice: await getGas(),
       }
       return contract.dodoMixSwapOne(...body, options)
     })
-    .catch(async _ => {
+    .catch(async _err => {
       options = {
         ...options,
         gasLimit: utils.hexlify(1000000),
@@ -114,12 +99,12 @@ export const dodoMixSwapTwo = async ({ targetApproveAddr, to, fromAddress, toAdd
     .then(async gasLimit => {
       options = {
         ...options,
-        gasLimit: getGasLimit(gasLimit),
+        gasLimit,
         gasPrice: await getGas(),
       }
       return contract.dodoMixSwapTwo(...body, options)
     })
-    .catch(async _ => {
+    .catch(async _err => {
       options = {
         ...options,
         gasLimit: utils.hexlify(1000000),
@@ -144,12 +129,12 @@ export const dodoSwapV2ETHToToken = async ({ to, options, decoderData }) => {
     .then(async gasLimit => {
       options = {
         ...options,
-        gasLimit: getGasLimit(gasLimit),
+        gasLimit,
         gasPrice: await getGas(),
       }
       return contract.dodoSwapV2ETHToToken(...body, options)
     })
-    .catch(async _ => {
+    .catch(async _err => {
       options = {
         ...options,
         gasLimit: utils.hexlify(1000000),
@@ -181,12 +166,12 @@ export const dodoSwapV2TokenToToken = async ({
     .then(async gasLimit => {
       options = {
         ...options,
-        gasLimit: getGasLimit(gasLimit),
+        gasLimit,
         gasPrice: await getGas(),
       }
       return contract.dodoSwapV2TokenToToken(...body, options)
     })
-    .catch(async _ => {
+    .catch(async _err => {
       options = {
         ...options,
         gasLimit: utils.hexlify(1000000),
@@ -212,12 +197,12 @@ export const externalSwap = async ({ targetApproveAddr, to, fromAddress, toAddre
     .then(async gasLimit => {
       options = {
         ...options,
-        gasLimit: getGasLimit(gasLimit),
+        gasLimit,
         gasPrice: await getGas(),
       }
       return contract.externalSwap(...body, options)
     })
-    .catch(async _ => {
+    .catch(async _err => {
       options = {
         ...options,
         gasLimit: utils.hexlify(1000000),
@@ -242,12 +227,12 @@ export const dodoSwapV1 = async ({ targetApproveAddr, to, fromAddress, toAddress
     .then(async gasLimit => {
       options = {
         ...options,
-        gasLimit: getGasLimit(gasLimit),
+        gasLimit,
         gasPrice: await getGas(),
       }
       return contract.dodoSwapV1(...body, options)
     })
-    .catch(async _ => {
+    .catch(async _err => {
       options = {
         ...options,
         gasLimit: utils.hexlify(1000000),
@@ -272,12 +257,12 @@ export const dodoSwapV2TokenToETH = async ({ targetApproveAddr, to, fromAddress,
     .then(async gasLimit => {
       options = {
         ...options,
-        gasLimit: getGasLimit(gasLimit),
+        gasLimit,
         gasPrice: await getGas(),
       }
       return contract.dodoSwapV2TokenToETH(...body, options)
     })
-    .catch(async _ => {
+    .catch(async _err => {
       options = {
         ...options,
         gasLimit: utils.hexlify(1000000),

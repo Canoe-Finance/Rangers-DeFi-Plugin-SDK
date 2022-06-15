@@ -21,12 +21,18 @@ export namespace Components {
         "data": IChartData[];
     }
     interface CanoeDex {
+        "logo": string;
+        "name": string;
         "token": string;
     }
     interface CanoeHeader {
+        "logo": string;
+        "name": string;
     }
     interface CanoeMain {
         "data": IChartData[];
+        "logo": string;
+        "name": string;
         "state": IState;
     }
     interface CanoeMini {
@@ -226,12 +232,18 @@ declare namespace LocalJSX {
         "data"?: IChartData[];
     }
     interface CanoeDex {
+        "logo"?: string;
+        "name"?: string;
         "token"?: string;
     }
     interface CanoeHeader {
+        "logo"?: string;
+        "name"?: string;
     }
     interface CanoeMain {
         "data"?: IChartData[];
+        "logo"?: string;
+        "name"?: string;
         "state"?: IState;
     }
     interface CanoeMini {
@@ -260,6 +272,7 @@ declare namespace LocalJSX {
     interface MyTab {
         "disabled"?: boolean;
         "onClickMenu"?: (event: CustomEvent<any>) => void;
+        "onTabChange"?: (event: CustomEvent<any>) => void;
         "tabList"?: any[];
     }
     interface SearchTokens {

@@ -70,16 +70,6 @@
     "logoURI": "https://assets.coingecko.com/coins/images/2518/thumb/weth.png?1628852295"
   },
   {
-    "id": "baby-doge-coin",
-    "code": "babydoge",
-    "name": "Baby Doge Coin",
-    "symbol": "BabyDoge",
-    "address": "0xc748673057861a797275CD8A068AbB95A902e8de",
-    "chainId": 56,
-    "decimals": 9,
-    "logoURI": "https://assets.coingecko.com/coins/images/16125/thumb/Baby_Doge.png?1623044048"
-  },
-  {
     "id": "pancakeswap-token",
     "code": "pancakeswap",
     "name": "PancakeSwap",
@@ -98,6 +88,26 @@
     "chainId": 56,
     "decimals": 18,
     "logoURI": "https://assets.coingecko.com/coins/images/3449/thumb/tusd.png?1618395665"
+  },
+  {
+    "id": "rangers-protocol-gas",
+    "code": "rangers-protocol-gas",
+    "name": "Rangers Protocol",
+    "symbol": "rpg",
+    "address": "0xc2098a8938119a52b1f7661893c0153a6cb116d5",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/18791/thumb/tO8MlqiM_400x400.png?1633421196"
+  },
+  {
+    "id": "mixmarvel",
+    "code": "mixmarvel",
+    "name": "MixMarvel",
+    "symbol": "mix",
+    "address": "0x398f7827dccbefe6990478876bbf3612d93baf05",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/8222/thumb/8878caf93b1e3b6cfb3b414bda3b5250.png?1613945432"
   },
   {
     "id": "binance-peg-polkadot",
@@ -428,5 +438,15 @@
     "chainId": 56,
     "decimals": 18,
     "logoURI": "https://assets.coingecko.com/coins/images/17365/thumb/meta.PNG?1627435447"
+  },
+  {
+    "id": "thetan-arena",
+    "code": "thetan-arena",
+    "name": "Thetan Arena",
+    "symbol": "THG",
+    "address": "0x9fd87aefe02441b123c3c32466cd9db4c578618f",
+    "chainId": 56,
+    "decimals": 18,
+    "logoURI": "https://assets.coingecko.com/coins/images/18414/thumb/c4N4n8k-_400x400.png?1631831447"
   }
 ]

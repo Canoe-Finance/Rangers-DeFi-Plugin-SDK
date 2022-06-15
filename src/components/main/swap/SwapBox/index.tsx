@@ -23,8 +23,8 @@ export class SwapBox {
   @State() tokens = []
   @State() swapTokenType: string = 'send'
   @State() balance: string = '0'
-  @State() receiveAmount: number | string = 0
-  @State() sendAmount: number | string = 0
+  @State() receiveAmount: number | string = ''
+  @State() sendAmount: number | string = ''
   @State() swapData = {}
   @State() showSearch: boolean = false
   @State() feePercentage: number = 1

@@ -13,6 +13,10 @@
   border-radius: 5px 5px 0 0;
   transition: all 0.2s ease-in-out;
 
+  &.credit {
+    height: calc(100% - 160px);
+  }
+
   .open-btn {
     position: absolute;
     top: 0;
@@ -39,7 +43,7 @@
   }
 
   &__close {
-    height: 45px;
+    height: 45px !important;
 
     .open-btn {
       transform: rotate(180deg);

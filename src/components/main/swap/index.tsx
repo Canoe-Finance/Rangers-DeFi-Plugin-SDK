@@ -7,6 +7,8 @@ import { state, onChange } from 'store'
   shadow: true,
 })
 export class SwapMain {
+  @State() isCredit = false
+
   tabList = [
     {
       title: 'swap',
@@ -17,11 +19,11 @@ export class SwapMain {
         { name: 'customize', icon: 'customize' },
       ],
     },
-    // {
-    //   title: 'credit card',
-    //   cName: 'credit',
-    //   menuList: [],
-    // },
+    {
+      title: 'credit card',
+      cName: 'credit',
+      menuList: [],
+    },
     // {
     //   title: 'Transfer',
     //   cName: 'transfer',
@@ -32,8 +34,6 @@ export class SwapMain {
   swapBoxRef!: HTMLElement
   creditBoxRef!: HTMLElement
   transferBoxRef!: HTMLElement
-
-  @State() showContent: boolean = true
 
   clickTabMenu = async ({ detail }) => {
     const { cName, menuName } = detail
@@ -46,31 +46,45 @@ export class SwapMain {
     }
   }
 
+  handleTabChange = ({ detail }) => {
+    this.isCredit = detail === 1
+  }
+
   componentWillLoad() {
     onChange('appShow', val => {
       setTimeout(() => {
-        this.showContent = val
+        state.showContent = val
       }, 300)
     })
   }
 
   render() {
     return (
-      <div class={`token-swap flex ${state.appShow && this.showContent ? '' : 'token-swap__close'}`}>
+      <div
+        class={`token-swap flex ${this.isCredit ? 'credit' : ''} ${
+          state.appShow && state.showContent ? '' : 'token-swap__close'
+        }`}
+      >
         <div
           class="open-btn"
           onClick={() => {
-            this.showContent = !this.showContent
+            state.showContent = !state.showContent
           }}
         ></div>
-        <my-tab class="my-tab grow" disabled={!this.showContent} tabList={this.tabList} onClickMenu={this.clickTabMenu}>
+        <my-tab
+          class="my-tab grow"
+          disabled={!state.showContent}
+          tabList={this.tabList}
+          onClickMenu={this.clickTabMenu}
+          onTabChange={this.handleTabChange}
+        >
           <div class="content-item">
             <swap-box class="flex-1 flex-shrink-0" ref={el => (this.swapBoxRef = el as HTMLElement)}></swap-box>
             <div class="footer">
               Powered by <span>Canoe</span>
             </div>
           </div>
-          <div class="content-item">
+          <div class={`content-item ${this.isCredit ? '' : 'hidden'}`}>
             <credit-box class="flex-1 flex-shrink-0" ref={el => (this.creditBoxRef = el as HTMLElement)}></credit-box>
             <div class="footer">
               Powered by <span>Canoe</span>

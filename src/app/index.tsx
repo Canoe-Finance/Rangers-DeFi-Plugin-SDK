@@ -15,6 +15,8 @@ import '../xy-ui/index'
 })
 export class CanoeApp {
   @Prop() token: string
+  @Prop() logo: string
+  @Prop() name: string
 
   @State() state = state
   @State() mini = []
@@ -39,7 +41,7 @@ export class CanoeApp {
         state:
           info.price_change_percentage_24h == 0 ? this.state.info.state : info.price_change_percentage_24h > 0 ? 1 : 0,
         market_cap_rank: info.market_cap_rank,
-        current_price: info.current_price < 0.001 ? '< $0.001' : '$' + toDecimal2NoZero(info.current_price),
+        current_price: info.current_price < 0.001 ? '< $0.001' : '$' + toDecimal2NoZero(info.current_price, 3),
         price_change_percentage: toDecimal2NoZero(info.price_change_percentage_24h),
         market_cap: '$' + formatNumber(info.market_cap),
         address_count: formatAddressNumber(holders),
@@ -124,7 +126,13 @@ export class CanoeApp {
           mini={this.mini}
           state={this.state}
         ></canoe-mini>
-        <canoe-main class={this.state.appShow ? '' : 'invisible'} data={this.chart} state={this.state}></canoe-main>
+        <canoe-main
+          class={this.state.appShow ? '' : 'invisible'}
+          logo={this.logo}
+          name={this.name}
+          data={this.chart}
+          state={this.state}
+        ></canoe-main>
       </div>
     )
   }

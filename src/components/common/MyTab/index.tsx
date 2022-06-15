@@ -22,12 +22,14 @@ export class MyTab {
   normalizedRadius = this.radius - Math.floor(this.strokeWidth / 2)
   circumference = this.normalizedRadius * 2 * Math.PI
 
+  @Event() tabChange: EventEmitter
   handleTabChange = (e, i) => {
     const { offsetLeft, offsetWidth } = e.target
     this.tabLeft = offsetLeft + 'px'
     this.tabWidth = offsetWidth + 'px'
     this.currentTab = i
     this.menuList = this.tabList[i].menuList || []
+    this.tabChange.emit(i)
   }
 
   componentDidLoad() {

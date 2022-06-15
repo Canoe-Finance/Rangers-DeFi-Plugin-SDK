@@ -1,4 +1,4 @@
-import { Component, h } from '@stencil/core'
+import { Component, h, Prop } from '@stencil/core'
 import { getChainList, getShortAddress } from '../../../utils/func'
 import { chainItemType } from '../../../interface'
 import storage from '../../../utils/storage'
@@ -18,6 +18,9 @@ import {
   shadow: true,
 })
 export class CanoeHeader {
+  @Prop() logo: string
+  @Prop() name: string
+
   networkPopover!: HTMLElement
   walletPopover!: HTMLElement
   networkList: chainItemType[] = getChainList()
@@ -114,8 +117,16 @@ export class CanoeHeader {
     return (
       <header class="flex items-center">
         <div class="header-logo h-full flex flex-1 items-center">
-          <img src="https://dex.canoe.finance/assets/icon/favicon.svg" class="w-6" alt="logo" />
-          <div class="font-bold">Canoe</div>
+          <img
+            src={
+              this.logo && this.logo.startsWith('http')
+                ? this.logo
+                : 'https://dex.canoe.finance/assets/icon/favicon.svg'
+            }
+            class="w-6"
+            alt="logo"
+          />
+          <div class="font-bold">{this.name ? this.name : 'Canoe'}</div>
         </div>
         <div class="network-container h-full flex items-center">
           <xy-popover class="popover">

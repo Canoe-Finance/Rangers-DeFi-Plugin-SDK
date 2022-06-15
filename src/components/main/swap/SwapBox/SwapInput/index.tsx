@@ -28,6 +28,8 @@ export class SwapInput {
     let value = e.target.value
     if (/^0[0-9]/.test(value)) {
       value = '0'
+    } else if (value == '.') {
+      value = '0.'
     } else {
       const regex = new RegExp(`^\\D*(\\d*(?:\\.\\d{0,${this.token.decimals}})?).*$`, 'g')
       value = value.replace(regex, '$1')
@@ -42,7 +44,7 @@ export class SwapInput {
           <img src={this.token.logoURI} class="token-logo" />
           <span class="token-symbol">{this.token.symbol}</span>
         </div>
-        <input class="customs focus:outline-none" value={this.value} onInput={this.handleInput} />
+        <input class="customs focus:outline-none" value={this.value} onInput={this.handleInput} placeholder="0" />
       </div>
     )
   }
