@@ -55,6 +55,7 @@ export interface IInfo {
 
 export interface IState {
   appShow: boolean
+  showContent: boolean
   loading: boolean
   circle: boolean
   reload: boolean

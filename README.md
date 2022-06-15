@@ -53,6 +53,8 @@ yarn build
   <body>
     <canoe-dex
       id=[YOUR ID]
+      logo="https://xxxxx.com/xxxx.png"
+      name="xxxxx"
       token="BNB"
       modules="['Info', 'News', 'Social', 'Credit-Card', 'Transfer']"
     ></canoe-dex>

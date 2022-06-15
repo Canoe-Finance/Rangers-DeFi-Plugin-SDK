@@ -3,6 +3,7 @@ import { IState } from 'interface'
 
 const { state, onChange } = createStore<IState>({
   appShow: false,
+  showContent: false,
   loading: false,
   circle: false,
   reload: false,

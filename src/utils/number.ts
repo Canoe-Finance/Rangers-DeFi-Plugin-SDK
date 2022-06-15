@@ -1,7 +1,7 @@
 import numabbr, { NumberAbbreviate } from 'numabbr'
 
-export const toDecimal2NoZero = (num: number) => {
-  const f = Math.round(Math.abs(num) * 100) / 100
+export const toDecimal2NoZero = (num: number, decimals = 2) => {
+  const f = Math.round(Math.abs(num) * 10 ** decimals) / 10 ** decimals
   const s = f.toString()
   return s
 }
