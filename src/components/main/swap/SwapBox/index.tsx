@@ -23,8 +23,8 @@ export class SwapBox {
   @State() tokens = []
   @State() swapTokenType: string = 'send'
   @State() balance: string = '0'
-  @State() receiveAmount: number | string = ''
-  @State() sendAmount: number | string = ''
+  @State() receiveAmount: string = ''
+  @State() sendAmount: string = ''
   @State() swapData = {}
   @State() showSearch: boolean = false
   @State() feePercentage: number = 1
@@ -45,7 +45,7 @@ export class SwapBox {
     resAmount: '0',
   }
 
-  timer: any = 0
+  timer: NodeJS.Timeout | null = null
 
   @Watch('sendAmount')
   watchSendAmount(value) {
@@ -86,7 +86,7 @@ export class SwapBox {
       state.receive = detail
     }
     this.showSearch = false
-    if (this.sendAmount > 0) {
+    if (Number(this.sendAmount) > 0) {
       this.getTransformInfo()
     }
   }
@@ -100,17 +100,17 @@ export class SwapBox {
       resPricePerFromToken: '0',
       resAmount: '0',
     }
-    if (type === 'send' && this.sendAmount <= 0) {
+    if (type === 'send' && Number(this.sendAmount) <= 0) {
       state.circle = false
-      this.receiveAmount = 0
+      this.receiveAmount = ''
       dodoRouterData.type = 'send'
       this.dodoRouterData = dodoRouterData
       this.clearTimer()
       return
     }
-    if (type === 'receive' && this.receiveAmount <= 0) {
+    if (type === 'receive' && Number(this.receiveAmount) <= 0) {
       state.circle = false
-      this.sendAmount = 0
+      this.sendAmount = ''
       dodoRouterData.type = 'receive'
       this.dodoRouterData = dodoRouterData
       this.clearTimer()
@@ -350,8 +350,8 @@ export class SwapBox {
     let receiveCopy = JSON.parse(JSON.stringify(state.receive))
     state.send = receiveCopy
     state.receive = sendCopy
-    this.sendAmount = 0
-    this.receiveAmount = 0
+    this.sendAmount = ''
+    this.receiveAmount = ''
     this.dodoRouterData.resAmount = '0'
     this._checkApprove(receiveCopy.address)
     this.getBalance()
@@ -366,9 +366,22 @@ export class SwapBox {
         this.balance = '0'
       }
     })
+    onChange('chain', val => {
+      if (val) {
+        getUserAddress().then(userAddress => {
+          if (userAddress && val.chainId && window['ethereum'].chainId == '0x38') {
+            getFeePercentage().then(res => {
+              this.feePercentage = res
+            })
+            this.getBalance()
+            this._checkApprove(state.send.address)
+          }
+        })
+      }
+    })
     if (checkEthereum()) {
       getUserAddress().then(userAddress => {
-        if (userAddress) {
+        if (userAddress && state.chain.chainId && window['ethereum'].chainId == '0x38') {
           getFeePercentage().then(res => {
             this.feePercentage = res
           })
@@ -388,19 +401,19 @@ export class SwapBox {
 
   getUseSourceLogo = name => {
     if (name.startsWith('pancake')) {
-      return 'https://dex.canoe.finance/assets/png/pancake.png'
+      return config.imgUrl + '/png/pancake.png'
     }
     if (name.startsWith('dodo')) {
-      return 'https://dex.canoe.finance/assets/png/dodo.png'
+      return config.imgUrl + '/png/dodo.png'
     }
     if (name.startsWith('0x')) {
-      return 'https://dex.canoe.finance/assets/png/0x.png'
+      return config.imgUrl + '/png/0x.png'
     }
     if (name.startsWith('1inch')) {
-      return 'https://dex.canoe.finance/assets/png/1inch.png'
+      return config.imgUrl + '/png/1inch.png'
     }
     if (name.startsWith('paraSwap')) {
-      return 'https://dex.canoe.finance/assets/png/paraSwap.png'
+      return config.imgUrl + '/png/paraSwap.png'
     }
     return ''
   }
@@ -435,10 +448,10 @@ export class SwapBox {
               <img
                 onClick={this.changeCoin}
                 class="icon cursor-pointer"
-                src="https://dex.canoe.finance/assets/icon/change.svg"
+                src={config.imgUrl + '/icon/change.svg'}
                 alt="change"
               />
-              {this.dodoRouterData.resAmount ? (
+              {Number(this.sendAmount) > 0 && Number(this.receiveAmount) > 0 ? (
                 <span class="ml-[2px]">
                   1{state.send.symbol} = {this.dodoRouterData.resPricePerFromToken} {state.receive.symbol}
                 </span>
@@ -450,7 +463,7 @@ export class SwapBox {
               onUpdateValue={e => this.handleUpdateValue(e, 'receive')}
               onOpenSearch={() => this._openSearch('receive')}
             ></swap-input>
-            {this.receiveAmount > 0 ? (
+            {Number(this.receiveAmount) > 0 ? (
               <div class="router-container mt-[15px] divide-y divide-[#43485E]">
                 <div class="router-path h-[30px] flex justify-center items-center text-sm">
                   <span class="text-color">{state.send.symbol}</span>
@@ -462,16 +475,12 @@ export class SwapBox {
                 </div>
                 <div class="router-amount flex flex-col h-[60px] px-[10px] text-xs justify-around">
                   <div class="amount-item flex justify-between mt-1">
-                    <span class="text-color">
-                      {this.dodoRouterData.type === 'send' ? 'Minimum Received' : 'Maximum sold'}
-                    </span>
+                    <span class="text-color">Minimum Received</span>
                     <span class="text-color">{this.dodoRouterData.resAmount}</span>
                   </div>
                   <div class="amount-item flex justify-between">
-                    <span class="text-color">{this.dodoRouterData.type === 'send' ? 'Received' : 'Sold'}</span>
-                    <span class="text-color">
-                      {this.dodoRouterData.type === 'send' ? state.receive.symbol : state.send.symbol}
-                    </span>
+                    <span class="text-color">Received</span>
+                    <span class="text-color">{state.receive.symbol}</span>
                   </div>
                   <div class="amount-item flex justify-between">
                     <span class="text-color">Price Impact</span>
@@ -532,7 +541,7 @@ export class SwapBox {
         </bottom-button>
       )
     }
-    if (Number(this.balance) == 0 || Number(this.balance) < this.sendAmount) {
+    if (Number(this.balance) == 0 || Number(this.balance) < Number(this.sendAmount)) {
       return (
         <bottom-button class="bottom-button opacity-50 cursor-not-allowed pointer-events-none">
           Insufficient Balance
@@ -541,9 +550,7 @@ export class SwapBox {
     } else if (this.isApproved || state.send.address == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') {
       return (
         <bottom-button
-          class={
-            this.sendAmount == 0 ? 'bottom-button opacity-50 cursor-not-allowed pointer-events-none' : 'bottom-button'
-          }
+          class={this.sendAmount ? 'bottom-button' : 'bottom-button opacity-50 cursor-not-allowed pointer-events-none'}
           loading={this.getTransformInfoLoading}
           onClick={this.openTransformInfoBox}
         >

@@ -1,13 +1,13 @@
 import { Component, h, Prop, Event, EventEmitter } from '@stencil/core'
 
-import { IToken } from '../../../../../interface'
+import { IToken, ICrossToken } from '../../../../../interface'
 @Component({
   tag: 'swap-input',
   styleUrl: 'index.scss',
   shadow: true,
 })
 export class SwapInput {
-  @Prop() token: IToken = {
+  @Prop() token: IToken | ICrossToken = {
     id: '',
     code: '',
     name: '',
@@ -17,6 +17,8 @@ export class SwapInput {
     decimals: 0,
   }
   @Prop() value: string | number = 0
+  @Prop() readonly: boolean = false
+
   @Event() updateValue: EventEmitter
   @Event() openSearch: EventEmitter
 
@@ -44,7 +46,13 @@ export class SwapInput {
           <img src={this.token.logoURI} class="token-logo" />
           <span class="token-symbol">{this.token.symbol}</span>
         </div>
-        <input class="customs focus:outline-none" value={this.value} onInput={this.handleInput} placeholder="0" />
+        <input
+          class="customs focus:outline-none"
+          readonly={this.readonly}
+          value={this.value}
+          onInput={this.handleInput}
+          placeholder="0.0"
+        />
       </div>
     )
   }

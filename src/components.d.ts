@@ -5,8 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { IChartData as IChartData1, IState } from "interface";
-import { IChartData, IToken, ITransformTokenInfo } from "./interface";
+import { IChainToken, IChartData as IChartData1, IState, TCrossType } from "interface";
+import { IChartData, ICrossToken, IToken, ITransformTokenInfo } from "./interface";
 export namespace Components {
     interface BaseChart {
         "mini": any[];
@@ -30,7 +30,7 @@ export namespace Components {
         "name": string;
     }
     interface CanoeMain {
-        "data": IChartData[];
+        "data": IChartData1[];
         "logo": string;
         "name": string;
         "state": IState;
@@ -59,6 +59,12 @@ export namespace Components {
         "disabled": boolean;
         "tabList": any[];
     }
+    interface SearchCross {
+        "crossType": TCrossType;
+        "fromChain": string;
+        "toChain": string;
+        "token": IChainToken;
+    }
     interface SearchTokens {
         "swapTokenType": string;
     }
@@ -69,7 +75,8 @@ export namespace Components {
         "clickMenu": (menuName: string) => Promise<void>;
     }
     interface SwapInput {
-        "token": IToken;
+        "readonly": boolean;
+        "token": IToken | ICrossToken;
         "value": string | number;
     }
     interface SwapSetting {
@@ -80,6 +87,38 @@ export namespace Components {
     }
     interface TransferBox {
     }
+}
+export interface CanoeMiniCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCanoeMiniElement;
+}
+export interface CanoeZoomCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCanoeZoomElement;
+}
+export interface DealStatusBoxCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDealStatusBoxElement;
+}
+export interface MyTabCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMyTabElement;
+}
+export interface SearchCrossCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSearchCrossElement;
+}
+export interface SearchTokensCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSearchTokensElement;
+}
+export interface SwapInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSwapInputElement;
+}
+export interface SwapSettingCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLSwapSettingElement;
 }
 declare global {
     interface HTMLBaseChartElement extends Components.BaseChart, HTMLStencilElement {
@@ -160,6 +199,12 @@ declare global {
         prototype: HTMLMyTabElement;
         new (): HTMLMyTabElement;
     };
+    interface HTMLSearchCrossElement extends Components.SearchCross, HTMLStencilElement {
+    }
+    var HTMLSearchCrossElement: {
+        prototype: HTMLSearchCrossElement;
+        new (): HTMLSearchCrossElement;
+    };
     interface HTMLSearchTokensElement extends Components.SearchTokens, HTMLStencilElement {
     }
     var HTMLSearchTokensElement: {
@@ -210,6 +255,7 @@ declare global {
         "credit-box": HTMLCreditBoxElement;
         "deal-status-box": HTMLDealStatusBoxElement;
         "my-tab": HTMLMyTabElement;
+        "search-cross": HTMLSearchCrossElement;
         "search-tokens": HTMLSearchTokensElement;
         "swap-box": HTMLSwapBoxElement;
         "swap-input": HTMLSwapInputElement;
@@ -241,14 +287,14 @@ declare namespace LocalJSX {
         "name"?: string;
     }
     interface CanoeMain {
-        "data"?: IChartData[];
+        "data"?: IChartData1[];
         "logo"?: string;
         "name"?: string;
         "state"?: IState;
     }
     interface CanoeMini {
         "mini"?: any[];
-        "onOpenSwap"?: (event: CustomEvent<any>) => void;
+        "onOpenSwap"?: (event: CanoeMiniCustomEvent<any>) => void;
         "state"?: IState;
     }
     interface CanoePrice {
@@ -258,12 +304,12 @@ declare namespace LocalJSX {
         "state"?: IState;
     }
     interface CanoeZoom {
-        "onClickClose"?: (event: CustomEvent<any>) => void;
+        "onClickClose"?: (event: CanoeZoomCustomEvent<any>) => void;
     }
     interface CreditBox {
     }
     interface DealStatusBox {
-        "onClose"?: (event: CustomEvent<any>) => void;
+        "onClose"?: (event: DealStatusBoxCustomEvent<any>) => void;
         "receive"?: ITransformTokenInfo;
         "send"?: ITransformTokenInfo;
         "swapData"?: any;
@@ -271,28 +317,39 @@ declare namespace LocalJSX {
     }
     interface MyTab {
         "disabled"?: boolean;
-        "onClickMenu"?: (event: CustomEvent<any>) => void;
-        "onTabChange"?: (event: CustomEvent<any>) => void;
+        "onClickMenu"?: (event: MyTabCustomEvent<any>) => void;
+        "onTabChange"?: (event: MyTabCustomEvent<any>) => void;
         "tabList"?: any[];
+    }
+    interface SearchCross {
+        "crossType"?: TCrossType;
+        "fromChain"?: string;
+        /**
+          * Emitted when an item from suggestions was selected
+         */
+        "onSelected"?: (event: SearchCrossCustomEvent<any>) => void;
+        "toChain"?: string;
+        "token"?: IChainToken;
     }
     interface SearchTokens {
         /**
           * Emitted when an item from suggestions was selected
          */
-        "onSelected"?: (event: CustomEvent<any>) => void;
+        "onSelected"?: (event: SearchTokensCustomEvent<any>) => void;
         "swapTokenType"?: string;
     }
     interface SwapBox {
     }
     interface SwapInput {
-        "onOpenSearch"?: (event: CustomEvent<any>) => void;
-        "onUpdateValue"?: (event: CustomEvent<any>) => void;
-        "token"?: IToken;
+        "onOpenSearch"?: (event: SwapInputCustomEvent<any>) => void;
+        "onUpdateValue"?: (event: SwapInputCustomEvent<any>) => void;
+        "readonly"?: boolean;
+        "token"?: IToken | ICrossToken;
         "value"?: string | number;
     }
     interface SwapSetting {
-        "onChangeSlippage"?: (event: CustomEvent<any>) => void;
-        "onClose"?: (event: CustomEvent<any>) => void;
+        "onChangeSlippage"?: (event: SwapSettingCustomEvent<any>) => void;
+        "onClose"?: (event: SwapSettingCustomEvent<any>) => void;
         "slippage"?: number;
         "visible"?: boolean;
     }
@@ -314,6 +371,7 @@ declare namespace LocalJSX {
         "credit-box": CreditBox;
         "deal-status-box": DealStatusBox;
         "my-tab": MyTab;
+        "search-cross": SearchCross;
         "search-tokens": SearchTokens;
         "swap-box": SwapBox;
         "swap-input": SwapInput;
@@ -339,6 +397,7 @@ declare module "@stencil/core" {
             "credit-box": LocalJSX.CreditBox & JSXBase.HTMLAttributes<HTMLCreditBoxElement>;
             "deal-status-box": LocalJSX.DealStatusBox & JSXBase.HTMLAttributes<HTMLDealStatusBoxElement>;
             "my-tab": LocalJSX.MyTab & JSXBase.HTMLAttributes<HTMLMyTabElement>;
+            "search-cross": LocalJSX.SearchCross & JSXBase.HTMLAttributes<HTMLSearchCrossElement>;
             "search-tokens": LocalJSX.SearchTokens & JSXBase.HTMLAttributes<HTMLSearchTokensElement>;
             "swap-box": LocalJSX.SwapBox & JSXBase.HTMLAttributes<HTMLSwapBoxElement>;
             "swap-input": LocalJSX.SwapInput & JSXBase.HTMLAttributes<HTMLSwapInputElement>;

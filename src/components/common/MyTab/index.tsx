@@ -14,7 +14,7 @@ export class MyTab {
 
   @State() currentTab: number = 0
   @State() tabLeft: string = '0'
-  @State() tabWidth: string = '0'
+  @State() tabWidth: string = '53'
   @State() menuList = []
 
   radius = 6
@@ -25,16 +25,11 @@ export class MyTab {
   @Event() tabChange: EventEmitter
   handleTabChange = (e, i) => {
     const { offsetLeft, offsetWidth } = e.target
-    this.tabLeft = offsetLeft + 'px'
-    this.tabWidth = offsetWidth + 'px'
+    this.tabLeft = offsetLeft
+    this.tabWidth = offsetWidth
     this.currentTab = i
     this.menuList = this.tabList[i].menuList || []
     this.tabChange.emit(i)
-  }
-
-  componentDidLoad() {
-    // select first tab
-    this.handleTabChange({ target: this.tabRef.childNodes[0] }, 0)
   }
 
   @Event() clickMenu: EventEmitter
@@ -54,7 +49,7 @@ export class MyTab {
         <div class="title">
           <div
             class="title-tab"
-            style={{ '--tab-width': this.tabWidth, '--tab-left': this.tabLeft }}
+            style={{ '--tab-width': this.tabWidth + 'px', '--tab-left': this.tabLeft + 'px' }}
             ref={el => (this.tabRef = el as HTMLElement)}
           >
             {this.tabList.map((tab, i) => (

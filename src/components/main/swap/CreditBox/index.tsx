@@ -15,14 +15,20 @@ export class CreditBox {
 
   render() {
     return (
-      <div class="credit-box flex items-center justify-center">
+      <div class="credit-box relative flex items-center justify-center">
         <iframe
           ref={el => (this.iframeDom = el)}
           class="iframe"
-          src="https://www.bifinity.com/en/buyflow?crypto=BNB"
+          src="https://www.binancecnt.com/en/buy-sell-crypto?crypto=BNB"
           width="358"
           height="560"
         ></iframe>
+        <a
+          class="mask"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.binancecnt.com/en/buy-sell-crypto?crypto=BNB"
+        ></a>
       </div>
     )
   }

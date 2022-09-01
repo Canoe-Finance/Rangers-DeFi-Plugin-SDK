@@ -11,6 +11,7 @@ import {
   getWindowNetwork,
   requestAccounts,
 } from '../../../api/ethereum/index'
+import config from 'config'
 
 @Component({
   tag: 'canoe-header',
@@ -118,11 +119,7 @@ export class CanoeHeader {
       <header class="flex items-center">
         <div class="header-logo h-full flex flex-1 items-center">
           <img
-            src={
-              this.logo && this.logo.startsWith('http')
-                ? this.logo
-                : 'https://dex.canoe.finance/assets/icon/favicon.svg'
-            }
+            src={this.logo && this.logo.startsWith('http') ? this.logo : config.imgUrl + '/icon/favicon.svg'}
             class="w-6"
             alt="logo"
           />

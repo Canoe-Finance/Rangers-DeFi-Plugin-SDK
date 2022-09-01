@@ -20,15 +20,15 @@ export class SwapMain {
       ],
     },
     {
+      title: 'cross',
+      cName: 'cross',
+      menuList: [],
+    },
+    {
       title: 'credit card',
       cName: 'credit',
       menuList: [],
     },
-    // {
-    //   title: 'Transfer',
-    //   cName: 'transfer',
-    //   menuList: [],
-    // },
   ]
   tabRef!: HTMLElement
   swapBoxRef!: HTMLElement
@@ -47,7 +47,7 @@ export class SwapMain {
   }
 
   handleTabChange = ({ detail }) => {
-    this.isCredit = detail === 1
+    this.isCredit = detail === 2
   }
 
   componentWillLoad() {
@@ -84,17 +84,17 @@ export class SwapMain {
               Powered by <span>Canoe</span>
             </div>
           </div>
-          <div class={`content-item ${this.isCredit ? '' : 'hidden'}`}>
-            <credit-box class="flex-1 flex-shrink-0" ref={el => (this.creditBoxRef = el as HTMLElement)}></credit-box>
-            <div class="footer">
-              Powered by <span>Canoe</span>
-            </div>
-          </div>
           <div class="content-item">
             <transfer-box
               class="flex-1 flex-shrink-0"
               ref={el => (this.transferBoxRef = el as HTMLElement)}
             ></transfer-box>
+            <div class="footer">
+              Powered by <span>Canoe</span>
+            </div>
+          </div>
+          <div class={`content-item ${this.isCredit ? 'credit' : ''}`}>
+            <credit-box class="flex-1 flex-shrink-0" ref={el => (this.creditBoxRef = el as HTMLElement)}></credit-box>
             <div class="footer">
               Powered by <span>Canoe</span>
             </div>

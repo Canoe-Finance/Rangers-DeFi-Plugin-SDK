@@ -4,6 +4,7 @@ import { ITransformTokenInfo } from '../../../../../interface'
 import { dodoSwap } from 'api/ethers/dodo'
 import { copy, getBlockExplorerUrls } from 'utils/func'
 import { state } from 'store'
+import config from 'config'
 
 @Component({
   tag: 'deal-status-box',
@@ -16,7 +17,7 @@ export class DealStatusBox {
   @State() timeout: number = 0
   @State() type: string = 'primary'
   @State() title: string = 'SWAP CONFIRMATION'
-  @State() statusIcon: string = 'https://dex.canoe.finance/assets/icon/transform.svg'
+  @State() statusIcon: string = config.imgUrl + '/icon/transform.svg'
   @State() buttonText: string = 'CONFIRM'
   @State() currentSwapData = {
     dodoData: {},
@@ -56,7 +57,7 @@ export class DealStatusBox {
       this.title = 'PENDING'
       this.type = 'info'
       this.buttonText = 'PENDING'
-      this.statusIcon = 'https://dex.canoe.finance/assets/icon/transforming.svg'
+      this.statusIcon = config.imgUrl + '/icon/transforming.svg'
       const tx = await dodoSwap(this.currentSwapData)
       this.hash = tx.hash
       this.timeout = 60
@@ -88,7 +89,7 @@ export class DealStatusBox {
     this.title = 'SWAP succeed'
     this.type = 'success'
     this.buttonText = 'VIEW SWAP DETAIL'
-    this.statusIcon = 'https://dex.canoe.finance/assets/icon/success.svg'
+    this.statusIcon = config.imgUrl + '/icon/success.svg'
   }
   setError = () => {
     this.timeout = 0
@@ -96,7 +97,7 @@ export class DealStatusBox {
     this.title = 'failure'
     this.type = 'error'
     this.buttonText = this.hash ? 'VIEW SWAP DETAIL' : 'ERROR'
-    this.statusIcon = 'https://dex.canoe.finance/assets/icon/error.svg'
+    this.statusIcon = config.imgUrl + '/icon/error.svg'
   }
   setInit = () => {
     this.timeout = 0
@@ -104,7 +105,7 @@ export class DealStatusBox {
     this.title = 'SWAP CONFIRMATION'
     this.type = 'primary'
     this.buttonText = 'CONFIRM'
-    this.statusIcon = 'https://dex.canoe.finance/assets/icon/transform.svg'
+    this.statusIcon = config.imgUrl + '/icon/transform.svg'
   }
 
   clearTimer() {
