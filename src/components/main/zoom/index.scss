@@ -1,32 +1,10 @@
 .zoom-top {
-  top: calc(50vh - 90px);
-  left: -18px;
+  top: 0;
+  margin-left: -24px;
+  background-color: $text-bg-active-color;
+  border-bottom-left-radius: 8px;
 
-  .zoom-show {
-    display: none;
-  }
-
-  .zoom-hide,
-  .zoom-show {
-    position: absolute;
-    right: 0;
-    width: 5px;
-  }
-
-  &:hover {
-    .zoom-show {
-      display: flex;
-      animation: width-show 0.2s linear forwards;
-    }
-
-    .zoom-hide {
-      display: none;
-    }
-  }
-}
-
-@keyframes width-show {
-  100% {
-    width: 12px;
+  span {
+    writing-mode: vertical-lr;
   }
 }

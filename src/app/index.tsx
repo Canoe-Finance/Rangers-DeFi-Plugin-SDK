@@ -23,7 +23,7 @@ export class CanoeApp {
   @State() chart: IChartData[]
   @State() intervalId: number
 
-  timer: any = 0
+  timer: NodeJS.Timeout | null = null
 
   getInfo = (id: string, code: string, send: string, receive: string, from: string, to: string) => {
     if (this.timer) {
@@ -119,7 +119,7 @@ export class CanoeApp {
   render() {
     return (
       <div class={`app-main app-mini ${this.state.appShow ? 'show' : 'hide'}`}>
-        <canoe-zoom onClickClose={() => this.handleClick(false)}></canoe-zoom>
+        {this.state.appShow && <canoe-zoom onClickClose={() => this.handleClick(false)}></canoe-zoom>}
         <canoe-mini
           class={this.state.appShow ? 'hidden' : ''}
           onOpenSwap={() => this.handleClick(true)}

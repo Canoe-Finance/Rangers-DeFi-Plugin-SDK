@@ -11,15 +11,15 @@ export class MetaZoom {
   render() {
     return (
       <div
-        class="zoom-top absolute w-[12px] h-[180px] cursor-pointer"
+        class="w-[24px] h-[90px] box-border zoom-top absolute cursor-pointer flex flex-col items-center justify-between text-xs py-4"
         onClick={() => {
           this.clickClose.emit()
         }}
       >
-        <div class="zoom-show bg-[#545e8380] rounded-[46px] h-[180px] relative right-[4px] flex justify-center items-center">
-          <xy-icon class="text-sm" name="right"></xy-icon>
+        <div class="flex justify-center items-center">
+          <xy-icon name="close"></xy-icon>
         </div>
-        <div class="zoom-hide bg-[#545e8380] rounded-[46px] h-[180px]"></div>
+        <span>CLOSE</span>
       </div>
     )
   }

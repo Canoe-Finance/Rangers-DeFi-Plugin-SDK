@@ -1,0 +1,167 @@
+[
+  {
+    "id": 56,
+    "name": "BNB Chain",
+    "symbol": "BSC",
+    "logoURI": "https://g-dex.canoe.finance/assets/chain/BSC.svg",
+    "chain": [
+      {
+        "id": 2025,
+        "name": "Rangers Protocol",
+        "symbol": "Rangers",
+        "logoURI": "https://g-dex.canoe.finance/assets/chain/Rangers.svg",
+        "token": [
+          {
+            "toChainId": 2025,
+            "name": "Rangers Protocol",
+            "symbol": "RPG",
+            "decimals": 18,
+            "logoURI": "https://g-dex.canoe.finance/assets/chain/RPG.svg",
+            "address": "0xc2098a8938119a52b1f7661893c0153a6cb116d5",
+            "tokenAddress": "0xaf2d1c5374ee99b167dd8567f2819c7567f1f1a0",
+            "contractAddress": "0xf9736ec3926703e85c843fc972bd89a7f8e827c0",
+            "isApprove": true,
+            "method": "anySwapOutUnderlying",
+            "config": {
+              "fee": 0.001,
+              "minFee": 2.9,
+              "maxFee": 572,
+              "minAmount": 5.8,
+              "maxAmount": 3000000
+            }
+          },
+          {
+            "toChainId": 2025,
+            "name": "EthereumToken",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
+            "address": "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+            "tokenAddress": "0x0230219b25395f14b84cf4dcd987e2daf5a71e4b",
+            "contractAddress": "0xe1d592c3322f1f714ca11f05b6bc0efef1907859",
+            "isApprove": true,
+            "method": "anySwapOutUnderlying",
+            "config": {
+              "fee": 0,
+              "minFee": 0.003,
+              "maxFee": 0.003,
+              "minAmount": 0.004,
+              "maxAmount": 1700
+            }
+          },
+          {
+            "toChainId": 2025,
+            "name": "TetherUSD",
+            "symbol": "USDT",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png",
+            "address": "0x55d398326f99059ff775485246999027b3197955",
+            "tokenAddress": "0x58340a102534080b9d3175f868aea9f6af986dd9",
+            "contractAddress": "0xe1d592c3322f1f714ca11f05b6bc0efef1907859",
+            "isApprove": true,
+            "method": "anySwapOutUnderlying",
+            "config": {
+              "fee": 0,
+              "minFee": 0.9,
+              "maxFee": 0.9,
+              "minAmount": 10,
+              "maxAmount": 5000000
+            }
+          },
+          {
+            "toChainId": 2025,
+            "name": "USDCoin",
+            "symbol": "USDC",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png",
+            "address": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+            "tokenAddress": "0xab6290bbd5c2d26881e8a7a10bc98552b9082e7f",
+            "contractAddress": "0xe1d592c3322f1f714ca11f05b6bc0efef1907859",
+            "isApprove": true,
+            "method": "anySwapOutUnderlying",
+            "config": {
+              "fee": 0,
+              "minFee": 0.9,
+              "maxFee": 0.9,
+              "minAmount": 10,
+              "maxAmount": 5000000
+            }
+          },
+          {
+            "toChainId": 2025,
+            "name": "DaiToken",
+            "symbol": "DAI",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/9956/large/4943.png",
+            "address": "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
+            "tokenAddress": "0x16316ab20088b133626ffdaa37a53876099cbd44",
+            "contractAddress": "0xe1d592c3322f1f714ca11f05b6bc0efef1907859",
+            "isApprove": true,
+            "method": "anySwapOutUnderlying",
+            "config": {
+              "fee": 0,
+              "minFee": 0.9,
+              "maxFee": 0.9,
+              "minAmount": 10,
+              "maxAmount": 5000000
+            }
+          }
+        ]
+      },
+      {
+        "id": 1284,
+        "name": "Moonbeam Chain",
+        "symbol": "Moonbeam",
+        "logoURI": "https://g-dex.canoe.finance/assets/chain/Moonbeam.svg",
+        "token": [
+          {
+            "toChainId": 1284,
+            "name": "Binance Coin",
+            "symbol": "BNB",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png?1644979850",
+            "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+            "tokenAddress": "0xc9baa8cfdde8e328787e29b4b078abf2dadc2055",
+            "contractAddress": "0xd9B4aE62721d6311d67566A32E75f9002447922e",
+            "isApprove": false,
+            "method": "transfer",
+            "config": {
+              "fee": 0,
+              "minFee": 0,
+              "maxFee": 0,
+              "minAmount": 0.1,
+              "maxAmount": 11000
+            }
+          }
+        ]
+      },
+      {
+        "id": 1285,
+        "name": "Moonriver Chain",
+        "symbol": "Moonriver",
+        "logoURI": "https://g-dex.canoe.finance/assets/chain/Moonriver.svg",
+        "token": [
+          {
+            "toChainId": 1285,
+            "name": "Binance Coin",
+            "symbol": "BNB",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png?1644979850",
+            "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+            "tokenAddress": "0xcb58418aa51ba525aef0fe474109c0354d844b7c",
+            "contractAddress": "0xd6faf697504075a358524996b132b532cc5D0F14",
+            "isApprove": false,
+            "method": "transfer",
+            "config": {
+              "fee": 0,
+              "minFee": 0,
+              "maxFee": 0,
+              "minAmount": 0.1,
+              "maxAmount": 10400
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

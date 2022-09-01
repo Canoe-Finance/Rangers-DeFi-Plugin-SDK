@@ -26,6 +26,7 @@
         margin-left: 4px;
         font-size: 16px;
         font-weight: 700;
+        line-height: 16px;
         color: #fff;
 
         &::after {
@@ -33,12 +34,12 @@
           display: inline-block;
           width: 0;
           height: 0;
-          margin-top: 8px;
+          margin-top: 7px;
           margin-left: 4px;
           content: '';
-          border-top: 5px solid #fff;
-          border-right: 5px solid transparent;
-          border-left: 5px solid transparent;
+          border-top: 4px solid #fff;
+          border-right: 4px solid transparent;
+          border-left: 4px solid transparent;
         }
       }
     }
@@ -48,31 +49,18 @@
       width: 0;
       height: 36px;
       padding: 0 10px;
+      font-size: 16px;
       color: #fff;
       text-align: right;
       background-color: $text-bg-color;
       border: none;
       outline: none;
+      box-shadow: none;
+      appearance: none;
 
       &::placeholder {
-        color: #fff;
+        color: #999;
       }
-
-      &:focus {
-        outline: 0 !important;
-        appearance: none;
-      }
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      appearance: none;
-      margin: 0;
-    }
-
-    input:focus {
-      outline: 0;
-      box-shadow: none;
     }
   }
 }

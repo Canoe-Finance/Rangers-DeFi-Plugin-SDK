@@ -77,3 +77,45 @@ export interface IDodoRouterRes {
   resPricePerToToken: string
   useSource: string
 }
+
+export interface IBase {
+  id: number
+  name: string
+  symbol: string
+  logoURI: string
+}
+
+export interface IChainToken {
+  name: string
+  symbol: string
+  decimals: number
+  logoURI: string
+  address: string
+}
+
+export interface IConfig {
+  fee: number
+  minFee: number
+  maxFee: number
+  minAmount: number
+  maxAmount: number
+}
+
+export interface ICrossToken extends IChainToken {
+  toChainId: number
+  tokenAddress: string
+  contractAddress: string
+  isApprove: boolean
+  method: string
+  config: IConfig
+}
+
+export interface ICrossChain extends IBase {
+  token: ICrossToken[]
+}
+
+export interface ICross extends IBase {
+  chain: ICrossChain[]
+}
+
+export type TCrossType = 'fromChain' | 'toChain' | 'token'

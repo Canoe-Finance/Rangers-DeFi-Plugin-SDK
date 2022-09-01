@@ -16,4 +16,6 @@ export default {
   // projectId
   // projectId: 'ymg',
   projectId: 'canoe',
+
+  imgUrl: 'https://g-dex.canoe.finance/assets',
 }

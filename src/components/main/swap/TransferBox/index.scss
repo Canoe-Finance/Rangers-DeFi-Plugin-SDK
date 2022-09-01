@@ -1,9 +1,108 @@
-:host {
+.transfer-box {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
+  padding: 15px 20px 0;
 
-  .transfer-box {
-    width: 100%;
-    height: 100%;
+  label {
+    margin-right: 10px;
+  }
+
+  .balance-max {
+    height: 16px;
+    padding: 0 4px;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    color: #a2a8ba;
+    cursor: pointer;
+    background: #323645;
+    border-radius: 2px;
+
+    &:active {
+      transform: translate(1px, 1px);
+    }
+  }
+}
+
+.chain-select {
+  position: relative;
+  padding: 6px 20px 6px 6px;
+  background: #3c4150;
+  border-radius: 4px;
+
+  img {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+}
+
+.has-right-arrow::after {
+  position: absolute;
+  top: 12px;
+  right: 6px;
+  display: block;
+  width: 0;
+  height: 0;
+  content: '';
+  border-top: 5px solid #fff;
+  border-right: 3px solid transparent;
+  border-left: 3px solid transparent;
+}
+
+.line {
+  top: -8px;
+  left: 10px;
+  width: 2px;
+  height: 45px;
+  background-color: #323645;
+
+  i {
+    position: absolute;
+    top: 18px;
+    left: -2px;
+    width: 6px;
+    height: 6px;
+    background-color: #323645;
+    border-radius: 50%;
+  }
+}
+
+.router-container {
+  width: 320px;
+  height: 65px;
+  background: $text-bg-color;
+  border-radius: 4px;
+}
+
+.bottom-button {
+  margin-top: 10px;
+
+  .icon-swap {
+    font-size: 24px;
+  }
+
+  .icon-wallet {
+    font-size: 16px;
+  }
+}
+
+.search-container {
+  z-index: 10;
+  background: $background-color;
+  transition: all 0.3s ease-in-out;
+
+  &.hide {
+    display: none;
+    opacity: 0;
+  }
+
+  &.show {
+    display: block;
+    opacity: 1;
   }
 }

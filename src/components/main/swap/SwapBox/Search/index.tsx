@@ -17,7 +17,7 @@ export class SearchTokens {
 
   autocomplete: HTMLDivElement
 
-  timer: any = 0
+  timer: NodeJS.Timeout | null = null
 
   /**
    * Emitted when an item from suggestions was selected
