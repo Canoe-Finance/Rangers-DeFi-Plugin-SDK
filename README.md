@@ -2,6 +2,12 @@
 
 ![image](https://user-images.githubusercontent.com/35088567/200258691-4826a15d-892e-41ea-8f41-a2cfe2e55b53.png)
 
+## Features
+- Credit Card, Binance Connect
+- Cross-Chain, Multichain
+- Aggregator API, DoDo
+- Token Info, Coingeckgo
+
 ## Canoe DeFi plugin tech solution
 
 ### [x] iframe
