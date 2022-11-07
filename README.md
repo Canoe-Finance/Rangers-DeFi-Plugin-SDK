@@ -1,8 +1,8 @@
-# MetaDex-SDK
+# DeFi SDK on Ranger 
 
-![MetaDex](./docs/images/canoe.gif)
+![image](https://user-images.githubusercontent.com/35088567/200258691-4826a15d-892e-41ea-8f41-a2cfe2e55b53.png)
 
-## MetaDex swap plugin solution
+## Canoe DeFi plugin tech solution
 
 ### [x] iframe
 
